@@ -1,6 +1,6 @@
 # PR-001：StudyC 学习集与纯文本资料后端
 
-状态：2026-11-20 已实现并提交草稿 [PR #40](https://github.com/is-spectator/planplan/pull/40)，待审查/合并，未部署。所属路线：[S1 学习空间与文本资料](implementation-roadmap.md)。
+状态：2026-11-20 已实现并提交草稿 [PR #40](https://github.com/is-spectator/planplan/pull/40)，待审查/合并。用户随后授权部署，候选与备份已准备，尚未激活；详见[部署进度与验收记录](../deploy/release-20261120-study-api.md)。所属路线：[S1 学习空间与文本资料](implementation-roadmap.md)。
 
 实现提交 `5083016`，接口与运行说明见 [后端 STUDYC_API.md](https://github.com/is-spectator/planplan/blob/50830163407548a31d965b7db53e5cc4ca723fd3/server/STUDYC_API.md)。认证前置另列 [PR #41](https://github.com/is-spectator/planplan/pull/41)，基线 `d6f6166`。本地 StudyC 集成测试 17/17 通过，后端全量 334 项通过、1 项 PostgreSQL 专用测试跳过，类型检查和构建通过；GitHub CI 结果以 PR 页面为准。
 

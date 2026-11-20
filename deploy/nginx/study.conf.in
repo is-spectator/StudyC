@@ -22,7 +22,8 @@ server {
     add_header Cache-Control "no-store, private" always;
 
 @AUTH_LOCATIONS@
-    # Exact auth locations above win; no other PlanPlan API is exposed here.
+@STUDY_API_LOCATIONS@
+    # Only explicit auth and optionally StudyC data routes may reach the backend.
     location ^~ /v1 { return 404; }
     location ^~ /assets/ {
         try_files $uri =404;

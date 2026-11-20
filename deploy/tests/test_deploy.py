@@ -4,6 +4,7 @@ from contextlib import redirect_stdout
 import importlib.util
 import io
 import json
+import re
 from pathlib import Path
 import sys
 import tarfile
@@ -89,6 +90,81 @@ class ReleaseChecks(unittest.TestCase):
         for value in ['/certs/valid.pem; return 200;', '/certs/../private.pem', '/path/with space.pem']:
             with self.assertRaises(ValueError):
                 renderer.safe_path(value)
+
+    def test_study_api_routes_are_opt_in_and_do_not_change_planplan_host(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            outputs = []
+            for enabled in (False, True):
+                output = root / ('enabled' if enabled else 'disabled')
+                argv = ['render-config.py', '--study-cert', '/certs/study.pem', '--study-key', '/certs/study.key',
+                        '--planplan-cert', '/certs/planplan.pem', '--planplan-key', '/certs/planplan.key',
+                        '--planplan-root', '/opt/planplan-web-ui/current/web', '--output', str(output)]
+                if enabled:
+                    argv.append('--enable-study-api')
+                with patch.object(sys, 'argv', argv), redirect_stdout(io.StringIO()):
+                    renderer.main()
+                text = (output / 'clyna-study.conf').read_text()
+                review = json.loads((output / 'review.json').read_text())
+                self.assertEqual(review['studyApiEnabled'], enabled)
+                self.assertEqual(review['studyApiRoutes'], renderer.STUDY_API_ROUTES if enabled else {})
+                self.assertEqual(renderer.STUDY_API_BEGIN in text, enabled)
+                self.assertIn('client_max_body_size 16k;', text)
+                self.assertIn('location ^~ /v1 { return 404; }', text)
+                self.assertNotIn('@STUDY_API_LOCATIONS@', text)
+                if enabled:
+                    self.assertEqual(text.count('client_max_body_size 2m;'), 2)
+                    self.assertEqual(sum(len(methods) for methods in review['studyApiRoutes'].values()), 8)
+                outputs.append((output / 'clyna-planplan-alias.conf').read_bytes())
+            self.assertEqual(outputs[0], outputs[1])
+
+    def test_study_api_nested_routes_are_anchored_and_methods_and_headers_are_preserved(self):
+        locations = renderer.study_api_locations()
+        self.assertIn('location = /v1/study/sets {', locations)
+        self.assertIn('location ^~ /v1/study/ {', locations)
+        self.assertIn('location ~ ^/v1/study/ { return 404; }', locations)
+        patterns = re.findall(r'location ~ "([^"]+)"', locations)
+        self.assertEqual(len(patterns), 3)
+        uuid = '3f623e5a-1111-4111-8111-111111111111'
+        base = '/v1/study/sets/' + uuid
+        valid = [base, base + '/materials', base + '/materials/' + uuid.upper()]
+        for index, path in enumerate(valid):
+            self.assertEqual([i for i, pattern in enumerate(patterns) if re.fullmatch(pattern, path)], [index])
+        for path in [base + '/', base + '/materials/', base + '/materials/' + uuid + '/extra',
+                     '/v1/study/sets/not-a-uuid', '/v1/study/sets/' + uuid[:-1],
+                     '/v1/study/sets/' + uuid + 'f', '/v1/study/templates', '/v1/templates',
+                     '/v1/study/sets/' + uuid.replace('-', ''), '/v1/study/sets/' + uuid.replace('3', 'g'),
+                     '/v1/study/sets/' + uuid.replace('-4111-', '-0111-'),
+                     '/v1/study/sets/' + uuid.replace('-8111-', '-7111-')]:
+            self.assertFalse(any(re.fullmatch(pattern, path) for pattern in patterns), path)
+        self.assertEqual(locations.count('if ($request_method !~ ^(GET|POST)$) { return 405; }'), 2)
+        self.assertEqual(locations.count('if ($request_method !~ ^(GET|PATCH)$) { return 405; }'), 2)
+        self.assertEqual(locations.count('proxy_pass http://127.0.0.1:8789;'), 4)
+        for directive in ['proxy_set_header Host $http_host;', 'proxy_set_header Origin $http_origin;',
+                          'proxy_set_header X-CSRF-Token $http_x_csrf_token;',
+                          'proxy_set_header X-PlanPlan-Expected-User $http_x_planplan_expected_user;',
+                          'proxy_cache off;', 'proxy_no_cache 1;', 'proxy_next_upstream off;',
+                          'proxy_hide_header Cache-Control;']:
+            self.assertEqual(locations.count(directive), 4)
+
+    def test_study_api_surgical_insertion_preserves_existing_config_and_guards_duplicates(self):
+        original = '''server { server_name study.clyna.ai; }
+server {
+    server_name study.clyna.ai;
+    root /custom/unchanged/current/web;
+    # preserve this inspected configuration
+    location ^~ /v1 { return 404; }
+}
+'''
+        result = renderer.insert_study_api_locations(original)
+        self.assertEqual(result.replace(renderer.study_api_locations() + '\n', '', 1), original)
+        self.assertLess(result.index('location ^~ /v1/study/'), result.index('location ^~ /v1 {'))
+        with self.assertRaises(ValueError):
+            renderer.insert_study_api_locations(result)
+        with self.assertRaises(ValueError):
+            renderer.insert_study_api_locations(original.replace('study.clyna.ai', 'clyna.ai'))
+        with self.assertRaises(ValueError):
+            renderer.insert_study_api_locations(original.replace('    location ^~ /v1 { return 404; }', ''))
 
     def test_failed_activation_restores_only_owned_configs_and_symlink(self):
         with tempfile.TemporaryDirectory() as temp:

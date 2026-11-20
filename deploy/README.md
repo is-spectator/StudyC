@@ -1,5 +1,7 @@
 # StudyC / PlanPlan 双域部署
 
+2026-11-20 后续 API 发布正在准备，**尚未激活**；参见 [PR-001 部署进度](release-20261120-study-api.md)。`render-config.py --enable-study-api` 可显式生成八个学习数据接口的白名单，默认仍不启用。下文的注册与静态站点发布状态是此前已完成的记录。
+
 状态：**统一注册首页已激活。** `https://clyna.ai/` 承载 Clyna 注册，StudyC 与 PlanPlan 的注册入口均指向主站；两个产品保留各自登录/重置流程和 host-only Cookie。当前 Study 静态产物为 `8e77afb69baebb995287145bb625d7e6b4dc7f6e9dec69c18ee573fe22350371`；Clyna/PlanPlan 静态 UI 为 `0dbe9865a46c472edea6ece13598417004624e0c95b3db5a69219e15ed4358ee`，独立目录 `/opt/planplan-web-ui/current/web`。后端仍为原 `/opt/planplan-web/current` 的 `9f763547…`，数据库和运行配置未变。统一激活返回 `activated-and-probed`，备份 `/var/backups/clyna-central-registration/20261120T030319Z-e9c28888`。真实生产注册和邮件投递未在本次执行；本地模拟注册验证通过。
 
 本次只把注册变更应用到核对过的线上 PlanPlan 源快照，未部署本地 main 中其他尚未上线的功能。保留 58 个原公开哈希资源，供已打开页面继续加载。新增 `activate-central-registration.py` 用于本次双前端切换，默认只检查，显式 `--apply` 才修改；包含三配置摘要/旧链接守卫、备份、语法检查、严格 TLS 探针与失败回滚。首次迁移专用脚本不能原样重跑（当前根目录已迁移）。后续仅更新 Study 时，先用下面的新静态根重新渲染配置，再核对当前配置摘要，不能复用历史候选。
