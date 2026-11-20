@@ -1,0 +1,309 @@
+- navigation "Main navigation":
+  - link "主页":
+    - /url: /platform
+  - button "搜索":
+  - link "我的学习集":
+    - /url: /platform/studysets
+  - link "日历":
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/calendar
+  - link "题库":
+    - /url: /platform/qbank
+  - button "教程":
+  - button "Hide tutorials shortcut":
+  - button "Feedback and Help":
+  - button "yan zhang — account menu":
+    - generic: YZ
+  - menu:
+    - menuitem "您的个人资料":
+      - generic: 您的个人资料
+    - menuitem "设置":
+      - generic: 设置
+    - menuitem "教程":
+      - generic: 教程
+    - menuitem "给我们反馈":
+      - generic: 给我们反馈
+    - menuitem "订阅":
+      - generic: 订阅
+    - menuitem "支持":
+      - generic: 支持
+    - menuitem "Discord":
+      - generic: Discord
+    - menuitem "主题 主题":
+      - generic: 主题
+      - radiogroup "主题":
+        - radio "Dark mode":
+        - radio "Light mode" [checked]:
+        - radio "System preference":
+- button "切换学习集":
+  - generic: 功能测试 · 线段计数 · 2026-11-20
+- button "显示学习计划":
+- button "Collapse sidebar":
+- region "Study set navigation":
+  - link "Dashboard":
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5
+    - generic: Dashboard
+  - button "学习计划":
+    - generic: 学习计划
+  - link "聊天":
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/chat/new
+    - generic: 聊天
+  - link "辅导我":
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/tutor-me
+    - generic: 辅导我
+  - link "录制讲座":
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/live-lecture
+    - generic: 录制讲座
+  - button "练习与活动":
+    - generic: 练习与活动
+  - button "上传":
+    - text: 上传
+  - link "资料":
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/materials
+    - generic: 资料
+  - link "查看全部":
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/materials
+  - button "More options":
+  - button "Untitled Document":
+    - link "Untitled Document":
+      - /url: /platform/studyset/6affc0bb75798c45c17d21f5/material/6affc0bb75798c45c17d21f6/note
+      - paragraph: Untitled Document
+  - button "功能测试：线段计数规律与计算方法":
+    - link "功能测试：线段计数规律与计算方法":
+      - /url: /platform/studyset/6affc0bb75798c45c17d21f5/material/6affc141249fd40339c8c590/note
+      - paragraph: 功能测试：线段计数规律与计算方法
+- separator "Resize sidebar"
+- navigation:
+  - navigation "Breadcrumb":
+    - button "功能测试 · 线段计数 · 2026-11-20":
+      - generic: 功能测试 · 线段计数 · 2026-11-20
+    - button "线段计数规律：从分段数到总线段数的推导":
+      - generic: 线段计数规律：从分段数到总线段数的推导
+  - button "Turn into another learning format":
+    - text: 转换成
+  - button "升级":
+    - generic: 升级
+  - button "Share Read":
+    - generic: 分享
+  - button "创建进度":
+    - generic: Creation progress, one has an issue
+  - 'button "Study timer: 25m"':
+    - generic: 25m
+- progressbar "阅读进度"
+- button "听":
+  - text: 听
+- button "更多":
+- banner:
+  - text: 阅读
+  - heading "线段计数规律：从分段数到总线段数的推导" [level=1]
+  - text: 7 分钟阅读
+  - button "听":
+    - text: 听
+  - button "更多":
+  - generic: 来源
+  - button "功能测试：线段计数规律与计算方法":
+    - text: 功能测试：线段计数规律与计算方法
+- article:
+  - paragraph: 在几何计数问题中，理解点与线段之间的关系是解决问题的基础。当我们讨论一条直线被分割成若干小段时，我们不仅在关注这些小段本身，更是在关注由这些分割点所能构成的所有可能的线段组合。本文将通过具体的数学规律，带你掌握如何快速计算直线上的线段总数。
+  - heading "理解基本概念：点与段的关系" [level=2]
+  - paragraph:
+    - text: 在开始计算之前，我们必须明确一个核心逻辑：线段是由两个不同的点确定的。因此，计算线段总数的关键，首先在于确定这条直线上共有多少个点
+    - button "来源 1": "1"
+    - text: 。
+  - paragraph:
+    - text: 假设一条直线段被标记点分成了
+    - generic: "n"
+    - text: 个小段，那么这些小段之间的分割点以及线段的两端点，共同构成了整条线上的点。根据数学规律，当小段数为
+    - generic: "n"
+    - text: 时，点的总数始终为
+    - generic: n +
+    - generic: "1"
+    - button "来源 1": "1"
+    - text: 。
+  - figure "展示一条直线被分为 n 个小段，并标注出 n+1 个点的示意图，强调点与段的数量关系":
+    - paragraph: 图片仅限高级版
+    - button "升级"
+    - generic: 展示一条直线被分为 n 个小段，并标注出 n+1 个点的示意图，强调点与段的数量关系
+  - blockquote:
+    - paragraph:
+      - strong: 学习提示
+      - text: ：在处理此类问题时，第一步永远是确认“点”的数量，而不是直接使用“段”的数量进行计算。
+  - heading "线段计数的两种数学方法" [level=2]
+  - paragraph:
+    - text: 一旦确定了点的总数，我们就可以利用组合数学的思想来计算所有可能的线段组合。这里有两种主流且高效的方法
+    - button "来源 1": "1"
+    - text: ：
+  - heading "1. 组合公式法" [level=3]
+  - paragraph:
+    - text: 由于任意两个不同的点都可以确定一条唯一的线段，我们可以使用组合公式来表达。对于
+    - generic: "n"
+    - text: 个小段构成的
+    - generic: n +
+    - generic: "1"
+    - text: 个点，其线段总数的计算公式为：
+  - generic: "2"
+  - generic: n(n + 1)
+  - paragraph:
+    - text: 这个公式能够帮助我们快速得出结果，尤其是在面对较大的
+    - generic: "n"
+    - text: 值时，比逐一列举要高效得多。
+  - heading "2. 等差数列累加法" [level=3]
+  - paragraph:
+    - text: 另一种直观的方法是将问题转化为等差数列求和。我们可以观察到，从第一个点开始，可以向后连接
+    - generic: "n"
+    - text: 个点；从第二个点开始，可以向后连接
+    - generic: n −
+    - generic: "1"
+    - text: 个点，以此类推，直到最后两个点之间只能构成 1 条线段。因此，总数可以表示为：
+  - generic: 1 +
+  - generic: 2 +
+  - generic: 3 +
+  - generic: ⋯ +
+  - generic: "n"
+  - figure "展示通过不同组合方式构成的线段累加过程，从 1 到 n 的递增关系":
+    - paragraph: 图片仅限高级版
+    - button "升级"
+    - generic: 展示通过不同组合方式构成的线段累加过程，从 1 到 n 的递增关系
+  - heading "实例解析：以 8 个小段为例" [level=2]
+  - paragraph:
+    - text: 为了更好地理解上述理论，我们来看一个具体的模拟题目
+    - button "来源 1": "1"
+    - text: ：
+  - paragraph:
+    - strong: 题目：
+    - text: 如果一条直线段被标记点分成了 8 个小段，那么这条线段上一共有多少条不同的线段？
+  - paragraph:
+    - strong: 解题步骤：
+  - list:
+    - strong:
+      - text: 确定
+      - generic: "n"
+      - text: 的值
+    - text: ：题目给出小段数
+    - generic: n =
+    - generic: "8"
+    - button "来源 1": "1"
+    - text: 。
+    - strong: 方法一：代入组合公式
+    - text: 我们将
+    - generic: n =
+    - generic: "8"
+    - text: 代入公式
+    - generic: "2"
+    - generic: n(n+1)
+    - text: 进行计算：
+    - generic: 总数
+    - text: =
+    - generic: "2"
+    - generic: 8 × (8 + 1)
+    - text: =
+    - generic: "2"
+    - generic: 8 × 9
+    - generic: = 36
+    - strong: 方法二：使用累加法
+    - text: 我们将 1 到 8 的整数进行累加：
+    - generic: 1 +
+    - generic: 2 +
+    - generic: 3 +
+    - generic: 4 +
+    - generic: 5 +
+    - generic: 6 +
+    - generic: 7 +
+    - generic: 8 =
+    - generic: "36"
+  - paragraph:
+    - text: 通过两种方法，我们均得到了相同的结果：该直线段上一共有
+    - strong: "36"
+    - text: 条不同的线段
+    - button "来源 1": "1"
+    - text: 。
+  - blockquote:
+    - paragraph:
+      - strong: 总结
+      - text: ：无论是使用公式还是累加，掌握“点数 = 段数 + 1”这一前提，是解题成功的关键。
+- generic: 由你的材料写成
+- button "功能测试：线段计数规律与计算方法":
+  - generic: 功能测试：线段计数规律与计算方法
+- generic: 这篇摘要有用吗？
+- button "有用":
+- button "没用":
+- generic: 继续学习
+- img "Not started"
+- heading "线段计数规律：从分段数到总线段数的推导" [level=3]
+- 'link "开始 引导式聊天: 线段计数规律：从分段数到总线段数的推导"':
+  - /url: /platform/studyset/6affc0bb75798c45c17d21f5/chat/new?studyTopicId=6affc6122f1dc89f7793199b&mode=guided&topicName=%E7%BA%BF%E6%AE%B5%E8%AE%A1%E6%95%B0%E8%A7%84%E5%BE%8B%EF%BC%9A%E4%BB%8E%E5%88%86%E6%AE%B5%E6%95%B0%E5%88%B0%E6%80%BB%E7%BA%BF%E6%AE%B5%E6%95%B0%E7%9A%84%E6%8E%A8%E5%AF%BC
+  - generic: 推荐
+  - button "About 推荐":
+  - generic: 引导式聊天
+- 'link "开始 抽认卡: 线段计数规律：从分段数到总线段数的推导"':
+  - /url: /platform/studyset/6affc0bb75798c45c17d21f5/flashcards/create?studyTopicId=6affc6122f1dc89f7793199b&studyplan=true&studyPlanSidebar=preserve
+  - generic: 抽认卡
+  - button "自定义你的抽认卡":
+- 'link "开始 QuizFetch: 线段计数规律：从分段数到总线段数的推导"':
+  - /url: /platform/studyset/6affc0bb75798c45c17d21f5/practice/quiz/create?studyTopicId=6affc6122f1dc89f7793199b&studyPlanSidebar=preserve
+  - generic: QuizFetch
+  - button "自定义您的测验":
+- button "探索更多":
+  - generic: 探索更多
+- generic: 接下来
+- img "Not started"
+- heading "点与线段的关系" [level=3]
+- button "跳过 点与线段的关系":
+  - text: 跳过
+- 'link "开始 引导式聊天: 点与线段的关系"':
+  - /url: /platform/studyset/6affc0bb75798c45c17d21f5/chat/new?studyTopicId=6affc143249fd40339c8c594&mode=guided&topicName=%E7%82%B9%E4%B8%8E%E7%BA%BF%E6%AE%B5%E7%9A%84%E5%85%B3%E7%B3%BB
+  - generic: 推荐
+  - button "About 推荐":
+  - generic: 引导式聊天
+- 'link "开始 阅读: 点与线段的关系"':
+  - /url: /platform/studyset/6affc0bb75798c45c17d21f5/read/create?studyTopicId=6affc143249fd40339c8c594&studyPlanSidebar=preserve
+  - generic: 快速赶上
+  - button "About 快速赶上":
+  - generic: 阅读
+- 'link "开始 QuizFetch: 点与线段的关系"':
+  - /url: /platform/studyset/6affc0bb75798c45c17d21f5/practice/quiz/create?studyTopicId=6affc143249fd40339c8c594&studyPlanSidebar=preserve
+  - generic: 最受欢迎的功能
+  - button "About 最受欢迎的功能":
+  - generic: QuizFetch
+  - button "自定义您的测验":
+- button "探索更多":
+  - generic: 探索更多
+- button "听":
+- slider "跳转" [disabled]
+- generic: 0:00 / 0:00
+- button "1.0×"
+- button "Sparky":
+  - text: Sparky
+- button "关闭播放器":
+- button "Chat history":
+  - generic: 聊天
+- button "New chat":
+- button "Collapse chat":
+- log "Chat transcript":
+  - button "更换角色":
+    - img "Sparky"
+  - button "更换角色"
+  - heading "有什么可以帮您的吗？" [level=2]:
+    - generic: 有什么可以帮您的吗？
+  - 'button "理解: 解释这篇文章"':
+    - generic: 解释这篇文章
+  - 'button "学习: 考考我"':
+    - generic: 考考我
+  - 'button "生成: 制作抽认卡"':
+    - generic: 制作抽认卡
+  - button "查看更多"
+  - button "插件":
+    - text: 插件
+  - button "开始引导式学习":
+    - generic: 开始引导式课程
+- status
+- button "Choose File"
+- textbox "向你的 AI tutor 提问任何问题..."
+- button "发送消息" [disabled]:
+- button "Chat actions":
+- button "Guided mode off":
+  - generic: 引导
+- button "呼叫 Sparky":
+  - generic: 通话
+- button "口述消息":
+- separator "Resize chat sidebar"
+- alert: 功能测试 · 线段计数 · 2026-11-20 | StudyFetch

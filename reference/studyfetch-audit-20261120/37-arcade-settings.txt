@@ -1,0 +1,125 @@
+- navigation "Main navigation":
+  - link "主页":
+    - /url: /platform
+  - button "搜索":
+  - link "我的学习集":
+    - /url: /platform/studysets
+  - link "日历":
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/calendar
+  - link "题库":
+    - /url: /platform/qbank
+  - button "教程":
+  - button "Hide tutorials shortcut":
+  - button "Feedback and Help":
+  - button "yan zhang — account menu":
+    - generic: YZ
+  - menu:
+    - menuitem "您的个人资料":
+      - generic: 您的个人资料
+    - menuitem "设置":
+      - generic: 设置
+    - menuitem "教程":
+      - generic: 教程
+    - menuitem "给我们反馈":
+      - generic: 给我们反馈
+    - menuitem "订阅":
+      - generic: 订阅
+    - menuitem "支持":
+      - generic: 支持
+    - menuitem "Discord":
+      - generic: Discord
+    - menuitem "主题 主题":
+      - generic: 主题
+      - radiogroup "主题":
+        - radio "Dark mode":
+        - radio "Light mode" [checked]:
+        - radio "System preference":
+- button:
+  - generic: 功能测试 · 线段计数 · 2026-11-20
+- button:
+- button:
+- region:
+  - link:
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5
+    - generic: Dashboard
+  - button:
+    - generic: 学习计划
+  - link:
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/chat/new
+    - generic: 聊天
+  - link:
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/tutor-me
+    - generic: 辅导我
+  - link:
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/live-lecture
+    - generic: 录制讲座
+  - button:
+    - generic: 练习与活动
+  - button:
+    - text: 上传
+  - link:
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/materials
+    - generic: 资料
+  - link:
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/materials
+    - text: 查看全部
+  - button:
+  - button:
+    - link:
+      - /url: /platform/studyset/6affc0bb75798c45c17d21f5/material/6affc0bb75798c45c17d21f6/note
+      - paragraph: Untitled Document
+  - button:
+    - link:
+      - /url: /platform/studyset/6affc0bb75798c45c17d21f5/material/6affc141249fd40339c8c590/note
+      - paragraph: 功能测试：线段计数规律与计算方法
+- separator
+- generic: 创建游戏
+- button "Close":
+  - generic: 退出
+- generic: 步骤 4 of 4
+- generic: 游戏详情
+- generic: 游戏名称（可选）
+- textbox "游戏名称（可选）" [active]:
+  - /placeholder: 输入您游戏的名称……
+  - text: 功能测试：线段计数匹配游戏
+- button "返回":
+  - text: 返回
+- button "创建游戏":
+  - text: 创建游戏
+- heading "功能测试：线段计数匹配游戏" [level=3]
+- paragraph: 匹配游戏
+- generic: 状态
+- generic: 准备创建
+- button "Chat history":
+  - generic: 聊天
+- button "New chat":
+- button "Collapse chat":
+- log "Chat transcript":
+  - button "更换角色":
+    - img "Sparky"
+  - button "更换角色"
+  - heading "有什么可以帮您的吗？" [level=2]:
+    - generic: 有什么可以帮您的吗？
+  - 'button "理解: 这个学习集是关于什么的？"':
+    - generic: 这个学习集是关于什么的？
+  - 'button "学习: 制定学习计划"':
+    - generic: 制定学习计划
+  - 'button "生成: 为这套卡片生成抽认卡"':
+    - generic: 为这套卡片生成抽认卡
+  - button "查看更多"
+  - button "插件":
+    - text: 插件
+  - button "开始引导式学习":
+    - generic: 开始引导式课程
+- status
+- button "Choose File"
+- textbox "向你的 AI tutor 提问任何问题..."
+- button "发送消息" [disabled]:
+- button "Chat actions":
+- button "Guided mode off":
+  - generic: 引导
+- button "呼叫 Sparky":
+  - generic: 通话
+- button "口述消息":
+- separator "Resize chat sidebar"
+- alert

@@ -1,0 +1,440 @@
+- navigation "Main navigation":
+  - link "主页":
+    - /url: /platform
+  - button "搜索":
+  - link "我的学习集":
+    - /url: /platform/studysets
+  - link "日历":
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/calendar
+  - link "题库":
+    - /url: /platform/qbank
+  - button "教程":
+  - button "Hide tutorials shortcut":
+  - button "Feedback and Help":
+  - button "yan zhang — account menu":
+    - generic: YZ
+  - menu:
+    - menuitem "您的个人资料":
+      - generic: 您的个人资料
+    - menuitem "设置":
+      - generic: 设置
+    - menuitem "教程":
+      - generic: 教程
+    - menuitem "给我们反馈":
+      - generic: 给我们反馈
+    - menuitem "订阅":
+      - generic: 订阅
+    - menuitem "支持":
+      - generic: 支持
+    - menuitem "Discord":
+      - generic: Discord
+    - menuitem "主题 主题":
+      - generic: 主题
+      - radiogroup "主题":
+        - radio "Dark mode":
+        - radio "Light mode" [checked]:
+        - radio "System preference":
+- button:
+  - generic: 功能测试 · 线段计数 · 2026-11-20
+- button:
+- button:
+- region:
+  - link:
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5
+    - generic: Dashboard
+  - button:
+    - generic: 学习计划
+  - link:
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/chat/new
+    - generic: 聊天
+  - link:
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/tutor-me
+    - generic: 辅导我
+  - link:
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/live-lecture
+    - generic: 录制讲座
+  - button:
+    - generic: 练习与活动
+  - button:
+    - text: 上传
+  - link:
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/materials
+    - generic: 资料
+  - link:
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/materials
+    - text: 查看全部
+  - button:
+  - button:
+    - link:
+      - /url: /platform/studyset/6affc0bb75798c45c17d21f5/material/6affc0bb75798c45c17d21f6/note
+      - paragraph: Untitled Document
+  - button:
+    - link:
+      - /url: /platform/studyset/6affc0bb75798c45c17d21f5/material/6affc141249fd40339c8c590/note
+      - paragraph: 功能测试：线段计数规律与计算方法
+- separator
+- navigation:
+  - button "Expand sidebar":
+  - navigation "Breadcrumb":
+    - button "功能测试 · 线段计数 · 2026-11-20":
+      - generic: 功能测试 · 线段计数 · 2026-11-20
+    - button "功能测试：线段计数规律与计算方法":
+      - generic: 功能测试：线段计数规律与计算方法
+  - button "Turn into another learning format":
+    - text: 转换成
+  - button "升级":
+    - generic: 升级
+  - button "Share Material":
+    - generic: 分享
+  - button "创建进度":
+    - generic: Creation progress, one has an issue
+  - 'button "Study timer: 25m"':
+    - generic: 25m
+- paragraph: 功能测试：线段计数
+- paragraph: 一条直线段被标记点分成 n 个小段时，共有 n+1 个不同的点。任意两个不同点确定一条线段。因此线段总数是 n(n+1)/2，也等于 1+2+…+n。分成 10 个小段时共有 11 个点和 55 条线段；分成 4 个小段时有 10 条线段。计数不依赖各小段的长度是否相等。常见错误是把小段数当成点数，或只统计相邻点构成的小线段。
+- paragraph: 独立练习：分成 6 个小段时有多少条线段？请分别用分类相加和选两点解释。
+- button "字体系列":
+  - generic: Inter
+- button "Font size":
+  - text: "11"
+- button "粗体":
+- button "斜体":
+- button "下划线":
+- button "删除线":
+- button "文本颜色":
+- button "左对齐" [pressed]:
+- button "居中对齐":
+- button "右对齐":
+- button "有序列表":
+- button "无序列表":
+- button "撤销" [disabled]:
+- button "重做" [disabled]:
+- button "插入":
+- button "版本历史":
+- button "打印":
+- button "折叠":
+- button "Chat history":
+  - generic: 聊天
+- button "New chat":
+- button "Collapse chat":
+- log "Chat transcript":
+  - button "更换角色":
+    - img "Sparky"
+  - button "更换角色"
+  - heading "有什么可以帮您的吗？" [level=2]:
+    - generic: 有什么可以帮您的吗？
+  - 'button "理解: Explain the difficult parts"':
+    - generic: Explain the difficult parts
+  - 'button "学习: Generate flashcards from this"':
+    - generic: Generate flashcards from this
+  - 'button "增强: Fill in the gaps"':
+    - generic: Fill in the gaps
+  - 'button "生成: Add a summary at the top"':
+    - generic: Add a summary at the top
+  - button "查看更多"
+  - button "插件" [active]:
+    - text: 插件
+  - button "开始引导式学习":
+    - generic: 开始引导式课程
+- status
+- button "Choose File"
+- textbox "向你的 AI tutor 提问任何问题..."
+- button "发送消息" [disabled]:
+- button "Chat actions":
+- button "Guided mode off":
+  - generic: 引导
+- button "1 material selected, open picker" [pressed]:
+  - generic: "1"
+- button "呼叫 Sparky":
+  - generic: 通话
+- button "口述消息":
+- separator "Resize chat sidebar"
+- alert
+- dialog "Modal":
+  - button [disabled]:
+  - button [disabled]:
+  - button "插件"
+  - generic: ">"
+  - heading "聊天" [level=1]
+  - button "创建插件":
+    - generic: 创建插件
+  - button "关闭":
+  - heading "探索插件" [level=2]
+  - paragraph: 这些插件会改变 聊天 的运作方式。挑一个，或者自己做一个。
+  - textbox "搜索社区"
+  - button "精选"
+  - button "探索"
+  - button "我的插件"
+  - button "我的喜欢"
+  - tablist "按专业浏览":
+    - tab "所有专业" [selected]
+    - tab "护理与 NCLEX"
+    - tab "医学院与 USMLE"
+    - tab "医学预科与 MCAT"
+    - tab "法学院与律师资格考试"
+    - tab "法学预科与 LSAT"
+    - tab "工程"
+    - tab "生物与生命科学"
+    - tab "化学"
+    - tab "物理与数学"
+    - tab "商业、金融与会计"
+    - tab "经济学"
+    - tab "社会科学与心理学"
+    - tab "AP 与高中"
+    - tab "语言"
+    - tab "研究生申请"
+    - tab "学习方法"
+  - button "排序方式":
+    - generic: 排序方式
+  - heading "护理与 NCLEX" [level=3]
+  - heading "NCLEX-RN Priority, Delegation and Safety" [level=3]
+  - generic: 由
+  - generic: studyfetchplugins
+  - paragraph: Next Gen NCLEX-style clinical vignettes that drill who to see first, what to delegate and when to escalate
+  - generic: "294"
+  - button "94":
+    - generic: "94"
+  - heading "Psychiatric Nursing and Therapeutic Communication" [level=3]
+  - generic: 由
+  - generic: studyfetchplugins
+  - paragraph: Therapeutic response selection, core disorder features and milieu safety for psychiatric-mental health nursing
+  - generic: "31"
+  - button "32":
+    - generic: "32"
+  - button "医学院与 USMLE 查看全部 5 个":
+    - generic: 医学院与 USMLE
+    - text: 查看全部 5 个
+  - heading "USMLE Step 1 Vignette Reasoning Drill" [level=3]
+  - generic: 由
+  - generic: studyfetchplugins
+  - paragraph: Second-order Step 1 one-best-answer vignettes with mechanism-level rationales and distractor autopsies
+  - generic: "76"
+  - button "41":
+    - generic: "41"
+  - heading "USMLE Step 2 CK Next Best Step Drill" [level=3]
+  - generic: 由
+  - generic: studyfetchplugins
+  - paragraph: Two-step CK vignettes drilling next-best-step management and the correct order of a diagnostic workup
+  - generic: "12"
+  - button "22":
+    - generic: "22"
+  - heading "Medical Physiology Curves And Compensation" [level=3]
+  - generic: 由
+  - generic: studyfetchplugins
+  - paragraph: Cardiac, renal, and respiratory physiology drilled through curve shifts, gradients, and compensatory responses
+  - generic: "18"
+  - button "30":
+    - generic: "30"
+  - heading "医学预科与 MCAT" [level=3]
+  - heading "MCAT CARS Passage Reasoning Drill" [level=3]
+  - generic: 由
+  - generic: studyfetchplugins
+  - paragraph: CARS practice built strictly on passage text, testing inference, tone, and author agreement with no outside facts
+  - generic: "14"
+  - button "19":
+    - generic: "19"
+  - button "法学院与律师资格考试 查看全部 5 个":
+    - generic: 法学院与律师资格考试
+    - text: 查看全部 5 个
+  - heading "Bar Exam MEE Essay Workshop" [level=3]
+  - generic: 由
+  - generic: studyfetchplugins
+  - paragraph: "Timed MEE-style essays: issue spotting under pressure, structure, and rubric-based self-grading"
+  - generic: "4"
+  - button "14":
+    - generic: "14"
+  - 'heading "1L Contracts: Formation, Consideration and the UCC" [level=3]'
+  - generic: 由
+  - generic: studyfetchplugins
+  - paragraph: Offer, acceptance, consideration and the UCC-versus-common-law split, drilled at 1L exam depth
+  - generic: "5"
+  - button "14":
+    - generic: "14"
+  - 'heading "1L Criminal Law: Mens Rea and Inchoate Offenses" [level=3]'
+  - generic: 由
+  - generic: studyfetchplugins
+  - paragraph: Mens rea tiers, MPC versus common law, and attempt, solicitation and conspiracy at 1L depth
+  - generic: "3"
+  - button "16":
+    - generic: "16"
+  - heading "法学预科与 LSAT" [level=3]
+  - heading "LSAT Logical Reasoning Flaw Spotter" [level=3]
+  - generic: 由
+  - generic: studyfetchplugins
+  - paragraph: Drill LSAT argument families, named flaw types and the trap answers that beat most test takers
+  - generic: "4"
+  - button "16":
+    - generic: "16"
+  - heading "LSAT Reading Comprehension Structure Drill" [level=3]
+  - generic: 由
+  - generic: studyfetchplugins
+  - paragraph: Train passage structure, author attitude and comparative-passage questions in real LSAT RC format
+  - generic: "5"
+  - button "18":
+    - generic: "18"
+  - button "工程 查看全部 6 个":
+    - generic: 工程
+    - text: 查看全部 6 个
+  - 'heading "Statics: Free-Body Diagrams and Trusses" [level=3]'
+  - generic: 由
+  - generic: studyfetchplugins
+  - paragraph: Drill 2D and 3D equilibrium with strict free-body diagrams, sign conventions, support reactions and truss methods
+  - generic: "5"
+  - button "17":
+    - generic: "17"
+  - 'heading "Dynamics: Kinematics, Energy and Momentum" [level=3]'
+  - generic: 由
+  - generic: studyfetchplugins
+  - paragraph: Particle and rigid-body dynamics practice across kinematics, work-energy, impulse-momentum and rotation about a fixed axis
+  - generic: "3"
+  - button "14":
+    - generic: "14"
+  - 'heading "Mechanics of Materials: Beams and Mohr''s Circle" [level=3]'
+  - generic: 由
+  - generic: studyfetchplugins
+  - paragraph: Practice axial, torsional and bending stress, shear and moment diagrams, deflection, combined loading and Mohr's circle
+  - generic: "5"
+  - button "13":
+    - generic: "13"
+  - heading "生物与生命科学" [level=3]
+  - 'heading "Biology I and II: Mechanism-First Review" [level=3]'
+  - generic: 由
+  - generic: studyfetchplugins
+  - paragraph: Two-semester intro biology practice that tests how processes work rather than which term matches which definition
+  - generic: "34"
+  - button "18":
+    - generic: "18"
+  - 'heading "Ecology and Evolution: Selection and Phylogenetics" [level=3]'
+  - generic: 由
+  - generic: studyfetchplugins
+  - paragraph: College practice on evolutionary mechanisms, tree reading, and population and community ecology with real numbers
+  - generic: "4"
+  - button "12":
+    - generic: "12"
+  - heading "化学" [level=3]
+  - 'heading "Organic Chemistry I: Stereochemistry and Substitution" [level=3]'
+  - generic: 由
+  - generic: studyfetchplugins
+  - paragraph: First-semester organic drill on nomenclature, conformations, stereochemistry, and substitution versus elimination outcomes
+  - generic: "15"
+  - button "16":
+    - generic: "16"
+  - heading "物理与数学" [level=3]
+  - 'heading "Physics I Mechanics: Calculus-Based" [level=3]'
+  - generic: 由
+  - generic: studyfetchplugins
+  - paragraph: Calculus-based mechanics practice with free-body diagrams described in words, stated sign conventions, and symbolic answers first
+  - generic: "16"
+  - button "13":
+    - generic: "13"
+  - 'heading "Intro Statistics: Inference and Test Choice" [level=3]'
+  - generic: 由
+  - generic: studyfetchplugins
+  - paragraph: Sampling, confidence intervals, hypothesis testing and choosing the right test with honest p-value interpretation
+  - generic: "10"
+  - button "15":
+    - generic: "15"
+  - heading "商业、金融与会计" [level=3]
+  - 'heading "Corporate Finance: NPV, IRR and WACC" [level=3]'
+  - generic: 由
+  - generic: studyfetchplugins
+  - paragraph: Time value of money, capital budgeting, cost of capital and capital structure with cash flow timelines and shown work
+  - generic: "11"
+  - button "15":
+    - generic: "15"
+  - 'heading "Marketing: Segmentation, Positioning and Metrics" [level=3]'
+  - generic: 由
+  - generic: studyfetchplugins
+  - paragraph: STP, the four Ps and marketing metrics drilled on concrete company scenarios rather than framework recitation
+  - generic: "7"
+  - button "19":
+    - generic: "19"
+  - heading "MBA Case Analysis Coach" [level=3]
+  - generic: 由
+  - generic: studyfetchplugins
+  - paragraph: "Structured business-case reasoning: problem definition, evidence from the exhibits, options, recommendation and risks"
+  - generic: "4"
+  - button "14":
+    - generic: "14"
+  - heading "经济学" [level=3]
+  - heading "High School Microeconomics Coach" [level=3]
+  - generic: 由
+  - generic: studyfetchplugins
+  - paragraph: Supply, demand, elasticity and market structure taught verbally and graphically with small whole numbers
+  - generic: "6"
+  - button "13":
+    - generic: "13"
+  - heading "Intermediate Microeconomics Derivation Drill" [level=3]
+  - generic: 由
+  - generic: studyfetchplugins
+  - paragraph: College microeconomics with algebraic derivation, elasticity computation and comparative statics on solved equilibria
+  - generic: "11"
+  - button "11":
+    - generic: "11"
+  - 'heading "Intermediate Macro: IS-LM and AD-AS" [level=3]'
+  - generic: 由
+  - generic: studyfetchplugins
+  - paragraph: College macro drilling IS-LM and AD-AS shifts with algebraic multipliers, policy mixes and comparative statics
+  - generic: "4"
+  - button "10":
+    - generic: "10"
+  - heading "社会科学与心理学" [level=3]
+  - heading "Intro Psychology for High School" [level=3]
+  - generic: 由
+  - generic: studyfetchplugins
+  - paragraph: Plain-language intro psych practice built on everyday scenarios, from neurons and memory to learning, development and social behavior
+  - generic: "11"
+  - button "20":
+    - generic: "20"
+  - 'heading "Abnormal Psychology: DSM-5-TR Criteria Drill" [level=3]'
+  - generic: 由
+  - generic: studyfetchplugins
+  - paragraph: Practice diagnostic criteria, duration thresholds, differential features and treatment modalities using clinical case vignettes
+  - generic: "9"
+  - button "18":
+    - generic: "18"
+  - heading "AP 与高中" [level=3]
+  - heading "AP US History DBQ and LEQ Rubric Coach" [level=3]
+  - generic: 由
+  - generic: studyfetchplugins
+  - paragraph: Build and score APUSH document-based and long essay responses row by row against thesis, context, evidence, and complexity
+  - generic: "1"
+  - button "12":
+    - generic: "12"
+  - heading "AP English Language Rhetoric and Argument Coach" [level=3]
+  - generic: 由
+  - generic: studyfetchplugins
+  - paragraph: Rhetorical analysis and argument essay practice scored on the AP row rubric for thesis, evidence, and sophistication
+  - generic: "5"
+  - button "14":
+    - generic: "14"
+  - heading "语言" [level=3]
+  - heading "High School Spanish Conjugation and Input Coach" [level=3]
+  - generic: 由
+  - generic: studyfetchplugins
+  - paragraph: Beginner to intermediate Spanish drills on verb conjugation and comprehensible input with usage over grammar labels
+  - generic: "1"
+  - button "11":
+    - generic: "11"
+  - heading "Medical Spanish for Clinical Encounters" [level=3]
+  - generic: 由
+  - generic: studyfetchplugins
+  - paragraph: Clinical Spanish practice for history taking, symptom description, and plain-language explanation with patients
+  - button "13":
+    - generic: "13"
+  - heading "研究生申请" [level=3]
+  - heading "GMAT Quant and Verbal Drill" [level=3]
+  - generic: 由
+  - generic: studyfetchplugins
+  - paragraph: GMAT-style problem solving, data sufficiency, critical reasoning and sentence correction with trap-focused explanations
+  - generic: "2"
+  - button "13":
+    - generic: "13"
+  - heading "学习方法" [level=3]
+  - heading "Feynman Method Explain-Back Tutor" [level=3]
+  - generic: 由
+  - generic: studyfetchplugins
+  - paragraph: A tutor that makes you explain the concept in plain words and stops you at every place you were hand-waving
+  - generic: "94"
+  - button "64":
+    - generic: "64"

@@ -1,0 +1,233 @@
+- navigation "Main navigation":
+  - link "主页":
+    - /url: /platform
+  - button "搜索":
+  - link "我的学习集":
+    - /url: /platform/studysets
+  - link "日历":
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/calendar
+  - link "题库":
+    - /url: /platform/qbank
+  - button "教程":
+  - button "Hide tutorials shortcut":
+  - button "Feedback and Help":
+  - button "yan zhang — account menu":
+    - generic: YZ
+  - menu:
+    - menuitem "您的个人资料":
+      - generic: 您的个人资料
+    - menuitem "设置":
+      - generic: 设置
+    - menuitem "教程":
+      - generic: 教程
+    - menuitem "给我们反馈":
+      - generic: 给我们反馈
+    - menuitem "订阅":
+      - generic: 订阅
+    - menuitem "支持":
+      - generic: 支持
+    - menuitem "Discord":
+      - generic: Discord
+    - menuitem "主题 主题":
+      - generic: 主题
+      - radiogroup "主题":
+        - radio "Dark mode":
+        - radio "Light mode" [checked]:
+        - radio "System preference":
+- button:
+  - generic: 功能测试 · 线段计数 · 2026-11-20
+- button:
+- button:
+- region:
+  - link:
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5
+    - generic: Dashboard
+  - button:
+    - generic: 学习计划
+  - link:
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/chat/new
+    - generic: 聊天
+  - link:
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/tutor-me
+    - generic: 辅导我
+  - link:
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/live-lecture
+    - generic: 录制讲座
+  - button:
+    - generic: 练习与活动
+  - button:
+    - text: 上传
+  - link:
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/materials
+    - generic: 资料
+  - link:
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/materials
+    - text: 查看全部
+  - button:
+  - button:
+    - link:
+      - /url: /platform/studyset/6affc0bb75798c45c17d21f5/material/6affc0bb75798c45c17d21f6/note
+      - paragraph: Untitled Document
+  - button:
+    - link:
+      - /url: /platform/studyset/6affc0bb75798c45c17d21f5/material/6affc141249fd40339c8c590/note
+      - paragraph: 功能测试：线段计数规律与计算方法
+- separator
+- navigation:
+  - button "Expand sidebar":
+  - navigation "Breadcrumb":
+    - button "功能测试 · 线段计数 · 2026-11-20":
+      - generic: 功能测试 · 线段计数 · 2026-11-20
+    - button "功能测试：线段计数规律与计算方法":
+      - generic: 功能测试：线段计数规律与计算方法
+  - button "Turn into another learning format":
+    - text: 转换成
+  - button "升级":
+    - generic: 升级
+  - button "Share Material":
+    - generic: 分享
+  - button "创建进度":
+    - generic: Creation progress, new results ready
+  - 'button "Study timer: 25m"':
+    - generic: 25m
+- paragraph: 功能测试：线段计数
+- paragraph: 一条直线段被标记点分成 n 个小段时，共有 n+1 个不同的点。任意两个不同点确定一条线段。因此线段总数是 n(n+1)/2，也等于 1+2+…+n。分成 10 个小段时共有 11 个点和 55 条线段；分成 4 个小段时有 10 条线段。计数不依赖各小段的长度是否相等。常见错误是把小段数当成点数，或只统计相邻点构成的小线段。
+- paragraph: 独立练习：分成 6 个小段时有多少条线段？请分别用分类相加和选两点解释。
+- button "字体系列":
+  - generic: Inter
+- button "Font size":
+  - text: "11"
+- button "粗体":
+- button "斜体":
+- button "下划线":
+- button "删除线":
+- button "文本颜色":
+- button "左对齐" [pressed]:
+- button "居中对齐":
+- button "右对齐":
+- button "有序列表":
+- button "无序列表":
+- button "撤销" [disabled]:
+- button "重做" [disabled]:
+- button "插入":
+- button "版本历史":
+- button "打印":
+- button "折叠":
+- button "Chat history":
+  - generic: 线段数量计算测试
+- button "New chat":
+- button "Collapse chat":
+- log "Chat transcript":
+  - paragraph: 功能测试：根据当前资料，一条线段被分成6个小段，共有多少条不同线段？请分别用分类相加和选两个点的方法解释，并指出资料来源。若只分成2段但长度不等，答案会变化吗？
+  - group "Message actions":
+    - button "Show message grade details":
+      - generic: A
+    - button "Copy message":
+    - status
+  - button "更换角色":
+    - img "Sparky"
+  - paragraph: 我先查一下你当前这份笔记的内容，确保解释和资料来源都准确。
+  - button "Wolfram Alpha 6*(6+1)/2, but do not solve it yourself" [expanded]:
+    - img "Wolfram Alpha"
+    - generic: 6*(6+1)/2, but do not solve it yourself
+  - paragraph: "Wolfram|Alpha could not understand: 6*(6+1)/2, but do not solve it yourself. Things to try instead: 6*(6+1)/2 solve yourself f"
+  - link "Computed by Wolfram Alpha Open in Wolfram Alpha":
+    - /url: https://www.wolframalpha.com/input?i=6*(6%2B1)%2F2%2C%20but%20do%20not%20solve%20it%20yourself
+    - generic: Computed by
+    - img "Wolfram Alpha"
+    - generic: Open in Wolfram Alpha
+  - button "Wolfram Alpha 6*(6+1)/2" [expanded]:
+    - img "Wolfram Alpha"
+    - generic: 6*(6+1)/2
+  - paragraph: "Query: \"6*(6+1)/2\" Input: 6 × (6 + 1)/2 Result: 21 Number name: twenty-one Visual representation: * * * * * * * * * * * * * * * * * * * * *"
+  - figure "Number line":
+    - generic: Number line
+    - link "Number line":
+      - /url: https://public6.wolframalpha.com/files/PNG_7xcfao4y5q.png
+      - img "Number line"
+  - paragraph: "Wolfram Language code: NumberLinePlot[21] Wolfram|Alpha website result for \"6*(6+1)/2\": https://www.wolframalpha.com/input?i=6%2A%286%2B1%29%2F2"
+  - link "Computed by Wolfram Alpha Open in Wolfram Alpha":
+    - /url: https://www.wolframalpha.com/input?i=6*(6%2B1)%2F2
+    - generic: Computed by
+    - img "Wolfram Alpha"
+    - generic: Open in Wolfram Alpha
+  - paragraph:
+    - text: 答案是
+    - strong: 21 条
+    - text: 。你的笔记正好就是这道练习的出处 📚
+  - paragraph:
+    - strong: 方法一：按长度分类相加
+    - text: 6 个小段意味着 7 个点。按“跨几个小段”来数：
+  - list:
+    - listitem: 跨 1 段：6 条
+    - listitem: 跨 2 段：5 条
+    - listitem: 跨 3 段：4 条
+    - listitem: 跨 4 段：3 条
+    - listitem: 跨 5 段：2 条
+    - listitem: 跨 6 段（整条）：1 条
+  - paragraph:
+    - text: 相加得
+    - generic: 6 +
+    - generic: 5 +
+    - generic: 4 +
+    - generic: 3 +
+    - generic: 2 +
+    - generic: 1 =
+    - generic: "21"
+    - text: 。
+  - paragraph:
+    - strong: 方法二：选两个点
+    - text: 7 个点中任取 2 个就确定一条线段，与中间隔多少点无关：
+    - generic: (
+    - generic: "2"
+    - generic: "7"
+    - generic: )
+    - text: =
+    - generic: "2"
+    - generic: 7 × 6
+    - text: =
+    - generic: "21"
+  - paragraph:
+    - text: 两种方法结果一致，也验证了笔记里的公式
+    - generic: "2"
+    - generic: n(n+1)
+    - text: （此处
+    - generic: n =
+    - generic: "6"
+    - text: ）。
+  - paragraph:
+    - strong: 分成 2 段但长度不等，答案会变吗？
+    - text: 不会。3 个点确定
+    - generic: (
+    - generic: "2"
+    - generic: "3"
+    - generic: )
+    - text: =
+    - generic: "3"
+    - text: 条线段，即 2+1=3。笔记明确指出“计数不依赖各小段的长度是否相等”，因为任意两个不同的点都唯一确定一条线段，点的位置和间距不影响配对数量。
+  - paragraph:
+    - text: 资料来源：你当前打开的笔记《功能测试：线段计数规律与计算方法》，第 1 行正文
+    - button "功能测试：线段计数规律与计算方... (Page 1)":
+      - generic: 功能测试：线段计数规律与计算方... (Page 1)
+  - button:
+  - button:
+  - button:
+  - button:
+  - button:
+  - button:
+- status: 有新的回复可用
+- button "New response available. Jump to latest":
+  - text: 跳转至最新
+- button "Choose File"
+- textbox "向你的 AI tutor 提问任何问题..."
+- button "发送消息" [disabled]:
+- button "Chat actions":
+- button "正在根据你的资料构建学习路径…" [disabled]:
+  - generic: 引导
+- button "1 material selected, open picker" [pressed]:
+  - generic: "1"
+- button "呼叫 Sparky":
+  - generic: 通话
+- button "口述消息":
+- separator "Resize chat sidebar"
+- alert: 功能测试 · 线段计数 · 2026-11-20 | StudyFetch

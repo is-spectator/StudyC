@@ -1,0 +1,2076 @@
+- navigation "Main navigation":
+  - link "主页":
+    - /url: /platform
+  - button "搜索":
+  - link "我的学习集":
+    - /url: /platform/studysets
+  - link "日历":
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/calendar
+  - link "题库":
+    - /url: /platform/qbank
+  - button "教程":
+  - button "Hide tutorials shortcut":
+  - button "Feedback and Help":
+  - button "yan zhang — account menu":
+    - generic: YZ
+  - menu:
+    - menuitem "您的个人资料":
+      - generic: 您的个人资料
+    - menuitem "设置":
+      - generic: 设置
+    - menuitem "教程":
+      - generic: 教程
+    - menuitem "给我们反馈":
+      - generic: 给我们反馈
+    - menuitem "订阅":
+      - generic: 订阅
+    - menuitem "支持":
+      - generic: 支持
+    - menuitem "Discord":
+      - generic: Discord
+    - menuitem "主题 主题":
+      - generic: 主题
+      - radiogroup "主题":
+        - radio "Dark mode":
+        - radio "Light mode" [checked]:
+        - radio "System preference":
+- button "切换学习集":
+  - generic: 功能测试 · 线段计数 · 2026-11-20
+- button "显示学习计划":
+- button "Collapse sidebar":
+- region "Study set navigation":
+  - link "Dashboard":
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5
+    - generic: Dashboard
+  - button "学习计划":
+    - generic: 学习计划
+  - link "聊天":
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/chat/new
+    - generic: 聊天
+  - link "辅导我":
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/tutor-me
+    - generic: 辅导我
+  - link "录制讲座":
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/live-lecture
+    - generic: 录制讲座
+  - button "练习与活动":
+    - generic: 练习与活动
+  - link "资料":
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/materials
+    - generic: 资料
+  - link "查看全部":
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/materials
+  - button "Untitled Document":
+    - link "Untitled Document":
+      - /url: /platform/studyset/6affc0bb75798c45c17d21f5/material/6affc0bb75798c45c17d21f6/note
+      - paragraph: Untitled Document
+  - button "功能测试：线段计数规律与计算方法":
+    - link "功能测试：线段计数规律与计算方法":
+      - /url: /platform/studyset/6affc0bb75798c45c17d21f5/material/6affc141249fd40339c8c590/note
+      - paragraph: 功能测试：线段计数规律与计算方法
+- separator "Resize sidebar"
+- navigation:
+  - generic: Mini Apps
+  - button "升级":
+    - generic: 升级
+  - button "创建进度":
+    - generic: Creation progress, one has an issue
+  - 'button "Study timer: 25m"':
+    - generic: 25m
+- heading "Mini Apps" [level=1]
+- paragraph: 发现由我们社区创建的互动学习体验。
+- link "创建 Mini App":
+  - /url: /platform/apps/create
+  - button "创建 Mini App":
+    - text: 创建 Mini App
+- button "探索"
+- button "我的 Mini Apps"
+- button "收藏"
+- textbox "搜索应用":
+  - /placeholder: 搜索...
+- link "本月 Mini App 为最佳新应用投票。每月月底会诞生一位新的冠军。 立即投票":
+  - /url: /platform/apps/of-the-month
+  - heading "本月 Mini App" [level=3]
+  - paragraph: 为最佳新应用投票。每月月底会诞生一位新的冠军。
+  - text: 立即投票
+- heading "精选" [level=2]
+- link "Human Body Atlas Human Body Atlas pennythedawg 104 2844 Trending on TikTok":
+  - /url: /platform/apps/6ad6d744eb4f4cccec47b179/play
+  - img "Human Body Atlas"
+  - heading "Human Body Atlas" [level=3]
+  - button "pennythedawg":
+    - generic: pennythedawg
+  - generic: "104"
+  - generic: "2844"
+  - generic: Trending on TikTok
+- link "Molecule Lab Molecule Lab pennythedawg 24 524 Trending on TikTok":
+  - /url: /platform/apps/6ae96fb79473ec6ed3b0c7c2/play
+  - img "Molecule Lab"
+  - heading "Molecule Lab" [level=3]
+  - button "pennythedawg":
+    - generic: pennythedawg
+  - generic: "24"
+  - generic: "524"
+  - generic: Trending on TikTok
+- link "Osteon — Drill Osteon — Drill pennythedawg 2 98 Trending on TikTok":
+  - /url: /platform/apps/6af647663c24fa2c5b03d3b3/play
+  - img "Osteon — Drill"
+  - heading "Osteon — Drill" [level=3]
+  - button "pennythedawg":
+    - generic: pennythedawg
+  - generic: "2"
+  - generic: "98"
+  - generic: Trending on TikTok
+- link "Sparky Crush Sparky Crush pennythedawg 7 Use Your Topic Trending on TikTok":
+  - /url: /platform/apps/6aa9e6074be9724498d59d0d/play
+  - img "Sparky Crush"
+  - heading "Sparky Crush" [level=3]
+  - button "pennythedawg":
+    - generic: pennythedawg
+  - generic: "7"
+  - generic: Use Your Topic
+  - generic: Trending on TikTok
+- link "Sparky Jump Sparky Jump pennythedawg 4 726 Trending on TikTok":
+  - /url: /platform/apps/6aa362a5fb998241b310075a/play
+  - img "Sparky Jump"
+  - heading "Sparky Jump" [level=3]
+  - button "pennythedawg":
+    - generic: pennythedawg
+  - generic: "4"
+  - generic: "726"
+  - generic: Trending on TikTok
+- link "Unhinged Study Methods Wheel Unhinged Study Methods Wheel adam123 192 8103 Trending on TikTok":
+  - /url: /platform/apps/6a97289b602e14468a4b1a79/play
+  - img "Unhinged Study Methods Wheel"
+  - heading "Unhinged Study Methods Wheel" [level=3]
+  - button "adam123":
+    - generic: adam123
+  - generic: "192"
+  - generic: "8103"
+  - generic: Trending on TikTok
+- link "Guess the Diagnosis [8 Bit] Guess the Diagnosis [8 Bit] StudyFetchHQ 272 10701 Use Your Topic Trending on TikTok":
+  - /url: /platform/apps/6a28a057b4200885807931c9/play
+  - img "Guess the Diagnosis [8 Bit]"
+  - heading "Guess the Diagnosis [8 Bit]" [level=3]
+  - button "StudyFetchHQ":
+    - generic: StudyFetchHQ
+  - generic: "272"
+  - generic: "10701"
+  - generic: Use Your Topic
+  - generic: Trending on TikTok
+- link "Amino Acid Quiz Amino Acid Quiz pennythedawg 13 519 Trending on TikTok":
+  - /url: /platform/apps/6aa3200e1782f132a509689d/play
+  - img "Amino Acid Quiz"
+  - heading "Amino Acid Quiz" [level=3]
+  - button "pennythedawg":
+    - generic: pennythedawg
+  - generic: "13"
+  - generic: "519"
+  - generic: Trending on TikTok
+- link "Study Buddy Sparky Study Buddy Sparky pennythedawg 24 835 Trending on TikTok":
+  - /url: /platform/apps/6aa335ec648f9ae3f4d8ff3f/play
+  - img "Study Buddy Sparky"
+  - heading "Study Buddy Sparky" [level=3]
+  - button "pennythedawg":
+    - generic: pennythedawg
+  - generic: "24"
+  - generic: "835"
+  - generic: Trending on TikTok
+- link "Sparky Anatomy Lab Sparky Anatomy Lab pennythedawg 118 3410 Trending on TikTok":
+  - /url: /platform/apps/6aa46b13fbb5cedf43194e41/play
+  - img "Sparky Anatomy Lab"
+  - heading "Sparky Anatomy Lab" [level=3]
+  - button "pennythedawg":
+    - generic: pennythedawg
+  - generic: "118"
+  - generic: "3410"
+  - generic: Trending on TikTok
+- button "向右滚动":
+- heading "趋势" [level=2]:
+  - text: 趋势
+- link "StudyScroll StudyScroll noralee1704076 226 4381 Use Your Topic":
+  - /url: /platform/apps/69d6b53f052ecba768df2151/play
+  - img "StudyScroll"
+  - heading "StudyScroll" [level=3]
+  - button "noralee1704076":
+    - generic: noralee1704076
+  - generic: "226"
+  - generic: "4381"
+  - generic: Use Your Topic
+- link "juicy gossip juicy gossip mythili1951935 139 2692 Use Your Topic":
+  - /url: /platform/apps/6a006efdaec593fe01cb08dc/play
+  - img "juicy gossip"
+  - heading "juicy gossip" [level=3]
+  - button "mythili1951935":
+    - generic: mythili1951935
+  - generic: "139"
+  - generic: "2692"
+  - generic: Use Your Topic
+- link "F1 Sonnys F1 Sonnys ashleyjyoo 1816 71700":
+  - /url: /platform/apps/6a17c343caba20a106cc6acc/play
+  - img "F1 Sonnys"
+  - heading "F1 Sonnys" [level=3]
+  - button "ashleyjyoo":
+    - generic: ashleyjyoo
+  - generic: "1816"
+  - generic: "71700"
+- link "Jeo-party! Jeo-party! CacheMonet 779 40051 Use Your Topic":
+  - /url: /platform/apps/69951536dc74d818e5f02eda/play
+  - img "Jeo-party!"
+  - heading "Jeo-party!" [level=3]
+  - button "CacheMonet":
+    - generic: CacheMonet
+  - generic: "779"
+  - generic: "40051"
+  - generic: Use Your Topic
+- link "Sparke Pets Sparke Pets nickolasbalon 340 10232 Use Your Topic":
+  - /url: /platform/apps/6995f7fd920a3387170dd60e/play
+  - img "Sparke Pets"
+  - heading "Sparke Pets" [level=3]
+  - button "nickolasbalon":
+    - generic: nickolasbalon
+  - generic: "340"
+  - generic: "10232"
+  - generic: Use Your Topic
+- link "Hogwarts Charm Academy Hogwarts Charm Academy elizabeth1270325 602 12236 Use Your Topic":
+  - /url: /platform/apps/6997a88300c9b9d90dd52008/play
+  - img "Hogwarts Charm Academy"
+  - heading "Hogwarts Charm Academy" [level=3]
+  - button "elizabeth1270325":
+    - generic: elizabeth1270325
+  - generic: "602"
+  - generic: "12236"
+  - generic: Use Your Topic
+- link "Candy Crush Study Candy Crush Study gumjala 113 3926 Use Your Topic":
+  - /url: /platform/apps/69a1faeaed908ed964ec5233/play
+  - img "Candy Crush Study"
+  - heading "Candy Crush Study" [level=3]
+  - button "gumjala":
+    - generic: gumjala
+  - generic: "113"
+  - generic: "3926"
+  - generic: Use Your Topic
+- link "Focus Flight Focus Flight ilanagains 76 3425":
+  - /url: /platform/apps/69c13d25ac4a2100ec1f7c46/play
+  - img "Focus Flight"
+  - heading "Focus Flight" [level=3]
+  - button "ilanagains":
+    - generic: ilanagains
+  - generic: "76"
+  - generic: "3425"
+- link "Study with ENHYPEN! ✨ Study with ENHYPEN! ✨ enhypen1920813 53 695 Use Your Topic":
+  - /url: /platform/apps/69dfed7a60f502fcb61a0787/play
+  - img "Study with ENHYPEN! ✨"
+  - heading "Study with ENHYPEN! ✨" [level=3]
+  - button "enhypen1920813":
+    - generic: enhypen1920813
+  - generic: "53"
+  - generic: "695"
+  - generic: Use Your Topic
+- link "Bitlife dupe Quiz Bitlife dupe Quiz anna1278998 22 378 Use Your Topic":
+  - /url: /platform/apps/6a0b3f2505879a7e7a2e15a0/play
+  - img "Bitlife dupe Quiz"
+  - heading "Bitlife dupe Quiz" [level=3]
+  - button "anna1278998":
+    - generic: anna1278998
+  - generic: "22"
+  - generic: "378"
+  - generic: Use Your Topic
+- link "F1 Studio F1 Studio K keishawibowo 285 3986 Use Your Topic":
+  - /url: /platform/apps/6a2baf62aff932189a68efb8/play
+  - img "F1 Studio"
+  - heading "F1 Studio" [level=3]
+  - button "K keishawibowo":
+    - generic: K
+    - generic: keishawibowo
+  - generic: "285"
+  - generic: "3986"
+  - generic: Use Your Topic
+- button "向右滚动":
+- heading "Timers" [level=2]
+- link "Create new timer":
+  - /url: /platform/apps/create?type=timer
+- button "查看全部"
+- link "Grand Prix Focus Grand Prix Focus Study timer J jess460948 0":
+  - /url: /platform/apps/6affc63339c50e2073f0ed3f/play
+  - img "Grand Prix Focus"
+  - heading "Grand Prix Focus" [level=3]
+  - paragraph: Study timer
+  - button "J jess460948":
+    - generic: J
+    - generic: jess460948
+  - generic: "0"
+- link "Cozy Focus Cozy Focus Study timer reeve461962 0 3":
+  - /url: /platform/apps/6aff3646bef585563ea6d1ef/play
+  - img "Cozy Focus"
+  - heading "Cozy Focus" [level=3]
+  - paragraph: Study timer
+  - button "reeve461962":
+    - generic: reeve461962
+  - generic: "0"
+  - generic: "3"
+- link "Misty Pine Focus Misty Pine Focus Study timer J jayne690076 0 4":
+  - /url: /platform/apps/6afcd433fccfbbcf571a931c/play
+  - img "Misty Pine Focus"
+  - heading "Misty Pine Focus" [level=3]
+  - paragraph: Study timer
+  - button "J jayne690076":
+    - generic: J
+    - generic: jayne690076
+  - generic: "0"
+  - generic: "4"
+- link "Starry Dusk Forest Starry Dusk Forest Study timer L liviya 0 4":
+  - /url: /platform/apps/6afb8314227dc3d2c65ac472/play
+  - img "Starry Dusk Forest"
+  - heading "Starry Dusk Forest" [level=3]
+  - paragraph: Study timer
+  - button "L liviya":
+    - generic: L
+    - generic: liviya
+  - generic: "0"
+  - generic: "4"
+- link "Starry Swirl Focus (copy) Starry Swirl Focus (copy) Study timer breeannedelarosa 0 3":
+  - /url: /platform/apps/6afb5943fd2bf22147fc9fef/play
+  - img "Starry Swirl Focus (copy)"
+  - heading "Starry Swirl Focus (copy)" [level=3]
+  - paragraph: Study timer
+  - button "breeannedelarosa":
+    - generic: breeannedelarosa
+  - generic: "0"
+  - generic: "3"
+- link "Dreamy Pink Timer Dreamy Pink Timer Study timer K kaykay662761 0 10":
+  - /url: /platform/apps/6afb4d234ab15df8ab58a903/play
+  - img "Dreamy Pink Timer"
+  - heading "Dreamy Pink Timer" [level=3]
+  - paragraph: Study timer
+  - button "K kaykay662761":
+    - generic: K
+    - generic: kaykay662761
+  - generic: "0"
+  - generic: "10"
+- link "Starry Swirl Focus Starry Swirl Focus Study timer K katalina223626 0 1":
+  - /url: /platform/apps/6afb176bec11095245a4fa7f/play
+  - img "Starry Swirl Focus"
+  - heading "Starry Swirl Focus" [level=3]
+  - paragraph: Study timer
+  - button "K katalina223626":
+    - generic: K
+    - generic: katalina223626
+  - generic: "0"
+  - generic: "1"
+- link "Sunset Focus Sunset Focus Study timer charlottepetersen1158615 0 4":
+  - /url: /platform/apps/6afa724c234f92c0196c0307/play
+  - img "Sunset Focus"
+  - heading "Sunset Focus" [level=3]
+  - paragraph: Study timer
+  - button "charlottepetersen1158615":
+    - generic: charlottepetersen1158615
+  - generic: "0"
+  - generic: "4"
+- button "向右滚动":
+- heading "游戏" [level=2]
+- button "查看全部"
+- link "Brain Bank Brain Bank B biglaunch10 125 4754 Use Your Topic":
+  - /url: /platform/apps/6996097fb143d19aaea25a3e/play
+  - img "Brain Bank"
+  - heading "Brain Bank" [level=3]
+  - button "B biglaunch10":
+    - generic: B
+    - generic: biglaunch10
+  - generic: "125"
+  - generic: "4754"
+  - generic: Use Your Topic
+- link "Study Kart Dash Study Kart Dash will1107202 84 6607 Use Your Topic":
+  - /url: /platform/apps/699626b0033b5d4491dc5e02/play
+  - img "Study Kart Dash"
+  - heading "Study Kart Dash" [level=3]
+  - button "will1107202":
+    - generic: will1107202
+  - generic: "84"
+  - generic: "6607"
+  - generic: Use Your Topic
+- link "Papa's Studyaria Papa's Studyaria masonherbel 288 7396 Use Your Topic":
+  - /url: /platform/apps/699770753d154e71631c4ac0/play
+  - img "Papa's Studyaria"
+  - heading "Papa's Studyaria" [level=3]
+  - button "masonherbel":
+    - generic: masonherbel
+  - generic: "288"
+  - generic: "7396"
+  - generic: Use Your Topic
+- link "Aesthetic Trivia Aesthetic Trivia jcam 112 4416 Use Your Topic":
+  - /url: /platform/apps/69979d653cb2008d088f2ed0/play
+  - img "Aesthetic Trivia"
+  - heading "Aesthetic Trivia" [level=3]
+  - button "jcam":
+    - generic: jcam
+  - generic: "112"
+  - generic: "4416"
+  - generic: Use Your Topic
+- link "Chess - Grandmaster Chess - Grandmaster ashleyjyoo 61 2746 Use Your Topic":
+  - /url: /platform/apps/699757c204a4c706062b491d/play
+  - img "Chess - Grandmaster"
+  - heading "Chess - Grandmaster" [level=3]
+  - button "ashleyjyoo":
+    - generic: ashleyjyoo
+  - generic: "61"
+  - generic: "2746"
+  - generic: Use Your Topic
+- link "GlowGrove Quest GlowGrove Quest adam123 15 1490 Use Your Topic":
+  - /url: /platform/apps/69966a638a16119df7f26572/play
+  - img "GlowGrove Quest"
+  - heading "GlowGrove Quest" [level=3]
+  - button "adam123":
+    - generic: adam123
+  - generic: "15"
+  - generic: "1490"
+  - generic: Use Your Topic
+- link "F1 STUDY RACER F1 STUDY RACER peter1675801 57 1603 Use Your Topic":
+  - /url: /platform/apps/699d0c04de44f2f6fd47e2f7/play
+  - img "F1 STUDY RACER"
+  - heading "F1 STUDY RACER" [level=3]
+  - button "peter1675801":
+    - generic: peter1675801
+  - generic: "57"
+  - generic: "1603"
+  - generic: Use Your Topic
+- link "Cosmic Quiz Invaders Cosmic Quiz Invaders ryantrattner383 36 2722 Use Your Topic":
+  - /url: /platform/apps/6995119c3fc4c54f20f125fb/play
+  - img "Cosmic Quiz Invaders"
+  - heading "Cosmic Quiz Invaders" [level=3]
+  - button "ryantrattner383":
+    - generic: ryantrattner383
+  - generic: "36"
+  - generic: "2722"
+  - generic: Use Your Topic
+- button "向右滚动":
+- heading "学习工具" [level=2]
+- button "查看全部"
+- link "Flight Simulator Timer Flight Simulator Timer janetnguyen1418312 1734 69576":
+  - /url: /platform/apps/69a8dc5b0c251f187f1782d9/play
+  - img "Flight Simulator Timer"
+  - heading "Flight Simulator Timer" [level=3]
+  - button "janetnguyen1418312":
+    - generic: janetnguyen1418312
+  - generic: "1734"
+  - generic: "69576"
+- link "Aesthetic Study Timer Aesthetic Study Timer jcam 212 7681":
+  - /url: /platform/apps/6998aceeccd17453a4975781/play
+  - img "Aesthetic Study Timer"
+  - heading "Aesthetic Study Timer" [level=3]
+  - button "jcam":
+    - generic: jcam
+  - generic: "212"
+  - generic: "7681"
+- link "Study Call with BTS!! Study Call with BTS!! alexus163484 134 3161 Use Your Topic":
+  - /url: /platform/apps/69c06bfc8d9cdf077dc5b009/play
+  - img "Study Call with BTS!!"
+  - heading "Study Call with BTS!!" [level=3]
+  - button "alexus163484":
+    - generic: alexus163484
+  - generic: "134"
+  - generic: "3161"
+  - generic: Use Your Topic
+- link "Study Agenda Study Agenda ashleyjyoo 130 3648 Use Your Topic":
+  - /url: /platform/apps/6995ff074eec8b1ee96c9f52/play
+  - img "Study Agenda"
+  - heading "Study Agenda" [level=3]
+  - button "ashleyjyoo":
+    - generic: ashleyjyoo
+  - generic: "130"
+  - generic: "3648"
+  - generic: Use Your Topic
+- link "Flight Study Flight Study nickolasbalon 84 4668":
+  - /url: /platform/apps/69976d8d65d1cfd45d8cdbde/play
+  - img "Flight Study"
+  - heading "Flight Study" [level=3]
+  - button "nickolasbalon":
+    - generic: nickolasbalon
+  - generic: "84"
+  - generic: "4668"
+- link "Classroom Exam Sim Classroom Exam Sim ryantrattner383 64 2806 Use Your Topic":
+  - /url: /platform/apps/699539d808efffdda8cdb824/play
+  - img "Classroom Exam Sim"
+  - heading "Classroom Exam Sim" [level=3]
+  - button "ryantrattner383":
+    - generic: ryantrattner383
+  - generic: "64"
+  - generic: "2806"
+  - generic: Use Your Topic
+- link "Cactus Focus Cactus Focus ryantrattner383 35 827 Use Your Topic":
+  - /url: /platform/apps/699518431d10ece8ca521603/play
+  - img "Cactus Focus"
+  - heading "Cactus Focus" [level=3]
+  - button "ryantrattner383":
+    - generic: ryantrattner383
+  - generic: "35"
+  - generic: "827"
+  - generic: Use Your Topic
+- link "F1 study game better for my use F1 study game better for my use L laurenmitchell 27 607":
+  - /url: /platform/apps/6a718c429c815618cf09b912/play
+  - img "F1 study game better for my use"
+  - heading "F1 study game better for my use" [level=3]
+  - button "L laurenmitchell":
+    - generic: L
+    - generic: laurenmitchell
+  - generic: "27"
+  - generic: "607"
+- button "向右滚动":
+- heading "测验" [level=2]
+- button "查看全部"
+- link "Rapid Recall Rapid Recall marvinicayforonda 45 2238 Use Your Topic":
+  - /url: /platform/apps/699532864d152b9c971a5f43/play
+  - img "Rapid Recall"
+  - heading "Rapid Recall" [level=3]
+  - button "marvinicayforonda":
+    - generic: marvinicayforonda
+  - generic: "45"
+  - generic: "2238"
+  - generic: Use Your Topic
+- link "KATSEYE Study Call KATSEYE Study Call alexus163484 39 891 Use Your Topic":
+  - /url: /platform/apps/69ddb3dffe3a40c1a4a5ce61/play
+  - img "KATSEYE Study Call"
+  - heading "KATSEYE Study Call" [level=3]
+  - button "alexus163484":
+    - generic: alexus163484
+  - generic: "39"
+  - generic: "891"
+  - generic: Use Your Topic
+- link "Danganropa style Danganropa style deletedUser-inbrm-at4xxf-1777658193536 18 663 Use Your Topic":
+  - /url: /platform/apps/69a8c25ba05647afd9bd45bb/play
+  - img "Danganropa style"
+  - heading "Danganropa style" [level=3]
+  - button "deletedUser-inbrm-at4xxf-1777658193536":
+    - generic: deletedUser-inbrm-at4xxf-1777658193536
+  - generic: "18"
+  - generic: "663"
+  - generic: Use Your Topic
+- link "Trivia Trivia abigailgarcia1987717 18 562 Use Your Topic":
+  - /url: /platform/apps/69b9d0d93ddf2b7c567d0f58/play
+  - img "Trivia"
+  - heading "Trivia" [level=3]
+  - button "abigailgarcia1987717":
+    - generic: abigailgarcia1987717
+  - generic: "18"
+  - generic: "562"
+  - generic: Use Your Topic
+- link "Pink Cafe Quizzes Pink Cafe Quizzes ace1216225 9 304 Use Your Topic":
+  - /url: /platform/apps/69f02f4efcf04df633ba4c49/play
+  - img "Pink Cafe Quizzes"
+  - heading "Pink Cafe Quizzes" [level=3]
+  - button "ace1216225":
+    - generic: ace1216225
+  - generic: "9"
+  - generic: "304"
+  - generic: Use Your Topic
+- link "Blue themed study room Blue themed study room E ethan1627848 8 149 Use Your Topic":
+  - /url: /platform/apps/69a589c341030e258cb59270/play
+  - img "Blue themed study room"
+  - heading "Blue themed study room" [level=3]
+  - button "E ethan1627848":
+    - generic: E
+    - generic: ethan1627848
+  - generic: "8"
+  - generic: "149"
+  - generic: Use Your Topic
+- link "Q WN Hogwarts Charm Academy Q WN Hogwarts Charm Academy safitrinurulisnaeni1259037 1 114 Use Your Topic":
+  - /url: /platform/apps/6a01ffc593e64d23350f612d/play
+  - img "Q WN Hogwarts Charm Academy"
+  - heading "Q WN Hogwarts Charm Academy" [level=3]
+  - button "safitrinurulisnaeni1259037":
+    - generic: safitrinurulisnaeni1259037
+  - generic: "1"
+  - generic: "114"
+  - generic: Use Your Topic
+- link "Vecna Battle Quiz Vecna Battle Quiz vaishnavi1129026 0 122 Use Your Topic":
+  - /url: /platform/apps/699f19c5f52330f82ed9bf94/play
+  - img "Vecna Battle Quiz"
+  - heading "Vecna Battle Quiz" [level=3]
+  - button "vaishnavi1129026":
+    - generic: vaishnavi1129026
+  - generic: "0"
+  - generic: "122"
+  - generic: Use Your Topic
+- button "向右滚动":
+- heading "闪卡" [level=2]
+- button "查看全部"
+- link "Cozy Cat Evening Study Cafe Cozy Cat Evening Study Cafe srianggreniwicaksana 27 560 Use Your Topic":
+  - /url: /platform/apps/69ebf440ec80b9e962893486/play
+  - img "Cozy Cat Evening Study Cafe"
+  - heading "Cozy Cat Evening Study Cafe" [level=3]
+  - button "srianggreniwicaksana":
+    - generic: srianggreniwicaksana
+  - generic: "27"
+  - generic: "560"
+  - generic: Use Your Topic
+- link "Flashcards in the Backrooms Flashcards in the Backrooms ashleyjyoo 21 353 Use Your Topic":
+  - /url: /platform/apps/6a1e053b867899b51930c96a/play
+  - img "Flashcards in the Backrooms"
+  - heading "Flashcards in the Backrooms" [level=3]
+  - button "ashleyjyoo":
+    - generic: ashleyjyoo
+  - generic: "21"
+  - generic: "353"
+  - generic: Use Your Topic
+- link "Sparkémon Trainer!! Sparkémon Trainer!! KarlaUrgiles 14 338 Use Your Topic":
+  - /url: /platform/apps/69a8ce9b14b03ee4fab500b7/play
+  - img "Sparkémon Trainer!!"
+  - heading "Sparkémon Trainer!!" [level=3]
+  - button "KarlaUrgiles":
+    - generic: KarlaUrgiles
+  - generic: "14"
+  - generic: "338"
+  - generic: Use Your Topic
+- link "Cafe Study Cafe Study helaine1493029 17 787 Use Your Topic":
+  - /url: /platform/apps/69975504c253cd09282a72dc/play
+  - img "Cafe Study"
+  - heading "Cafe Study" [level=3]
+  - button "helaine1493029":
+    - generic: helaine1493029
+  - generic: "17"
+  - generic: "787"
+  - generic: Use Your Topic
+- link "8-bit Flashcards 8-bit Flashcards jcam 4 267 Use Your Topic":
+  - /url: /platform/apps/6997adfe0aac8b09ce780ca2/play
+  - img "8-bit Flashcards"
+  - heading "8-bit Flashcards" [level=3]
+  - button "jcam":
+    - generic: jcam
+  - generic: "4"
+  - generic: "267"
+  - generic: Use Your Topic
+- button "向右滚动":
+- heading "创意" [level=2]
+- button "查看全部"
+- link "Scandalous Secrets Scandalous Secrets prisha1137310 38 868":
+  - /url: /platform/apps/69e62c0871d73263750eb1f2/play
+  - img "Scandalous Secrets"
+  - heading "Scandalous Secrets" [level=3]
+  - button "prisha1137310":
+    - generic: prisha1137310
+  - generic: "38"
+  - generic: "868"
+- link "Material to Storybook Material to Storybook jcam 22 661 Use Your Topic":
+  - /url: /platform/apps/699d09ad9b87f35d2c8ad67b/play
+  - img "Material to Storybook"
+  - heading "Material to Storybook" [level=3]
+  - button "jcam":
+    - generic: jcam
+  - generic: "22"
+  - generic: "661"
+  - generic: Use Your Topic
+- link "study cafe!! ★★ study cafe!! ★★ mochii_chan 24 1114":
+  - /url: /platform/apps/69d2499d2269b2ac1f3e4ddb/play
+  - img "study cafe!! ★★"
+  - heading "study cafe!! ★★" [level=3]
+  - button "mochii_chan":
+    - generic: mochii_chan
+  - generic: "24"
+  - generic: "1114"
+- link "Study Call with BTS!! (copy and updated) Study Call with BTS!! (copy and updated) S saee1444735 22 446 Use Your Topic":
+  - /url: /platform/apps/69c7fd7519774604aac61aff/play
+  - img "Study Call with BTS!! (copy and updated)"
+  - heading "Study Call with BTS!! (copy and updated)" [level=3]
+  - button "S saee1444735":
+    - generic: S
+    - generic: saee1444735
+  - generic: "22"
+  - generic: "446"
+  - generic: Use Your Topic
+- link "Spill The Tea Spill The Tea jayabuddan 17 245 Use Your Topic":
+  - /url: /platform/apps/6ae7da7773c3d94b6b2685b3/play
+  - img "Spill The Tea"
+  - heading "Spill The Tea" [level=3]
+  - button "jayabuddan":
+    - generic: jayabuddan
+  - generic: "17"
+  - generic: "245"
+  - generic: Use Your Topic
+- link "Chaos Study Spinner Chaos Study Spinner adam123 7 271":
+  - /url: /platform/apps/6a971708474d18a9e8df26dc/play
+  - img "Chaos Study Spinner"
+  - heading "Chaos Study Spinner" [level=3]
+  - button "adam123":
+    - generic: adam123
+  - generic: "7"
+  - generic: "271"
+- link "QUIZ QUIZ belindareyeshernández 0 109 Use Your Topic":
+  - /url: /platform/apps/69e8374080a73df1b1f20cb5/play
+  - img "QUIZ"
+  - heading "QUIZ" [level=3]
+  - button "belindareyeshernández":
+    - generic: belindareyeshernández
+  - generic: "0"
+  - generic: "109"
+  - generic: Use Your Topic
+- link "Come Home Come Home gurmanikaur 0 75 Use Your Topic":
+  - /url: /platform/apps/69d7fbb27136a373505020cb/play
+  - img "Come Home"
+  - heading "Come Home" [level=3]
+  - button "gurmanikaur":
+    - generic: gurmanikaur
+  - generic: "0"
+  - generic: "75"
+  - generic: Use Your Topic
+- button "向右滚动":
+- heading "角色扮演" [level=2]
+- link "Campus Chronicles Campus Chronicles laineysterretje 32 915 Use Your Topic":
+  - /url: /platform/apps/699638e7eb02d5304fc65d92/play
+  - img "Campus Chronicles"
+  - heading "Campus Chronicles" [level=3]
+  - button "laineysterretje":
+    - generic: laineysterretje
+  - generic: "32"
+  - generic: "915"
+  - generic: Use Your Topic
+- link "Katseye academy Katseye academy julietagimenezsuarez 9 159 Use Your Topic":
+  - /url: /platform/apps/6a00a287f49980570fe813aa/play
+  - img "Katseye academy"
+  - heading "Katseye academy" [level=3]
+  - button "julietagimenezsuarez":
+    - generic: julietagimenezsuarez
+  - generic: "9"
+  - generic: "159"
+  - generic: Use Your Topic
+- link "Walk with Plato Walk with Plato Super_Studier 2 113":
+  - /url: /platform/apps/6a1e000aa8be4016d0ab6f1c/play
+  - img "Walk with Plato"
+  - heading "Walk with Plato" [level=3]
+  - button "Super_Studier":
+    - generic: Super_Studier
+  - generic: "2"
+  - generic: "113"
+- heading "全部应用" [level=2]
+- link "F1 Sonnys F1 Sonnys ashleyjyoo 1816 71700":
+  - /url: /platform/apps/6a17c343caba20a106cc6acc/play
+  - img "F1 Sonnys"
+  - heading "F1 Sonnys" [level=3]
+  - button "ashleyjyoo":
+    - generic: ashleyjyoo
+  - generic: "1816"
+  - generic: "71700"
+- link "Flight Simulator Timer Flight Simulator Timer janetnguyen1418312 1734 69576":
+  - /url: /platform/apps/69a8dc5b0c251f187f1782d9/play
+  - img "Flight Simulator Timer"
+  - heading "Flight Simulator Timer" [level=3]
+  - button "janetnguyen1418312":
+    - generic: janetnguyen1418312
+  - generic: "1734"
+  - generic: "69576"
+- link "Hogwarts Charm Academy Hogwarts Charm Academy elizabeth1270325 602 12236 Use Your Topic":
+  - /url: /platform/apps/6997a88300c9b9d90dd52008/play
+  - img "Hogwarts Charm Academy"
+  - heading "Hogwarts Charm Academy" [level=3]
+  - button "elizabeth1270325":
+    - generic: elizabeth1270325
+  - generic: "602"
+  - generic: "12236"
+  - generic: Use Your Topic
+- link "Jeo-party! Jeo-party! CacheMonet 779 40051 Use Your Topic":
+  - /url: /platform/apps/69951536dc74d818e5f02eda/play
+  - img "Jeo-party!"
+  - heading "Jeo-party!" [level=3]
+  - button "CacheMonet":
+    - generic: CacheMonet
+  - generic: "779"
+  - generic: "40051"
+  - generic: Use Your Topic
+- link "Sparke Pets Sparke Pets nickolasbalon 340 10232 Use Your Topic":
+  - /url: /platform/apps/6995f7fd920a3387170dd60e/play
+  - img "Sparke Pets"
+  - heading "Sparke Pets" [level=3]
+  - button "nickolasbalon":
+    - generic: nickolasbalon
+  - generic: "340"
+  - generic: "10232"
+  - generic: Use Your Topic
+- link "Guess the Diagnosis [8 Bit] Guess the Diagnosis [8 Bit] StudyFetchHQ 272 10701 Use Your Topic":
+  - /url: /platform/apps/6a28a057b4200885807931c9/play
+  - img "Guess the Diagnosis [8 Bit]"
+  - heading "Guess the Diagnosis [8 Bit]" [level=3]
+  - button "StudyFetchHQ":
+    - generic: StudyFetchHQ
+  - generic: "272"
+  - generic: "10701"
+  - generic: Use Your Topic
+- link "Brain Bank Brain Bank B biglaunch10 125 4754 Use Your Topic":
+  - /url: /platform/apps/6996097fb143d19aaea25a3e/play
+  - img "Brain Bank"
+  - heading "Brain Bank" [level=3]
+  - button "B biglaunch10":
+    - generic: B
+    - generic: biglaunch10
+  - generic: "125"
+  - generic: "4754"
+  - generic: Use Your Topic
+- link "Study Kart Dash Study Kart Dash will1107202 84 6607 Use Your Topic":
+  - /url: /platform/apps/699626b0033b5d4491dc5e02/play
+  - img "Study Kart Dash"
+  - heading "Study Kart Dash" [level=3]
+  - button "will1107202":
+    - generic: will1107202
+  - generic: "84"
+  - generic: "6607"
+  - generic: Use Your Topic
+- link "F1 Studio F1 Studio K keishawibowo 285 3986 Use Your Topic":
+  - /url: /platform/apps/6a2baf62aff932189a68efb8/play
+  - img "F1 Studio"
+  - heading "F1 Studio" [level=3]
+  - button "K keishawibowo":
+    - generic: K
+    - generic: keishawibowo
+  - generic: "285"
+  - generic: "3986"
+  - generic: Use Your Topic
+- link "StudyScroll StudyScroll noralee1704076 226 4381 Use Your Topic":
+  - /url: /platform/apps/69d6b53f052ecba768df2151/play
+  - img "StudyScroll"
+  - heading "StudyScroll" [level=3]
+  - button "noralee1704076":
+    - generic: noralee1704076
+  - generic: "226"
+  - generic: "4381"
+  - generic: Use Your Topic
+- link "Candy Crush Study Candy Crush Study gumjala 113 3926 Use Your Topic":
+  - /url: /platform/apps/69a1faeaed908ed964ec5233/play
+  - img "Candy Crush Study"
+  - heading "Candy Crush Study" [level=3]
+  - button "gumjala":
+    - generic: gumjala
+  - generic: "113"
+  - generic: "3926"
+  - generic: Use Your Topic
+- link "Aesthetic Study Timer Aesthetic Study Timer jcam 212 7681":
+  - /url: /platform/apps/6998aceeccd17453a4975781/play
+  - img "Aesthetic Study Timer"
+  - heading "Aesthetic Study Timer" [level=3]
+  - button "jcam":
+    - generic: jcam
+  - generic: "212"
+  - generic: "7681"
+- link "Papa's Studyaria Papa's Studyaria masonherbel 288 7396 Use Your Topic":
+  - /url: /platform/apps/699770753d154e71631c4ac0/play
+  - img "Papa's Studyaria"
+  - heading "Papa's Studyaria" [level=3]
+  - button "masonherbel":
+    - generic: masonherbel
+  - generic: "288"
+  - generic: "7396"
+  - generic: Use Your Topic
+- link "F1 Estudio F1 Estudio Kei_donayre16 183 4978":
+  - /url: /platform/apps/6a23862f237133df48be6e81/play
+  - img "F1 Estudio"
+  - heading "F1 Estudio" [level=3]
+  - button "Kei_donayre16":
+    - generic: Kei_donayre16
+  - generic: "183"
+  - generic: "4978"
+- link "Aesthetic Trivia Aesthetic Trivia jcam 112 4416 Use Your Topic":
+  - /url: /platform/apps/69979d653cb2008d088f2ed0/play
+  - img "Aesthetic Trivia"
+  - heading "Aesthetic Trivia" [level=3]
+  - button "jcam":
+    - generic: jcam
+  - generic: "112"
+  - generic: "4416"
+  - generic: Use Your Topic
+- link "juicy gossip juicy gossip mythili1951935 139 2692 Use Your Topic":
+  - /url: /platform/apps/6a006efdaec593fe01cb08dc/play
+  - img "juicy gossip"
+  - heading "juicy gossip" [level=3]
+  - button "mythili1951935":
+    - generic: mythili1951935
+  - generic: "139"
+  - generic: "2692"
+  - generic: Use Your Topic
+- link "Study Call with BTS!! Study Call with BTS!! alexus163484 134 3161 Use Your Topic":
+  - /url: /platform/apps/69c06bfc8d9cdf077dc5b009/play
+  - img "Study Call with BTS!!"
+  - heading "Study Call with BTS!!" [level=3]
+  - button "alexus163484":
+    - generic: alexus163484
+  - generic: "134"
+  - generic: "3161"
+  - generic: Use Your Topic
+- link "Study Agenda Study Agenda ashleyjyoo 130 3648 Use Your Topic":
+  - /url: /platform/apps/6995ff074eec8b1ee96c9f52/play
+  - img "Study Agenda"
+  - heading "Study Agenda" [level=3]
+  - button "ashleyjyoo":
+    - generic: ashleyjyoo
+  - generic: "130"
+  - generic: "3648"
+  - generic: Use Your Topic
+- link "Unhinged Study Methods Wheel Unhinged Study Methods Wheel adam123 192 8103":
+  - /url: /platform/apps/6a97289b602e14468a4b1a79/play
+  - img "Unhinged Study Methods Wheel"
+  - heading "Unhinged Study Methods Wheel" [level=3]
+  - button "adam123":
+    - generic: adam123
+  - generic: "192"
+  - generic: "8103"
+- link "Human Body Atlas Human Body Atlas pennythedawg 104 2844":
+  - /url: /platform/apps/6ad6d744eb4f4cccec47b179/play
+  - img "Human Body Atlas"
+  - heading "Human Body Atlas" [level=3]
+  - button "pennythedawg":
+    - generic: pennythedawg
+  - generic: "104"
+  - generic: "2844"
+- link "FocusFlight FocusFlight mokshithav 118 3313":
+  - /url: /platform/apps/69cbd376d0e63b762129c1da/play
+  - img "FocusFlight"
+  - heading "FocusFlight" [level=3]
+  - button "mokshithav":
+    - generic: mokshithav
+  - generic: "118"
+  - generic: "3313"
+- link "Sparky Anatomy Lab Sparky Anatomy Lab pennythedawg 118 3410":
+  - /url: /platform/apps/6aa46b13fbb5cedf43194e41/play
+  - img "Sparky Anatomy Lab"
+  - heading "Sparky Anatomy Lab" [level=3]
+  - button "pennythedawg":
+    - generic: pennythedawg
+  - generic: "118"
+  - generic: "3410"
+- link "Artist Timer Artist Timer lakshmiprasannaeswaripyla 80 2280 Use Your Topic":
+  - /url: /platform/apps/69d9f7d30a153192e0c8ad34/play
+  - img "Artist Timer"
+  - heading "Artist Timer" [level=3]
+  - button "lakshmiprasannaeswaripyla":
+    - generic: lakshmiprasannaeswaripyla
+  - generic: "80"
+  - generic: "2280"
+  - generic: Use Your Topic
+- link "Chess - Grandmaster Chess - Grandmaster ashleyjyoo 61 2746 Use Your Topic":
+  - /url: /platform/apps/699757c204a4c706062b491d/play
+  - img "Chess - Grandmaster"
+  - heading "Chess - Grandmaster" [level=3]
+  - button "ashleyjyoo":
+    - generic: ashleyjyoo
+  - generic: "61"
+  - generic: "2746"
+  - generic: Use Your Topic
+- link "F1 F1 A aanya1321622 81 2034":
+  - /url: /platform/apps/6a2cc3aa1b1a356ae19f6d05/play
+  - img "F1"
+  - heading "F1" [level=3]
+  - button "A aanya1321622":
+    - generic: A
+    - generic: aanya1321622
+  - generic: "81"
+  - generic: "2034"
+- link "GlowGrove Quest GlowGrove Quest adam123 15 1490 Use Your Topic":
+  - /url: /platform/apps/69966a638a16119df7f26572/play
+  - img "GlowGrove Quest"
+  - heading "GlowGrove Quest" [level=3]
+  - button "adam123":
+    - generic: adam123
+  - generic: "15"
+  - generic: "1490"
+  - generic: Use Your Topic
+- link "Flight Study Flight Study nickolasbalon 84 4668":
+  - /url: /platform/apps/69976d8d65d1cfd45d8cdbde/play
+  - img "Flight Study"
+  - heading "Flight Study" [level=3]
+  - button "nickolasbalon":
+    - generic: nickolasbalon
+  - generic: "84"
+  - generic: "4668"
+- link "Focus Flight Focus Flight ilanagains 76 3425":
+  - /url: /platform/apps/69c13d25ac4a2100ec1f7c46/play
+  - img "Focus Flight"
+  - heading "Focus Flight" [level=3]
+  - button "ilanagains":
+    - generic: ilanagains
+  - generic: "76"
+  - generic: "3425"
+- link "F1 Study GP F1 Study GP amolitripathi 28 951 Use Your Topic":
+  - /url: /platform/apps/6a30ec0fb6397d7977e3c02b/play
+  - img "F1 Study GP"
+  - heading "F1 Study GP" [level=3]
+  - button "amolitripathi":
+    - generic: amolitripathi
+  - generic: "28"
+  - generic: "951"
+  - generic: Use Your Topic
+- link "Classroom Exam Sim Classroom Exam Sim ryantrattner383 64 2806 Use Your Topic":
+  - /url: /platform/apps/699539d808efffdda8cdb824/play
+  - img "Classroom Exam Sim"
+  - heading "Classroom Exam Sim" [level=3]
+  - button "ryantrattner383":
+    - generic: ryantrattner383
+  - generic: "64"
+  - generic: "2806"
+  - generic: Use Your Topic
+- link "F1 Sonnys Pomodoro F1 Sonnys Pomodoro R reaganmullins 40 7434":
+  - /url: /platform/apps/6a47da8ca3ad7271486514f2/play
+  - img "F1 Sonnys Pomodoro"
+  - heading "F1 Sonnys Pomodoro" [level=3]
+  - button "R reaganmullins":
+    - generic: R
+    - generic: reaganmullins
+  - generic: "40"
+  - generic: "7434"
+- link "F1 STUDY RACER F1 STUDY RACER peter1675801 57 1603 Use Your Topic":
+  - /url: /platform/apps/699d0c04de44f2f6fd47e2f7/play
+  - img "F1 STUDY RACER"
+  - heading "F1 STUDY RACER" [level=3]
+  - button "peter1675801":
+    - generic: peter1675801
+  - generic: "57"
+  - generic: "1603"
+  - generic: Use Your Topic
+- link "Hogwarts Express Travel Timer (Harry Potter Destinations) Hogwarts Express Travel Timer (Harry Potter Destinations) shona1236773 56 1161":
+  - /url: /platform/apps/69d64c3c9b0acd397155bb32/play
+  - img "Hogwarts Express Travel Timer (Harry Potter Destinations)"
+  - heading "Hogwarts Express Travel Timer (Harry Potter Destinations)" [level=3]
+  - button "shona1236773":
+    - generic: shona1236773
+  - generic: "56"
+  - generic: "1161"
+- link "Cosmic Quiz Invaders Cosmic Quiz Invaders ryantrattner383 36 2722 Use Your Topic":
+  - /url: /platform/apps/6995119c3fc4c54f20f125fb/play
+  - img "Cosmic Quiz Invaders"
+  - heading "Cosmic Quiz Invaders" [level=3]
+  - button "ryantrattner383":
+    - generic: ryantrattner383
+  - generic: "36"
+  - generic: "2722"
+  - generic: Use Your Topic
+- link "Rapid Recall Rapid Recall marvinicayforonda 45 2238 Use Your Topic":
+  - /url: /platform/apps/699532864d152b9c971a5f43/play
+  - img "Rapid Recall"
+  - heading "Rapid Recall" [level=3]
+  - button "marvinicayforonda":
+    - generic: marvinicayforonda
+  - generic: "45"
+  - generic: "2238"
+  - generic: Use Your Topic
+- link "Study with ENHYPEN! ✨ Study with ENHYPEN! ✨ enhypen1920813 53 695 Use Your Topic":
+  - /url: /platform/apps/69dfed7a60f502fcb61a0787/play
+  - img "Study with ENHYPEN! ✨"
+  - heading "Study with ENHYPEN! ✨" [level=3]
+  - button "enhypen1920813":
+    - generic: enhypen1920813
+  - generic: "53"
+  - generic: "695"
+  - generic: Use Your Topic
+- link "KATSEYE Study Call KATSEYE Study Call alexus163484 39 891 Use Your Topic":
+  - /url: /platform/apps/69ddb3dffe3a40c1a4a5ce61/play
+  - img "KATSEYE Study Call"
+  - heading "KATSEYE Study Call" [level=3]
+  - button "alexus163484":
+    - generic: alexus163484
+  - generic: "39"
+  - generic: "891"
+  - generic: Use Your Topic
+- link "Steady Flight Focus Steady Flight Focus stutimehta1718867 39 1855":
+  - /url: /platform/apps/69bfa3660cf91424e2bf026f/play
+  - img "Steady Flight Focus"
+  - heading "Steady Flight Focus" [level=3]
+  - button "stutimehta1718867":
+    - generic: stutimehta1718867
+  - generic: "39"
+  - generic: "1855"
+- link "Scandalous Secrets Scandalous Secrets prisha1137310 38 868":
+  - /url: /platform/apps/69e62c0871d73263750eb1f2/play
+  - img "Scandalous Secrets"
+  - heading "Scandalous Secrets" [level=3]
+  - button "prisha1137310":
+    - generic: prisha1137310
+  - generic: "38"
+  - generic: "868"
+- link "Cozy Cat Evening Study Cafe Cozy Cat Evening Study Cafe srianggreniwicaksana 27 560 Use Your Topic":
+  - /url: /platform/apps/69ebf440ec80b9e962893486/play
+  - img "Cozy Cat Evening Study Cafe"
+  - heading "Cozy Cat Evening Study Cafe" [level=3]
+  - button "srianggreniwicaksana":
+    - generic: srianggreniwicaksana
+  - generic: "27"
+  - generic: "560"
+  - generic: Use Your Topic
+- link "Campus Chronicles Campus Chronicles laineysterretje 32 915 Use Your Topic":
+  - /url: /platform/apps/699638e7eb02d5304fc65d92/play
+  - img "Campus Chronicles"
+  - heading "Campus Chronicles" [level=3]
+  - button "laineysterretje":
+    - generic: laineysterretje
+  - generic: "32"
+  - generic: "915"
+  - generic: Use Your Topic
+- link "Cactus Focus Cactus Focus ryantrattner383 35 827 Use Your Topic":
+  - /url: /platform/apps/699518431d10ece8ca521603/play
+  - img "Cactus Focus"
+  - heading "Cactus Focus" [level=3]
+  - button "ryantrattner383":
+    - generic: ryantrattner383
+  - generic: "35"
+  - generic: "827"
+  - generic: Use Your Topic
+- link "Zen Roll Quiz Zen Roll Quiz ryantrattner383 18 2234 Use Your Topic":
+  - /url: /platform/apps/699bf191ffa6219bb5175e97/play
+  - img "Zen Roll Quiz"
+  - heading "Zen Roll Quiz" [level=3]
+  - button "ryantrattner383":
+    - generic: ryantrattner383
+  - generic: "18"
+  - generic: "2234"
+  - generic: Use Your Topic
+- link "Quiz Tug Quiz Tug gamerchan 5 398 Use Your Topic":
+  - /url: /platform/apps/699c48e3b2fda8d95226edb8/play
+  - img "Quiz Tug"
+  - heading "Quiz Tug" [level=3]
+  - button "gamerchan":
+    - generic: gamerchan
+  - generic: "5"
+  - generic: "398"
+  - generic: Use Your Topic
+- link "FIFA World Cup Sonnys FIFA World Cup Sonnys ashleyjyoo 23 454 Use Your Topic":
+  - /url: /platform/apps/6a30537d5e21841ef069824c/play
+  - img "FIFA World Cup Sonnys"
+  - heading "FIFA World Cup Sonnys" [level=3]
+  - button "ashleyjyoo":
+    - generic: ashleyjyoo
+  - generic: "23"
+  - generic: "454"
+  - generic: Use Your Topic
+- link "Danganropa style Danganropa style deletedUser-inbrm-at4xxf-1777658193536 18 663 Use Your Topic":
+  - /url: /platform/apps/69a8c25ba05647afd9bd45bb/play
+  - img "Danganropa style"
+  - heading "Danganropa style" [level=3]
+  - button "deletedUser-inbrm-at4xxf-1777658193536":
+    - generic: deletedUser-inbrm-at4xxf-1777658193536
+  - generic: "18"
+  - generic: "663"
+  - generic: Use Your Topic
+- link "F1 study game better for my use F1 study game better for my use L laurenmitchell 27 607":
+  - /url: /platform/apps/6a718c429c815618cf09b912/play
+  - img "F1 study game better for my use"
+  - heading "F1 study game better for my use" [level=3]
+  - button "L laurenmitchell":
+    - generic: L
+    - generic: laurenmitchell
+  - generic: "27"
+  - generic: "607"
+- link "3D Study Train 3D Study Train samanthamartin1607897 4 273 Use Your Topic":
+  - /url: /platform/apps/6a1f134c76c1b44c004d0c27/play
+  - img "3D Study Train"
+  - heading "3D Study Train" [level=3]
+  - button "samanthamartin1607897":
+    - generic: samanthamartin1607897
+  - generic: "4"
+  - generic: "273"
+  - generic: Use Your Topic
+- link "SLIDE.io - 🥏BOMBS, GLIDERS AND MORE 💣 SLIDE.io - 🥏BOMBS, GLIDERS AND MORE 💣 doombotinotlb 23 839 Use Your Topic":
+  - /url: /platform/apps/69d6970a0ede62d7280cbeae/play
+  - img "SLIDE.io - 🥏BOMBS, GLIDERS AND MORE 💣"
+  - heading "SLIDE.io - 🥏BOMBS, GLIDERS AND MORE 💣" [level=3]
+  - button "doombotinotlb":
+    - generic: doombotinotlb
+  - generic: "23"
+  - generic: "839"
+  - generic: Use Your Topic
+- link "Material to Storybook Material to Storybook jcam 22 661 Use Your Topic":
+  - /url: /platform/apps/699d09ad9b87f35d2c8ad67b/play
+  - img "Material to Storybook"
+  - heading "Material to Storybook" [level=3]
+  - button "jcam":
+    - generic: jcam
+  - generic: "22"
+  - generic: "661"
+  - generic: Use Your Topic
+- link "Molecule Lab Molecule Lab pennythedawg 24 524":
+  - /url: /platform/apps/6ae96fb79473ec6ed3b0c7c2/play
+  - img "Molecule Lab"
+  - heading "Molecule Lab" [level=3]
+  - button "pennythedawg":
+    - generic: pennythedawg
+  - generic: "24"
+  - generic: "524"
+- link "study cafe!! ★★ study cafe!! ★★ mochii_chan 24 1114":
+  - /url: /platform/apps/69d2499d2269b2ac1f3e4ddb/play
+  - img "study cafe!! ★★"
+  - heading "study cafe!! ★★" [level=3]
+  - button "mochii_chan":
+    - generic: mochii_chan
+  - generic: "24"
+  - generic: "1114"
+- link "Trivia Trivia abigailgarcia1987717 18 562 Use Your Topic":
+  - /url: /platform/apps/69b9d0d93ddf2b7c567d0f58/play
+  - img "Trivia"
+  - heading "Trivia" [level=3]
+  - button "abigailgarcia1987717":
+    - generic: abigailgarcia1987717
+  - generic: "18"
+  - generic: "562"
+  - generic: Use Your Topic
+- link "Puppy Zone Study Puppy Zone Study charlottecross 25 757":
+  - /url: /platform/apps/69b4220ced7102c2139a1d12/play
+  - img "Puppy Zone Study"
+  - heading "Puppy Zone Study" [level=3]
+  - button "charlottecross":
+    - generic: charlottecross
+  - generic: "25"
+  - generic: "757"
+- link "Fireboy Watergirl but actually helpful Fireboy Watergirl but actually helpful masonherbel 12 606 Use Your Topic":
+  - /url: /platform/apps/699770d617bd14d37ee440b1/play
+  - img "Fireboy Watergirl but actually helpful"
+  - heading "Fireboy Watergirl but actually helpful" [level=3]
+  - button "masonherbel":
+    - generic: masonherbel
+  - generic: "12"
+  - generic: "606"
+  - generic: Use Your Topic
+- link "Diagnosis Buddies Diagnosis Buddies StudyFetchHQ 15 1291 Use Your Topic":
+  - /url: /platform/apps/6a2c7f6019e38390a8ba9600/play
+  - img "Diagnosis Buddies"
+  - heading "Diagnosis Buddies" [level=3]
+  - button "StudyFetchHQ":
+    - generic: StudyFetchHQ
+  - generic: "15"
+  - generic: "1291"
+  - generic: Use Your Topic
+- link "Flashcards in the Backrooms Flashcards in the Backrooms ashleyjyoo 21 353 Use Your Topic":
+  - /url: /platform/apps/6a1e053b867899b51930c96a/play
+  - img "Flashcards in the Backrooms"
+  - heading "Flashcards in the Backrooms" [level=3]
+  - button "ashleyjyoo":
+    - generic: ashleyjyoo
+  - generic: "21"
+  - generic: "353"
+  - generic: Use Your Topic
+- link "Spin Scholar Spin Scholar CacheMonet 9 1093 Use Your Topic":
+  - /url: /platform/apps/69951668ee0c1addb5e8ae7a/play
+  - img "Spin Scholar"
+  - heading "Spin Scholar" [level=3]
+  - button "CacheMonet":
+    - generic: CacheMonet
+  - generic: "9"
+  - generic: "1093"
+  - generic: Use Your Topic
+- link "Bitlife dupe Quiz Bitlife dupe Quiz anna1278998 22 378 Use Your Topic":
+  - /url: /platform/apps/6a0b3f2505879a7e7a2e15a0/play
+  - img "Bitlife dupe Quiz"
+  - heading "Bitlife dupe Quiz" [level=3]
+  - button "anna1278998":
+    - generic: anna1278998
+  - generic: "22"
+  - generic: "378"
+  - generic: Use Your Topic
+- link "Flight all country timer Flight all country timer raykhonamnodirjanovna 19 432":
+  - /url: /platform/apps/69cbc084fd623b7b03ae62d9/play
+  - img "Flight all country timer"
+  - heading "Flight all country timer" [level=3]
+  - button "raykhonamnodirjanovna":
+    - generic: raykhonamnodirjanovna
+  - generic: "19"
+  - generic: "432"
+- link "Study Call with BTS!! (copy and updated) Study Call with BTS!! (copy and updated) S saee1444735 22 446 Use Your Topic":
+  - /url: /platform/apps/69c7fd7519774604aac61aff/play
+  - img "Study Call with BTS!! (copy and updated)"
+  - heading "Study Call with BTS!! (copy and updated)" [level=3]
+  - button "S saee1444735":
+    - generic: S
+    - generic: saee1444735
+  - generic: "22"
+  - generic: "446"
+  - generic: Use Your Topic
+- link "F1 Sonnys that doesnt stop when u change tab F1 Sonnys that doesnt stop when u change tab ananyaandra 26 1223":
+  - /url: /platform/apps/6a255c34f2897f059c83a5d3/play
+  - img "F1 Sonnys that doesnt stop when u change tab"
+  - heading "F1 Sonnys that doesnt stop when u change tab" [level=3]
+  - button "ananyaandra":
+    - generic: ananyaandra
+  - generic: "26"
+  - generic: "1223"
+- link "3D Study Plane 3D Study Plane StudyFetchHQ 6 171 Use Your Topic":
+  - /url: /platform/apps/6a206fd62beb9a7c60815171/play
+  - img "3D Study Plane"
+  - heading "3D Study Plane" [level=3]
+  - button "StudyFetchHQ":
+    - generic: StudyFetchHQ
+  - generic: "6"
+  - generic: "171"
+  - generic: Use Your Topic
+- link "Bake Master Quest Bake Master Quest priyal.p 13 295 Use Your Topic":
+  - /url: /platform/apps/69af03927640c8d66a5a95d1/play
+  - img "Bake Master Quest"
+  - heading "Bake Master Quest" [level=3]
+  - button "priyal.p":
+    - generic: priyal.p
+  - generic: "13"
+  - generic: "295"
+  - generic: Use Your Topic
+- link "F1 study timer & collecting F1 study timer & collecting eliobarack 17 1369":
+  - /url: /platform/apps/6a4eff25b5f89de2a91fb342/play
+  - img "F1 study timer & collecting"
+  - heading "F1 study timer & collecting" [level=3]
+  - button "eliobarack":
+    - generic: eliobarack
+  - generic: "17"
+  - generic: "1369"
+- link "Flight Simulator Timer(100+ destinations, cabin announcements, with pause button and more flights!) Flight Simulator Timer(100+ destinations, cabin announcements, with pause button and more flights!) shona1236773 19 519":
+  - /url: /platform/apps/69d35e8843079d1d875864b5/play
+  - img "Flight Simulator Timer(100+ destinations, cabin announcements, with pause button and more flights!)"
+  - heading "Flight Simulator Timer(100+ destinations, cabin announcements, with pause button and more flights!)" [level=3]
+  - button "shona1236773":
+    - generic: shona1236773
+  - generic: "19"
+  - generic: "519"
+- link "Sparkémon Trainer!! Sparkémon Trainer!! KarlaUrgiles 14 338 Use Your Topic":
+  - /url: /platform/apps/69a8ce9b14b03ee4fab500b7/play
+  - img "Sparkémon Trainer!!"
+  - heading "Sparkémon Trainer!!" [level=3]
+  - button "KarlaUrgiles":
+    - generic: KarlaUrgiles
+  - generic: "14"
+  - generic: "338"
+  - generic: Use Your Topic
+- link "Cozy Study🕯️ೀ₊°⋆ Cozy Study🕯️ೀ₊°⋆ vivienneorsoni 13 153 Use Your Topic":
+  - /url: /platform/apps/6a23e1b59b170ee4db156cd9/play
+  - img "Cozy Study🕯️ೀ₊°⋆"
+  - heading "Cozy Study🕯️ೀ₊°⋆" [level=3]
+  - button "vivienneorsoni":
+    - generic: vivienneorsoni
+  - generic: "13"
+  - generic: "153"
+  - generic: Use Your Topic
+- link "Focus Flight - Study Help. Focus Flight - Study Help. arjunsouryasrirangam 15 351":
+  - /url: /platform/apps/69cfc45e92a81d7b6ca7e534/play
+  - img "Focus Flight - Study Help."
+  - heading "Focus Flight - Study Help." [level=3]
+  - button "arjunsouryasrirangam":
+    - generic: arjunsouryasrirangam
+  - generic: "15"
+  - generic: "351"
+- link "study flight study flight esandurrani 14 699":
+  - /url: /platform/apps/6998e07cd50b672fabaf8b21/play
+  - img "study flight"
+  - heading "study flight" [level=3]
+  - button "esandurrani":
+    - generic: esandurrani
+  - generic: "14"
+  - generic: "699"
+- link "Quest Scholar Quest Scholar hannahmoreland 2 26 Use Your Topic":
+  - /url: /platform/apps/6ac83b4a069939d0f58aa49f/play
+  - img "Quest Scholar"
+  - heading "Quest Scholar" [level=3]
+  - button "hannahmoreland":
+    - generic: hannahmoreland
+  - generic: "2"
+  - generic: "26"
+  - generic: Use Your Topic
+- link "Hogwarts Charm Academy+ Hogwarts Charm Academy+ laineysterretje 10 311 Use Your Topic":
+  - /url: /platform/apps/6998dc3d97776ebf80f3ef3b/play
+  - img "Hogwarts Charm Academy+"
+  - heading "Hogwarts Charm Academy+" [level=3]
+  - button "laineysterretje":
+    - generic: laineysterretje
+  - generic: "10"
+  - generic: "311"
+  - generic: Use Your Topic
+- link "Spill The Tea Spill The Tea jayabuddan 17 245 Use Your Topic":
+  - /url: /platform/apps/6ae7da7773c3d94b6b2685b3/play
+  - img "Spill The Tea"
+  - heading "Spill The Tea" [level=3]
+  - button "jayabuddan":
+    - generic: jayabuddan
+  - generic: "17"
+  - generic: "245"
+  - generic: Use Your Topic
+- link "F1 Sonnys (copy) F1 Sonnys (copy) sanjanaezhilarasu 13 612":
+  - /url: /platform/apps/6a23b1e2c1f330457fc91f62/play
+  - img "F1 Sonnys (copy)"
+  - heading "F1 Sonnys (copy)" [level=3]
+  - button "sanjanaezhilarasu":
+    - generic: sanjanaezhilarasu
+  - generic: "13"
+  - generic: "612"
+- link "Energy Rush Energy Rush ilynematutina 3 187 Use Your Topic":
+  - /url: /platform/apps/699a6d18e51f8798b94600ff/play
+  - img "Energy Rush"
+  - heading "Energy Rush" [level=3]
+  - button "ilynematutina":
+    - generic: ilynematutina
+  - generic: "3"
+  - generic: "187"
+  - generic: Use Your Topic
+- link "STAR SHOOTER STAR SHOOTER Super_Studier 6 157 Use Your Topic":
+  - /url: /platform/apps/6996882a04623c5f31373720/play
+  - img "STAR SHOOTER"
+  - heading "STAR SHOOTER" [level=3]
+  - button "Super_Studier":
+    - generic: Super_Studier
+  - generic: "6"
+  - generic: "157"
+  - generic: Use Your Topic
+- link "Lofi Pomodoro Study Sesh Lofi Pomodoro Study Sesh janetnguyen1418312 32 547 Use Your Topic":
+  - /url: /platform/apps/69a73bf6cb987316cbacc161/play
+  - img "Lofi Pomodoro Study Sesh"
+  - heading "Lofi Pomodoro Study Sesh" [level=3]
+  - button "janetnguyen1418312":
+    - generic: janetnguyen1418312
+  - generic: "32"
+  - generic: "547"
+  - generic: Use Your Topic
+- link "GraphMind GraphMind aritradhar 2 97 Use Your Topic":
+  - /url: /platform/apps/69d96a1a8eecd91135ab104c/play
+  - img "GraphMind"
+  - heading "GraphMind" [level=3]
+  - button "aritradhar":
+    - generic: aritradhar
+  - generic: "2"
+  - generic: "97"
+  - generic: Use Your Topic
+- link "Avatar last airbender challenge Avatar last airbender challenge P puppylover24 10 525 Use Your Topic":
+  - /url: /platform/apps/69d2b81dcd0fe48c355b3a3a/play
+  - img "Avatar last airbender challenge"
+  - heading "Avatar last airbender challenge" [level=3]
+  - button "P puppylover24":
+    - generic: P
+    - generic: puppylover24
+  - generic: "10"
+  - generic: "525"
+  - generic: Use Your Topic
+- link "Aesthetic Notes 2 Aesthetic Notes 2 StudyFetchHQ 14 199 Use Your Topic":
+  - /url: /platform/apps/6a2afcf52a4cbb1939453094/play
+  - img "Aesthetic Notes 2"
+  - heading "Aesthetic Notes 2" [level=3]
+  - button "StudyFetchHQ":
+    - generic: StudyFetchHQ
+  - generic: "14"
+  - generic: "199"
+  - generic: Use Your Topic
+- link "Flight Simulator Timer (copy) Flight Simulator Timer (copy) J jannaahmed1744670 12 529":
+  - /url: /platform/apps/69b53bf9302d2497e7e0616a/play
+  - img "Flight Simulator Timer (copy)"
+  - heading "Flight Simulator Timer (copy)" [level=3]
+  - button "J jannaahmed1744670":
+    - generic: J
+    - generic: jannaahmed1744670
+  - generic: "12"
+  - generic: "529"
+- link "Crossword Scholar Crossword Scholar danseta 7 505 Use Your Topic":
+  - /url: /platform/apps/6998ed5b8788dc86565ccdc9/play
+  - img "Crossword Scholar"
+  - heading "Crossword Scholar" [level=3]
+  - button "danseta":
+    - generic: danseta
+  - generic: "7"
+  - generic: "505"
+  - generic: Use Your Topic
+- link "Aesthetic Note Creator Aesthetic Note Creator emberbiadacz 11 105 Use Your Topic":
+  - /url: /platform/apps/6a572bd324f252daea2e51f2/play
+  - img "Aesthetic Note Creator"
+  - heading "Aesthetic Note Creator" [level=3]
+  - button "emberbiadacz":
+    - generic: emberbiadacz
+  - generic: "11"
+  - generic: "105"
+  - generic: Use Your Topic
+- link "Temple Run (TELL UR MOM UR NOT PLAYING) Temple Run (TELL UR MOM UR NOT PLAYING) khuloodabdulbasitpalekar16202467 8 163 Use Your Topic":
+  - /url: /platform/apps/69ddfddf10a223962659d2f4/play
+  - img "Temple Run (TELL UR MOM UR NOT PLAYING)"
+  - heading "Temple Run (TELL UR MOM UR NOT PLAYING)" [level=3]
+  - button "khuloodabdulbasitpalekar16202467":
+    - generic: khuloodabdulbasitpalekar16202467
+  - generic: "8"
+  - generic: "163"
+  - generic: Use Your Topic
+- link "Flight Focus Flight Focus aurra1796250 10 1171":
+  - /url: /platform/apps/69ce6f965942089fd314d42e/play
+  - img "Flight Focus"
+  - heading "Flight Focus" [level=3]
+  - button "aurra1796250":
+    - generic: aurra1796250
+  - generic: "10"
+  - generic: "1171"
+- link "Knowledge Climb Knowledge Climb D diannesmith1671424 0 39 Use Your Topic":
+  - /url: /platform/apps/6a8205a33cf214fe7b5ac538/play
+  - img "Knowledge Climb"
+  - heading "Knowledge Climb" [level=3]
+  - button "D diannesmith1671424":
+    - generic: D
+    - generic: diannesmith1671424
+  - generic: "0"
+  - generic: "39"
+  - generic: Use Your Topic
+- link "CORTIS CORTIS J julyes_ 7 38 Use Your Topic":
+  - /url: /platform/apps/6acdaf24fcc811c25daf7b9c/play
+  - img "CORTIS"
+  - heading "CORTIS" [level=3]
+  - button "J julyes_":
+    - generic: J
+    - generic: julyes_
+  - generic: "7"
+  - generic: "38"
+  - generic: Use Your Topic
+- link "Amino Acid Quiz Amino Acid Quiz pennythedawg 13 519":
+  - /url: /platform/apps/6aa3200e1782f132a509689d/play
+  - img "Amino Acid Quiz"
+  - heading "Amino Acid Quiz" [level=3]
+  - button "pennythedawg":
+    - generic: pennythedawg
+  - generic: "13"
+  - generic: "519"
+- link "Study Feud Study Feud sadechanel 9 185 Use Your Topic":
+  - /url: /platform/apps/6a4d7532223701da48ab85ef/play
+  - img "Study Feud"
+  - heading "Study Feud" [level=3]
+  - button "sadechanel":
+    - generic: sadechanel
+  - generic: "9"
+  - generic: "185"
+  - generic: Use Your Topic
+- link "Airplane Study Airplane Study violetlovenduski 10 198 Use Your Topic":
+  - /url: /platform/apps/69c6a445c65aff0dd52f042c/play
+  - img "Airplane Study"
+  - heading "Airplane Study" [level=3]
+  - button "violetlovenduski":
+    - generic: violetlovenduski
+  - generic: "10"
+  - generic: "198"
+  - generic: Use Your Topic
+- link "Brain Bank Brain Bank randajeryis 4 151 Use Your Topic":
+  - /url: /platform/apps/69b538cb4d0035bffb40b273/play
+  - img "Brain Bank"
+  - heading "Brain Bank" [level=3]
+  - button "randajeryis":
+    - generic: randajeryis
+  - generic: "4"
+  - generic: "151"
+  - generic: Use Your Topic
+- link "Study Buddy Sparky Study Buddy Sparky pennythedawg 24 835":
+  - /url: /platform/apps/6aa335ec648f9ae3f4d8ff3f/play
+  - img "Study Buddy Sparky"
+  - heading "Study Buddy Sparky" [level=3]
+  - button "pennythedawg":
+    - generic: pennythedawg
+  - generic: "24"
+  - generic: "835"
+- link "Nurse Reels Nurse Reels Nelliepooh 10 64 Use Your Topic":
+  - /url: /platform/apps/6ac29041be57365ed3eedbc1/play
+  - img "Nurse Reels"
+  - heading "Nurse Reels" [level=3]
+  - button "Nelliepooh":
+    - generic: Nelliepooh
+  - generic: "10"
+  - generic: "64"
+  - generic: Use Your Topic
+- link "Tiêu diệt vi khuẩn Tiêu diệt vi khuẩn giathangly 2 76 Use Your Topic":
+  - /url: /platform/apps/69cbde3281503b274e8862a8/play
+  - img "Tiêu diệt vi khuẩn"
+  - heading "Tiêu diệt vi khuẩn" [level=3]
+  - button "giathangly":
+    - generic: giathangly
+  - generic: "2"
+  - generic: "76"
+  - generic: Use Your Topic
+- link "Katseye academy Katseye academy julietagimenezsuarez 9 159 Use Your Topic":
+  - /url: /platform/apps/6a00a287f49980570fe813aa/play
+  - img "Katseye academy"
+  - heading "Katseye academy" [level=3]
+  - button "julietagimenezsuarez":
+    - generic: julietagimenezsuarez
+  - generic: "9"
+  - generic: "159"
+  - generic: Use Your Topic
+- link "Pink Cafe Quizzes Pink Cafe Quizzes ace1216225 9 304 Use Your Topic":
+  - /url: /platform/apps/69f02f4efcf04df633ba4c49/play
+  - img "Pink Cafe Quizzes"
+  - heading "Pink Cafe Quizzes" [level=3]
+  - button "ace1216225":
+    - generic: ace1216225
+  - generic: "9"
+  - generic: "304"
+  - generic: Use Your Topic
+- link "Study Call with StrayKids Study Call with StrayKids kadishanwachukwu 9 100 Use Your Topic":
+  - /url: /platform/apps/69cd584abc7bcfce9327c381/play
+  - img "Study Call with StrayKids"
+  - heading "Study Call with StrayKids" [level=3]
+  - button "kadishanwachukwu":
+    - generic: kadishanwachukwu
+  - generic: "9"
+  - generic: "100"
+  - generic: Use Your Topic
+- link "Study Forest Study Forest nickolasbalon 8 334 Use Your Topic":
+  - /url: /platform/apps/6995fddbe8e7f15fff73e4af/play
+  - img "Study Forest"
+  - heading "Study Forest" [level=3]
+  - button "nickolasbalon":
+    - generic: nickolasbalon
+  - generic: "8"
+  - generic: "334"
+  - generic: Use Your Topic
+- link "Hogwarts Academy Hogwarts Academy cristalanderson 9 453 Use Your Topic":
+  - /url: /platform/apps/6a4188c478df909ba39d2a81/play
+  - img "Hogwarts Academy"
+  - heading "Hogwarts Academy" [level=3]
+  - button "cristalanderson":
+    - generic: cristalanderson
+  - generic: "9"
+  - generic: "453"
+  - generic: Use Your Topic
+- link "Cafe Study Cafe Study helaine1493029 17 787 Use Your Topic":
+  - /url: /platform/apps/69975504c253cd09282a72dc/play
+  - img "Cafe Study"
+  - heading "Cafe Study" [level=3]
+  - button "helaine1493029":
+    - generic: helaine1493029
+  - generic: "17"
+  - generic: "787"
+  - generic: Use Your Topic
+- link "HOGWARTS HOGWARTS diyaafathah 14 175 Use Your Topic":
+  - /url: /platform/apps/6a8057c1eef41d8c4e96ef5d/play
+  - img "HOGWARTS"
+  - heading "HOGWARTS" [level=3]
+  - button "diyaafathah":
+    - generic: diyaafathah
+  - generic: "14"
+  - generic: "175"
+  - generic: Use Your Topic
+- link "Melody Master Melody Master CacheMonet 10 830":
+  - /url: /platform/apps/699de4d88b7e82820e48b41b/play
+  - img "Melody Master"
+  - heading "Melody Master" [level=3]
+  - button "CacheMonet":
+    - generic: CacheMonet
+  - generic: "10"
+  - generic: "830"
+- link "Blue themed study room Blue themed study room E ethan1627848 8 149 Use Your Topic":
+  - /url: /platform/apps/69a589c341030e258cb59270/play
+  - img "Blue themed study room"
+  - heading "Blue themed study room" [level=3]
+  - button "E ethan1627848":
+    - generic: E
+    - generic: ethan1627848
+  - generic: "8"
+  - generic: "149"
+  - generic: Use Your Topic
+- link "2048 Quiz 2048 Quiz masonherbel 5 261 Use Your Topic":
+  - /url: /platform/apps/6997656b5965969181842c7d/play
+  - img "2048 Quiz"
+  - heading "2048 Quiz" [level=3]
+  - button "masonherbel":
+    - generic: masonherbel
+  - generic: "5"
+  - generic: "261"
+  - generic: Use Your Topic
+- link "Spooky Guess the Diagnosis [8 Bit] Spooky Guess the Diagnosis [8 Bit] StudyFetchHQ 4 133 Use Your Topic":
+  - /url: /platform/apps/6ac5453930de62a90c893db2/play
+  - img "Spooky Guess the Diagnosis [8 Bit]"
+  - heading "Spooky Guess the Diagnosis [8 Bit]" [level=3]
+  - button "StudyFetchHQ":
+    - generic: StudyFetchHQ
+  - generic: "4"
+  - generic: "133"
+  - generic: Use Your Topic
+- link "TIME- AM & PM CLOCK TIME- AM & PM CLOCK emmasamms 0 7 Use Your Topic":
+  - /url: /platform/apps/69fab5d2552f302bd0252834/play
+  - img "TIME- AM & PM CLOCK"
+  - heading "TIME- AM & PM CLOCK" [level=3]
+  - button "emmasamms":
+    - generic: emmasamms
+  - generic: "0"
+  - generic: "7"
+  - generic: Use Your Topic
+- link "Lu Xun Journey Lu Xun Journey U user197767 0 1 Use Your Topic":
+  - /url: /platform/apps/69afab95a3619f6fb8ebbfec/play
+  - img "Lu Xun Journey"
+  - heading "Lu Xun Journey" [level=3]
+  - button "U user197767":
+    - generic: U
+    - generic: user197767
+  - generic: "0"
+  - generic: "1"
+  - generic: Use Your Topic
+- link "Chaos Study Spinner Chaos Study Spinner adam123 7 271":
+  - /url: /platform/apps/6a971708474d18a9e8df26dc/play
+  - img "Chaos Study Spinner"
+  - heading "Chaos Study Spinner" [level=3]
+  - button "adam123":
+    - generic: adam123
+  - generic: "7"
+  - generic: "271"
+- link "Study Timer Study Timer gabymuscat1237121 7 182":
+  - /url: /platform/apps/69d0f87984ebaf634c1b2f52/play
+  - img "Study Timer"
+  - heading "Study Timer" [level=3]
+  - button "gabymuscat1237121":
+    - generic: gabymuscat1237121
+  - generic: "7"
+  - generic: "182"
+- link "Pomorodo Time Pomorodo Time Aria 7 160 Use Your Topic":
+  - /url: /platform/apps/69b43266d8be0d5916484f9c/play
+  - img "Pomorodo Time"
+  - heading "Pomorodo Time" [level=3]
+  - button "Aria":
+    - generic: Aria
+  - generic: "7"
+  - generic: "160"
+  - generic: Use Your Topic
+- link "Studying Background Studying Background ash1144027 6 191":
+  - /url: /platform/apps/69a821d37e29605daaa7131d/play
+  - img "Studying Background"
+  - heading "Studying Background" [level=3]
+  - button "ash1144027":
+    - generic: ash1144027
+  - generic: "6"
+  - generic: "191"
+- link "study puppies study puppies saraalcaraz 7 119 Use Your Topic":
+  - /url: /platform/apps/699b5f8909d6ce2802c598bc/play
+  - img "study puppies"
+  - heading "study puppies" [level=3]
+  - button "saraalcaraz":
+    - generic: saraalcaraz
+  - generic: "7"
+  - generic: "119"
+  - generic: Use Your Topic
+- link "8-bit Flashcards 8-bit Flashcards jcam 4 267 Use Your Topic":
+  - /url: /platform/apps/6997adfe0aac8b09ce780ca2/play
+  - img "8-bit Flashcards"
+  - heading "8-bit Flashcards" [level=3]
+  - button "jcam":
+    - generic: jcam
+  - generic: "4"
+  - generic: "267"
+  - generic: Use Your Topic
+- link "dog on a walk timer dog on a walk timer esandurrani 6 269":
+  - /url: /platform/apps/699772104df6d3db9117b979/play
+  - img "dog on a walk timer"
+  - heading "dog on a walk timer" [level=3]
+  - button "esandurrani":
+    - generic: esandurrani
+  - generic: "6"
+  - generic: "269"
+- link "Osteon — Drill Osteon — Drill pennythedawg 2 98":
+  - /url: /platform/apps/6af647663c24fa2c5b03d3b3/play
+  - img "Osteon — Drill"
+  - heading "Osteon — Drill" [level=3]
+  - button "pennythedawg":
+    - generic: pennythedawg
+  - generic: "2"
+  - generic: "98"
+- link "Stranger Things Study Game Stranger Things Study Game charlottesmall 4 95 Use Your Topic":
+  - /url: /platform/apps/69b86f48b26a4293fca6f59d/play
+  - img "Stranger Things Study Game"
+  - heading "Stranger Things Study Game" [level=3]
+  - button "charlottesmall":
+    - generic: charlottesmall
+  - generic: "4"
+  - generic: "95"
+  - generic: Use Your Topic
+- link "QUIZ QUIZ belindareyeshernández 0 109 Use Your Topic":
+  - /url: /platform/apps/69e8374080a73df1b1f20cb5/play
+  - img "QUIZ"
+  - heading "QUIZ" [level=3]
+  - button "belindareyeshernández":
+    - generic: belindareyeshernández
+  - generic: "0"
+  - generic: "109"
+  - generic: Use Your Topic
+- link "Pastel pink timer🌸 Pastel pink timer🌸 familieprincen 15 573":
+  - /url: /platform/apps/699597cbfe6eaa97af23b675/play
+  - img "Pastel pink timer🌸"
+  - heading "Pastel pink timer🌸" [level=3]
+  - button "familieprincen":
+    - generic: familieprincen
+  - generic: "15"
+  - generic: "573"
+- link "Study Flight Study Flight hannapiekarska 15 295 Use Your Topic":
+  - /url: /platform/apps/69dfde8e51e47a30e2cf18a3/play
+  - img "Study Flight"
+  - heading "Study Flight" [level=3]
+  - button "hannapiekarska":
+    - generic: hannapiekarska
+  - generic: "15"
+  - generic: "295"
+  - generic: Use Your Topic
+- link "Analog Hospital Analog Hospital samanthamartin1607897 3 50 Use Your Topic":
+  - /url: /platform/apps/69b20ba9624ff3bdeafe77ad/play
+  - img "Analog Hospital"
+  - heading "Analog Hospital" [level=3]
+  - button "samanthamartin1607897":
+    - generic: samanthamartin1607897
+  - generic: "3"
+  - generic: "50"
+  - generic: Use Your Topic
+- link "Walk with Plato Walk with Plato Super_Studier 2 113":
+  - /url: /platform/apps/6a1e000aa8be4016d0ab6f1c/play
+  - img "Walk with Plato"
+  - heading "Walk with Plato" [level=3]
+  - button "Super_Studier":
+    - generic: Super_Studier
+  - generic: "2"
+  - generic: "113"
+- link "Study Snake Study Snake masonherbel 2 107 Use Your Topic":
+  - /url: /platform/apps/6997702610f04fb43e540b53/play
+  - img "Study Snake"
+  - heading "Study Snake" [level=3]
+  - button "masonherbel":
+    - generic: masonherbel
+  - generic: "2"
+  - generic: "107"
+  - generic: Use Your Topic
+- link "Risk Runner Risk Runner alexamaeaguilar 0 35 Use Your Topic":
+  - /url: /platform/apps/69df17f2e70e7cffe5b0f156/play
+  - img "Risk Runner"
+  - heading "Risk Runner" [level=3]
+  - button "alexamaeaguilar":
+    - generic: alexamaeaguilar
+  - generic: "0"
+  - generic: "35"
+  - generic: Use Your Topic
+- link "FlightMind FlightMind hana1234 6 88 Use Your Topic":
+  - /url: /platform/apps/69b179050a314a61d23bb1f5/play
+  - img "FlightMind"
+  - heading "FlightMind" [level=3]
+  - button "hana1234":
+    - generic: hana1234
+  - generic: "6"
+  - generic: "88"
+  - generic: Use Your Topic
+- link "Brain Bank - TIMELINE AND SOURCES OF HISTORY Brain Bank - TIMELINE AND SOURCES OF HISTORY ushamanoj 14 272 Use Your Topic":
+  - /url: /platform/apps/69e23de000b914b0ccba6a6d/play
+  - img "Brain Bank - TIMELINE AND SOURCES OF HISTORY"
+  - heading "Brain Bank - TIMELINE AND SOURCES OF HISTORY" [level=3]
+  - button "ushamanoj":
+    - generic: ushamanoj
+  - generic: "14"
+  - generic: "272"
+  - generic: Use Your Topic
+- link "Five below dupes Five below dupes zoya1667181 4 52 Use Your Topic":
+  - /url: /platform/apps/69f4674b82059cc2c84222c9/play
+  - img "Five below dupes"
+  - heading "Five below dupes" [level=3]
+  - button "zoya1667181":
+    - generic: zoya1667181
+  - generic: "4"
+  - generic: "52"
+  - generic: Use Your Topic
+- link "High Stakes Trivia High Stakes Trivia P paytonhoneycutt1668487 0 13 Use Your Topic":
+  - /url: /platform/apps/6acd29f7e41246172259f250/play
+  - img "High Stakes Trivia"
+  - heading "High Stakes Trivia" [level=3]
+  - button "P paytonhoneycutt1668487":
+    - generic: P
+    - generic: paytonhoneycutt1668487
+  - generic: "0"
+  - generic: "13"
+  - generic: Use Your Topic
+- link "Lockout Tagout Trainer Lockout Tagout Trainer ryantrattner383 2 104":
+  - /url: /platform/apps/699bfb76fd463d10b9394fef/play
+  - img "Lockout Tagout Trainer"
+  - heading "Lockout Tagout Trainer" [level=3]
+  - button "ryantrattner383":
+    - generic: ryantrattner383
+  - generic: "2"
+  - generic: "104"
+- link "Coverletter Hoops Coverletter Hoops K kathywilliams1978 0 36 Use Your Topic":
+  - /url: /platform/apps/69bda7f57b8af9e768d5e086/play
+  - img "Coverletter Hoops"
+  - heading "Coverletter Hoops" [level=3]
+  - button "K kathywilliams1978":
+    - generic: K
+    - generic: kathywilliams1978
+  - generic: "0"
+  - generic: "36"
+  - generic: Use Your Topic
+- link "F1 Study Race F1 Study Race Averlyn 13 273 Use Your Topic":
+  - /url: /platform/apps/6a214afe3dc65a7be5048e5d/play
+  - img "F1 Study Race"
+  - heading "F1 Study Race" [level=3]
+  - button "Averlyn":
+    - generic: Averlyn
+  - generic: "13"
+  - generic: "273"
+  - generic: Use Your Topic
+- link "Trials of the Grand Dojo Trials of the Grand Dojo alexthacker 3 63 Use Your Topic":
+  - /url: /platform/apps/69ac9b645c084dac43836049/play
+  - img "Trials of the Grand Dojo"
+  - heading "Trials of the Grand Dojo" [level=3]
+  - button "alexthacker":
+    - generic: alexthacker
+  - generic: "3"
+  - generic: "63"
+  - generic: Use Your Topic
+- link "💥Mind Blast 💣 - NINJA SLICE UPDATE 💥Mind Blast 💣 - NINJA SLICE UPDATE doombotinotlb 2 32 Use Your Topic":
+  - /url: /platform/apps/69e8a7d662bc29b8d7be8d88/play
+  - img "💥Mind Blast 💣 - NINJA SLICE UPDATE"
+  - heading "💥Mind Blast 💣 - NINJA SLICE UPDATE" [level=3]
+  - button "doombotinotlb":
+    - generic: doombotinotlb
+  - generic: "2"
+  - generic: "32"
+  - generic: Use Your Topic
+- link "Pomodoro Move! Pomodoro Move! mkvillarin 7 25 Use Your Topic":
+  - /url: /platform/apps/6a6b5d4ff7d340964f85d45a/play
+  - img "Pomodoro Move!"
+  - heading "Pomodoro Move!" [level=3]
+  - button "mkvillarin":
+    - generic: mkvillarin
+  - generic: "7"
+  - generic: "25"
+  - generic: Use Your Topic
+- link "Galaxy Explorer Mysteries Galaxy Explorer Mysteries lorenbango 0 23 Use Your Topic":
+  - /url: /platform/apps/69ac30989938b61346ef843a/play
+  - img "Galaxy Explorer Mysteries"
+  - heading "Galaxy Explorer Mysteries" [level=3]
+  - button "lorenbango":
+    - generic: lorenbango
+  - generic: "0"
+  - generic: "23"
+  - generic: Use Your Topic
+- link "Study timer,quiz and games Study timer,quiz and games familieprincen 6 139 Use Your Topic":
+  - /url: /platform/apps/69987a74eedc8bbd24ad6d2f/play
+  - img "Study timer,quiz and games"
+  - heading "Study timer,quiz and games" [level=3]
+  - button "familieprincen":
+    - generic: familieprincen
+  - generic: "6"
+  - generic: "139"
+  - generic: Use Your Topic
+- link "F1 F1 Study timer cicilialin 6 291":
+  - /url: /platform/apps/6acbef6c392dea8332126f47/play
+  - img "F1"
+  - heading "F1" [level=3]
+  - paragraph: Study timer
+  - button "cicilialin":
+    - generic: cicilialin
+  - generic: "6"
+  - generic: "291"
+- link "Guess the Diagnosis for Psych Guess the Diagnosis for Psych ajtaylor1357779 5 78 Use Your Topic":
+  - /url: /platform/apps/6abe888451eb8b35169ce833/play
+  - img "Guess the Diagnosis for Psych"
+  - heading "Guess the Diagnosis for Psych" [level=3]
+  - button "ajtaylor1357779":
+    - generic: ajtaylor1357779
+  - generic: "5"
+  - generic: "78"
+  - generic: Use Your Topic
+- link "Come Home Come Home gurmanikaur 0 75 Use Your Topic":
+  - /url: /platform/apps/69d7fbb27136a373505020cb/play
+  - img "Come Home"
+  - heading "Come Home" [level=3]
+  - button "gurmanikaur":
+    - generic: gurmanikaur
+  - generic: "0"
+  - generic: "75"
+  - generic: Use Your Topic
+- link "Q WN Hogwarts Charm Academy Q WN Hogwarts Charm Academy safitrinurulisnaeni1259037 1 114 Use Your Topic":
+  - /url: /platform/apps/6a01ffc593e64d23350f612d/play
+  - img "Q WN Hogwarts Charm Academy"
+  - heading "Q WN Hogwarts Charm Academy" [level=3]
+  - button "safitrinurulisnaeni1259037":
+    - generic: safitrinurulisnaeni1259037
+  - generic: "1"
+  - generic: "114"
+  - generic: Use Your Topic
+- link "StudySphere StudySphere garimakaranpuria 5 42 Use Your Topic":
+  - /url: /platform/apps/69a080d7fd7786d19ebe7712/play
+  - img "StudySphere"
+  - heading "StudySphere" [level=3]
+  - button "garimakaranpuria":
+    - generic: garimakaranpuria
+  - generic: "5"
+  - generic: "42"
+  - generic: Use Your Topic
+- link "Stray Kids World Domination Stray Kids World Domination riyaraj1942463 6 41 Use Your Topic":
+  - /url: /platform/apps/6a04c69f546babd8283e53a1/play
+  - img "Stray Kids World Domination"
+  - heading "Stray Kids World Domination" [level=3]
+  - button "riyaraj1942463":
+    - generic: riyaraj1942463
+  - generic: "6"
+  - generic: "41"
+  - generic: Use Your Topic
+- link "Katseye Study Chat Katseye Study Chat ariana1745351 4 71 Use Your Topic":
+  - /url: /platform/apps/69fd0623afa2eb5740e1b77e/play
+  - img "Katseye Study Chat"
+  - heading "Katseye Study Chat" [level=3]
+  - button "ariana1745351":
+    - generic: ariana1745351
+  - generic: "4"
+  - generic: "71"
+  - generic: Use Your Topic
+- 'link "Flight Simulator Timer {Pomodoro copy} Flight Simulator Timer {Pomodoro copy} D deletedUser-4dfiai-1xqmb-1777241393666 2 834"':
+  - /url: /platform/apps/69ee80f7b126ff1c60eacee1/play
+  - 'img "Flight Simulator Timer {Pomodoro copy}"'
+  - 'heading "Flight Simulator Timer {Pomodoro copy}" [level=3]'
+  - button "D deletedUser-4dfiai-1xqmb-1777241393666":
+    - generic: D
+    - generic: deletedUser-4dfiai-1xqmb-1777241393666
+  - generic: "2"
+  - generic: "834"
+- link "Vecna Battle Quiz Vecna Battle Quiz vaishnavi1129026 0 122 Use Your Topic":
+  - /url: /platform/apps/699f19c5f52330f82ed9bf94/play
+  - img "Vecna Battle Quiz"
+  - heading "Vecna Battle Quiz" [level=3]
+  - button "vaishnavi1129026":
+    - generic: vaishnavi1129026
+  - generic: "0"
+  - generic: "122"
+  - generic: Use Your Topic
+- link "Cozy Focus Room Cozy Focus Room Study timer nanabush 4 210":
+  - /url: /platform/apps/6acad9b352c303daa232108e/play
+  - img "Cozy Focus Room"
+  - heading "Cozy Focus Room" [level=3]
+  - paragraph: Study timer
+  - button "nanabush":
+    - generic: nanabush
+  - generic: "4"
+  - generic: "210"
+- link "Lofi Bunny Timer Lofi Bunny Timer J jhanvikrishna 4 99 Use Your Topic":
+  - /url: /platform/apps/69a830519a6668a9489d95d2/play
+  - img "Lofi Bunny Timer"
+  - heading "Lofi Bunny Timer" [level=3]
+  - button "J jhanvikrishna":
+    - generic: J
+    - generic: jhanvikrishna
+  - generic: "4"
+  - generic: "99"
+  - generic: Use Your Topic
+- link "Year 5 Exam Review Year 5 Exam Review E emily107304 0 3 Use Your Topic":
+  - /url: /platform/apps/6af289af1477af1f74d66014/play
+  - img "Year 5 Exam Review"
+  - heading "Year 5 Exam Review" [level=3]
+  - button "E emily107304":
+    - generic: E
+    - generic: emily107304
+  - generic: "0"
+  - generic: "3"
+  - generic: Use Your Topic
+- link "Relearn and test challange Relearn and test challange RMCRK 1 90 Use Your Topic":
+  - /url: /platform/apps/69ffb473fe40ba6a614d8595/play
+  - img "Relearn and test challange"
+  - heading "Relearn and test challange" [level=3]
+  - button "RMCRK":
+    - generic: RMCRK
+  - generic: "1"
+  - generic: "90"
+  - generic: Use Your Topic
+- link "Cram Cafe Cram Cafe studyfetchautumn 5 184 Use Your Topic":
+  - /url: /platform/apps/69a2d16c57adcd2e95dc2d33/play
+  - img "Cram Cafe"
+  - heading "Cram Cafe" [level=3]
+  - button "studyfetchautumn":
+    - generic: studyfetchautumn
+  - generic: "5"
+  - generic: "184"
+  - generic: Use Your Topic
+- link "Grand Prix Focus Grand Prix Focus A adele182191 4 89":
+  - /url: /platform/apps/6a409499bcea353392e2bac5/play
+  - img "Grand Prix Focus"
+  - heading "Grand Prix Focus" [level=3]
+  - button "A adele182191":
+    - generic: A
+    - generic: adele182191
+  - generic: "4"
+  - generic: "89"
+- button "上一页" [disabled]:
+  - text: 上一页
+- generic: 1 / 23
+- button "下一页":
+  - text: 下一页
+- alert

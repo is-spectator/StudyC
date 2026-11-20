@@ -1,0 +1,176 @@
+- navigation "Main navigation":
+  - link "主页":
+    - /url: /platform
+  - button "搜索":
+  - link "我的学习集":
+    - /url: /platform/studysets
+  - link "日历":
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/calendar
+  - link "题库":
+    - /url: /platform/qbank
+  - button "教程":
+  - button "Hide tutorials shortcut":
+  - button "Feedback and Help":
+  - button "yan zhang — account menu":
+    - generic: YZ
+  - menu:
+    - menuitem "您的个人资料":
+      - generic: 您的个人资料
+    - menuitem "设置":
+      - generic: 设置
+    - menuitem "教程":
+      - generic: 教程
+    - menuitem "给我们反馈":
+      - generic: 给我们反馈
+    - menuitem "订阅":
+      - generic: 订阅
+    - menuitem "支持":
+      - generic: 支持
+    - menuitem "Discord":
+      - generic: Discord
+    - menuitem "主题 主题":
+      - generic: 主题
+      - radiogroup "主题":
+        - radio "Dark mode":
+        - radio "Light mode" [checked]:
+        - radio "System preference":
+- button:
+  - generic: 功能测试 · 线段计数 · 2026-11-20
+- button:
+- button:
+- region:
+  - link:
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5
+    - generic: Dashboard
+  - button:
+    - generic: 学习计划
+  - link:
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/chat/new
+    - generic: 聊天
+  - link:
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/tutor-me
+    - generic: 辅导我
+  - link:
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/live-lecture
+    - generic: 录制讲座
+  - button:
+    - generic: 练习与活动
+  - button:
+    - text: 上传
+  - link:
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/materials
+    - generic: 资料
+  - link:
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/materials
+    - text: 查看全部
+  - button:
+  - button:
+    - link:
+      - /url: /platform/studyset/6affc0bb75798c45c17d21f5/material/6affc0bb75798c45c17d21f6/note
+      - paragraph: Untitled Document
+  - button:
+    - link:
+      - /url: /platform/studyset/6affc0bb75798c45c17d21f5/material/6affc141249fd40339c8c590/note
+      - paragraph: 功能测试：线段计数规律与计算方法
+- separator
+- navigation:
+  - button "Expand sidebar":
+  - navigation "Breadcrumb":
+    - link "功能测试 · 线段计数 · 2026-11-20":
+      - /url: /platform/studyset/6affc0bb75798c45c17d21f5
+      - generic: 功能测试 · 线段计数 · 2026-11-20
+    - button "功能测试：两题模拟考试":
+      - generic: 功能测试：两题模拟考试
+  - button "Turn into another learning format":
+    - text: 转换成
+  - button "升级":
+    - generic: 升级
+  - button "Share Practice Test":
+    - generic: 分享
+  - button "创建进度":
+    - generic: Creation progress, one has an issue
+  - 'button "Study timer: 25m"':
+    - generic: 25m
+- generic: "分数: 100%"
+- heading "绝对精彩！" [level=2]
+- paragraph: 对功能测试：两题模拟考试的掌握非常出色！你展现了透彻的理解。
+- paragraph: 你得到了 1 出于 1 答对题
+- button "查看答案"
+- button "重考":
+  - text: 重考
+- generic: 100%
+- paragraph: 分数
+- heading "主题表现" [level=3]
+- paragraph: 组合公式推导
+- paragraph: 1 item 复习
+- generic: 没有改进
+- paragraph: 你认为你的朋友们能做得更好吗？
+- paragraph: 分享你的 100% 分数
+- button "Challenge Them":
+  - generic: Challenge Them
+- generic: 继续学习
+- img "Covered, 51%":
+- heading "组合公式推导" [level=3]
+- 'link "开始 引导式聊天: 组合公式推导"':
+  - /url: /platform/studyset/6affc0bb75798c45c17d21f5/chat/new?studyTopicId=6affc144249fd40339c8c59a&mode=guided&topicName=%E7%BB%84%E5%90%88%E5%85%AC%E5%BC%8F%E6%8E%A8%E5%AF%BC
+  - generic: 推荐
+  - button "About 推荐":
+  - generic: 引导式聊天
+- 'link "开始 阅读: 组合公式推导"':
+  - /url: /platform/studyset/6affc0bb75798c45c17d21f5/read/create?studyTopicId=6affc144249fd40339c8c59a&studyPlanSidebar=preserve
+  - generic: 快速赶上
+  - button "About 快速赶上":
+  - generic: 阅读
+- 'link "再玩一次 模拟测试: 组合公式推导"':
+  - /url: /platform/studyset/6affc0bb75798c45c17d21f5/practice/test/6affc52f81532953d8502a37
+  - generic: 最受欢迎的功能
+  - button "About 最受欢迎的功能":
+  - generic: 模拟测试
+  - button "自定义您的测试":
+- 'link "开始 抽认卡: 组合公式推导"':
+  - /url: /platform/studyset/6affc0bb75798c45c17d21f5/flashcards/create?studyTopicId=6affc144249fd40339c8c59a&studyplan=true&studyPlanSidebar=preserve
+  - generic: 抽认卡
+  - button "自定义你的抽认卡":
+- 'link "开始 QuizFetch: 组合公式推导"':
+  - /url: /platform/studyset/6affc0bb75798c45c17d21f5/practice/quiz/create?studyTopicId=6affc144249fd40339c8c59a&studyPlanSidebar=preserve
+  - generic: QuizFetch
+  - button "自定义您的测验":
+- 'link "开始 辅导: 组合公式推导"':
+  - /url: /platform/studyset/6affc0bb75798c45c17d21f5/tutor-me/create?studyTopicId=6affc144249fd40339c8c59a&studyPlanSidebar=preserve
+  - generic: 辅导
+- button "探索更多":
+  - generic: 探索更多
+- generic: UP NEXT
+- img "Not started"
+- heading "等差数列求和法" [level=3]
+- 'link "开始 引导式聊天: 等差数列求和法"':
+  - /url: /platform/studyset/6affc0bb75798c45c17d21f5/chat/new?studyTopicId=6affc144249fd40339c8c598&mode=guided&topicName=%E7%AD%89%E5%B7%AE%E6%95%B0%E5%88%97%E6%B1%82%E5%92%8C%E6%B3%95
+  - generic: 推荐
+  - button "About 推荐":
+  - generic: 引导式聊天
+- 'link "开始 阅读: 等差数列求和法"':
+  - /url: /platform/studyset/6affc0bb75798c45c17d21f5/read/create?studyTopicId=6affc144249fd40339c8c598&studyPlanSidebar=preserve
+  - generic: 快速赶上
+  - button "About 快速赶上":
+  - generic: 阅读
+- 'link "开始 抽认卡: 等差数列求和法"':
+  - /url: /platform/studyset/6affc0bb75798c45c17d21f5/flashcards/create?studyTopicId=6affc144249fd40339c8c598&studyplan=true&studyPlanSidebar=preserve
+  - generic: 抽认卡
+  - button "自定义你的抽认卡":
+- 'link "开始 QuizFetch: 等差数列求和法"':
+  - /url: /platform/studyset/6affc0bb75798c45c17d21f5/practice/quiz/create?studyTopicId=6affc144249fd40339c8c598&studyPlanSidebar=preserve
+  - generic: QuizFetch
+  - button "自定义您的测验":
+- 'link "开始 辅导: 等差数列求和法"':
+  - /url: /platform/studyset/6affc0bb75798c45c17d21f5/tutor-me/create?studyTopicId=6affc144249fd40339c8c598&studyPlanSidebar=preserve
+  - generic: 辅导
+- 'link "开始 音频回顾: 等差数列求和法"':
+  - /url: /platform/studyset/6affc0bb75798c45c17d21f5/audio-recap-v2/create?studyTopicId=6affc144249fd40339c8c598&studyPlanSidebar=preserve
+  - generic: 音频回顾
+  - button "自定义你的音频摘要":
+- button "探索更多":
+  - generic: 探索更多
+- button "Open chat":
+  - img "Sparky"
+  - generic: 聊天
+- alert

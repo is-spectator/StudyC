@@ -1,0 +1,158 @@
+- navigation "Main navigation":
+  - link "主页":
+    - /url: /platform
+  - button "搜索":
+  - link "我的学习集":
+    - /url: /platform/studysets
+  - link "日历":
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/calendar
+  - link "题库":
+    - /url: /platform/qbank
+  - button "教程":
+  - button "Hide tutorials shortcut":
+  - button "Feedback and Help":
+  - button "yan zhang — account menu":
+    - generic: YZ
+  - menu:
+    - menuitem "您的个人资料":
+      - generic: 您的个人资料
+    - menuitem "设置":
+      - generic: 设置
+    - menuitem "教程":
+      - generic: 教程
+    - menuitem "给我们反馈":
+      - generic: 给我们反馈
+    - menuitem "订阅":
+      - generic: 订阅
+    - menuitem "支持":
+      - generic: 支持
+    - menuitem "Discord":
+      - generic: Discord
+    - menuitem "主题 主题":
+      - generic: 主题
+      - radiogroup "主题":
+        - radio "Dark mode":
+        - radio "Light mode" [checked]:
+        - radio "System preference":
+- button "切换学习集":
+  - generic: 功能测试 · 线段计数 · 2026-11-20
+- button "显示学习计划":
+- button "Collapse sidebar":
+- region "Study set navigation":
+  - link "Dashboard":
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5
+    - generic: Dashboard
+  - button "学习计划":
+    - generic: 学习计划
+  - link "聊天":
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/chat/new
+    - generic: 聊天
+  - link "辅导我":
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/tutor-me
+    - generic: 辅导我
+  - link "录制讲座":
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/live-lecture
+    - generic: 录制讲座
+  - button "练习与活动":
+    - generic: 练习与活动
+  - button "上传":
+    - text: 上传
+  - link "资料":
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/materials
+    - generic: 资料
+  - link "查看全部":
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/materials
+  - button "More options":
+  - button "Untitled Document":
+    - link "Untitled Document":
+      - /url: /platform/studyset/6affc0bb75798c45c17d21f5/material/6affc0bb75798c45c17d21f6/note
+      - paragraph: Untitled Document
+  - button "功能测试：线段计数规律与计算方法":
+    - link "功能测试：线段计数规律与计算方法":
+      - /url: /platform/studyset/6affc0bb75798c45c17d21f5/material/6affc141249fd40339c8c590/note
+      - paragraph: 功能测试：线段计数规律与计算方法
+- separator "Resize sidebar"
+- navigation:
+  - navigation "Breadcrumb":
+    - button "功能测试 · 线段计数 · 2026-11-20":
+      - generic: 功能测试 · 线段计数 · 2026-11-20
+    - button "功能测试：线段计数短音频 - summary":
+      - generic: 功能测试：线段计数短音频 - summary
+  - button "Turn into another learning format":
+    - text: 转换成
+  - button "升级":
+    - generic: 升级
+  - button "Share Audio Recap":
+    - generic: 分享
+  - button "创建进度":
+    - generic: Creation progress, one has an issue
+  - 'button "Study timer: 25m"':
+    - generic: 25m
+- img "Audio Recap Preview"
+- slider "Audio progress": "0"
+- generic "Highlight markers"
+- generic: 0:00
+- generic: 3:00
+- generic "Audio recap highlight controls"
+- button "15":
+  - generic: "15"
+- button "Pause" [active]:
+- button "30":
+  - generic: "30"
+- button "Playback speed": 1x
+- button "静音 (M)":
+- slider "Volume": "1"
+- button "Hide Transcript" [expanded]
+- 'button "View References: Source materials"':
+  - generic: View References
+- heading "Transcript" [level=2]
+- generic: 0:00
+- generic: "Sparky: 大家好！今天我们来揭秘线段计数的奥秘，从图形直观跃迁到公式思维。"
+- toolbar "Actions for transcript at 0:00":
+  - button "Listen from here":
+  - button "Ask Sparky about transcript"
+- generic: 0:06
+- generic: "Sparky: 今天咱们来聊聊线段计数这个话题，听起来简单，但里面其实藏着很巧妙的思维方法。 Morgan: 没错，线段计数其实是数学思维的一个小缩影。我们先从最基础的问题开始：如果一条直线段被标记点分成n个小段，那总共有多少个不同的点呢？ Sparky: 这个好理解，分成n个小段，那就会有n加1个点。比如分成4段，就是5个点；分成10段，就是11个点。 Morgan: 对，关键就在于任意两个不同的点就能确定一条线段。所以线段的总数，就是从n加1个点里选两个点的组合数。 Sparky: 用公式表示就是n加1乘以n再除以2，也就是n乘以n加1除以2。这个结果同时也等于1加2加3一直加到n。 Morgan: 我们来举个例子巩固一下。如果分成4个小段，那就有5个点，线段总数就是1加2加3加4等于10条。 Sparky: 再比如分成10个小段，就有11个点，总数就是1加到10，等于55条线段。这两个案例很经典，4段10条，10段55条，记住它们就能快速验证公式。 Morgan: 这里有个重要的提醒：计数的结果不依赖各小段的长度是否相等，哪怕每段长短不一，只要标记点的数量和位置确定了，线段总数就不变。 Sparky: 对，还有一个常见错误要特别注意，就是别把小段数当成点数。分成n段是n加1个点，不是n个点。"
+- toolbar "Actions for transcript at 0:06":
+  - button "Listen from here":
+  - button "Ask Sparky about transcript"
+- generic: 1:43
+- generic: "Morgan: 另一个常见错误是只统计相邻点构成的小线段，而忽略了跨越多个小段的长线段。比如5个点里，除了相邻的4条短线段，还有跨两段的、跨三段的、跨四段的，这些都要算进去。 Sparky: 所以用分类相加法的时候，可以按线段包含的小段数来分类：包含1小段的有n条，包含2小段的有n减1条，依此类推，最后包含n小段的只有1条，加起来正好是1加2加到n。 Morgan: 而用两点确定法就更直接了，n加1个点里任选两个，组合数就是n乘以n加1除以2，一步到位。 Sparky: 这两种方法殊途同归，一个从局部累加，一个从整体组合，正好体现了从图形直观到公式抽象的思维跃迁。 Morgan: 最后留个练习给大家：如果分成6个小段，有多少条线段呢？试着用分类相加和选两点两种方法分别解释一下，答案应该是21条。 Sparky: 记住核心口诀：n段变n加1个点，两点定线，总数就是n乘以n加1除以2。避开两个坑：别把段数当点数，别只数相邻线段。"
+- toolbar "Actions for transcript at 1:43":
+  - button "Listen from here":
+  - button "Ask Sparky about transcript"
+- textbox "关于此主题，有任何问题都可以问..."
+- button "录音提问":
+- button "Chat history":
+  - generic: 聊天
+- button "New chat":
+- button "Collapse chat":
+- log "Chat transcript":
+  - button "更换角色":
+    - img "Sparky"
+  - button "更换角色"
+  - heading "有什么可以帮您的吗？" [level=2]:
+    - generic: 有什么可以帮您的吗？
+  - 'button "理解: Main point"':
+    - generic: Main point
+  - 'button "学习: Key takeaways"':
+    - generic: Key takeaways
+  - 'button "生成: Make flashcards"':
+    - generic: Make flashcards
+  - button "查看更多"
+  - button "插件":
+    - text: 插件
+  - button "开始引导式学习":
+    - generic: 开始引导式课程
+- status
+- button "Choose File"
+- textbox "向你的 AI tutor 提问任何问题..."
+- button "发送消息" [disabled]:
+- button "Chat actions":
+- button "Guided mode off":
+  - generic: 引导
+- button "呼叫 Sparky":
+  - generic: 通话
+- button "口述消息":
+- separator "Resize chat sidebar"
+- alert

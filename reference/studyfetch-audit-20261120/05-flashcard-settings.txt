@@ -1,0 +1,144 @@
+- navigation "Main navigation":
+  - link "主页":
+    - /url: /platform
+  - button "搜索":
+  - link "我的学习集":
+    - /url: /platform/studysets
+  - link "日历":
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/calendar
+  - link "题库":
+    - /url: /platform/qbank
+  - button "教程":
+  - button "Hide tutorials shortcut":
+  - button "Feedback and Help":
+  - button "yan zhang — account menu":
+    - generic: YZ
+  - menu:
+    - menuitem "您的个人资料":
+      - generic: 您的个人资料
+    - menuitem "设置":
+      - generic: 设置
+    - menuitem "教程":
+      - generic: 教程
+    - menuitem "给我们反馈":
+      - generic: 给我们反馈
+    - menuitem "订阅":
+      - generic: 订阅
+    - menuitem "支持":
+      - generic: 支持
+    - menuitem "Discord":
+      - generic: Discord
+    - menuitem "主题 主题":
+      - generic: 主题
+      - radiogroup "主题":
+        - radio "Dark mode":
+        - radio "Light mode" [checked]:
+        - radio "System preference":
+- button:
+  - generic: 功能测试 · 线段计数 · 2026-11-20
+- button:
+- button:
+- region:
+  - link:
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5
+    - generic: Dashboard
+  - button:
+    - generic: 学习计划
+  - link:
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/chat/new
+    - generic: 聊天
+  - link:
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/tutor-me
+    - generic: 辅导我
+  - link:
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/live-lecture
+    - generic: 录制讲座
+  - button:
+    - generic: 练习与活动
+  - button:
+    - text: 上传
+  - link:
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/materials
+    - generic: 资料
+  - link:
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/materials
+    - text: 查看全部
+  - button:
+  - button:
+    - link:
+      - /url: /platform/studyset/6affc0bb75798c45c17d21f5/material/6affc0bb75798c45c17d21f6/note
+      - paragraph: Untitled Document
+  - button:
+    - link:
+      - /url: /platform/studyset/6affc0bb75798c45c17d21f5/material/6affc141249fd40339c8c590/note
+      - paragraph: 功能测试：线段计数规律与计算方法
+- separator
+- generic: 创建抽认卡组
+- button "Close":
+  - generic: 退出
+- paragraph: 4 of 4
+- heading "附加设置" [level=2]
+- paragraph: 为您的flashcards配置名称、语言和插件
+- heading "您想将您的flashcards命名为什么？" [level=3]
+- textbox "输入flashcards名称": 功能测试：线段计数混合卡
+- heading "您希望您的flashcards使用哪种语言？" [level=3]
+- button "🇨🇳 中文":
+  - generic: 🇨🇳
+  - generic: 中文
+- heading "使用插件自定义您的flashcards" [level=3]
+- button "探索插件":
+  - generic: 探索插件
+- button "标准 StudyFetch Flashcards 准备就绪 flashcards 可以直接使用，无需修改。":
+  - heading "标准 StudyFetch Flashcards" [level=4]
+  - paragraph: 准备就绪 flashcards 可以直接使用，无需修改。
+- button "Summarizer Spark.E Summarizer Spark.E StudyFetch Original Spark.E AI gives super brief and super simple explanations of concepts":
+  - img "Summarizer Spark.E"
+  - heading "Summarizer Spark.E" [level=4]
+  - generic: StudyFetch Original
+  - paragraph: Spark.E AI gives super brief and super simple explanations of concepts
+- button "Professor Spark.E Professor Spark.E StudyFetch Original Spark.E AI will chat with you like your professor.":
+  - img "Professor Spark.E"
+  - heading "Professor Spark.E" [level=4]
+  - generic: StudyFetch Original
+  - paragraph: Spark.E AI will chat with you like your professor.
+- button "Deep Learner Spark.E Deep Learner Spark.E StudyFetch Original Spark.E AI will be super detailed and give me lots of examples.":
+  - img "Deep Learner Spark.E"
+  - heading "Deep Learner Spark.E" [level=4]
+  - generic: StudyFetch Original
+  - paragraph: Spark.E AI will be super detailed and give me lots of examples.
+- button "高级设置" [active]:
+  - text: 高级设置
+- generic: 重点主题 (可选)
+- textbox "重点主题 (可选)":
+  - /placeholder: 例如，关键概念，第三章词汇...
+- paragraph: 明确flashcards应从你的资料中侧重哪些内容
+- button "返回":
+  - text: 返回
+- button "创建flashcards"
+- generic: 名称
+- generic: 功能测试：线段计数混合卡
+- generic: 🇨🇳
+- generic: 中文
+- link "Preview of 功能测试：线段计数规律与计算方法 功能测试：线段计数规律与计算方法":
+  - /url: /platform/studyset/6affc0bb75798c45c17d21f5/material/6affc141249fd40339c8c590/note
+  - img "Preview of 功能测试：线段计数规律与计算方法"
+  - paragraph: 功能测试：线段计数规律与计算方法
+- generic: "3"
+- generic: 术语与定义
+- generic: 术语
+- generic: "1"
+- generic: 音频
+- generic: 术语
+- generic: "1"
+- generic: 选择题
+- generic: 术语
+- generic: "1"
+- generic: 填空
+- generic: 术语
+- generic: "1"
+- generic: 完形填空
+- generic: 术语
+- button "Open chat":
+  - img "Sparky"
+  - generic: 聊天
+- alert: 功能测试 · 线段计数 · 2026-11-20 | StudyFetch

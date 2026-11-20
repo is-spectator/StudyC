@@ -1,0 +1,181 @@
+- navigation "Main navigation":
+  - link "主页":
+    - /url: /platform
+  - button "搜索":
+  - link "我的学习集":
+    - /url: /platform/studysets
+  - link "日历":
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/calendar
+  - link "题库":
+    - /url: /platform/qbank
+  - button "教程":
+  - button "Hide tutorials shortcut":
+  - button "Feedback and Help":
+  - button "yan zhang — account menu":
+    - generic: YZ
+  - menu:
+    - menuitem "您的个人资料":
+      - generic: 您的个人资料
+    - menuitem "设置":
+      - generic: 设置
+    - menuitem "教程":
+      - generic: 教程
+    - menuitem "给我们反馈":
+      - generic: 给我们反馈
+    - menuitem "订阅":
+      - generic: 订阅
+    - menuitem "支持":
+      - generic: 支持
+    - menuitem "Discord":
+      - generic: Discord
+    - menuitem "主题 主题":
+      - generic: 主题
+      - radiogroup "主题":
+        - radio "Dark mode":
+        - radio "Light mode" [checked]:
+        - radio "System preference":
+- button:
+  - generic: 功能测试 · 线段计数 · 2026-11-20
+- button:
+- button:
+- region:
+  - link:
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5
+    - generic: Dashboard
+  - button:
+    - generic: 学习计划
+  - link:
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/chat/new
+    - generic: 聊天
+  - link:
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/tutor-me
+    - generic: 辅导我
+  - link:
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/live-lecture
+    - generic: 录制讲座
+  - button:
+    - generic: 练习与活动
+  - button:
+    - text: 上传
+  - link:
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/materials
+    - generic: 资料
+  - link:
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/materials
+    - text: 查看全部
+  - button:
+  - button:
+    - link:
+      - /url: /platform/studyset/6affc0bb75798c45c17d21f5/material/6affc0bb75798c45c17d21f6/note
+      - paragraph: Untitled Document
+  - button:
+    - link:
+      - /url: /platform/studyset/6affc0bb75798c45c17d21f5/material/6affc141249fd40339c8c590/note
+      - paragraph: 功能测试：线段计数规律与计算方法
+- separator
+- navigation:
+  - button "Expand sidebar":
+  - navigation "Breadcrumb":
+    - button "功能测试 · 线段计数 · 2026-11-20":
+      - generic: 功能测试 · 线段计数 · 2026-11-20
+    - button "功能测试：线段计数规律与计算方法":
+      - generic: 功能测试：线段计数规律与计算方法
+  - button "Turn into another learning format":
+    - text: 转换成
+  - button "升级":
+    - generic: 升级
+  - button "Share Material":
+    - generic: 分享
+  - button "创建进度":
+    - generic: Creation progress, one has an issue
+  - 'button "Study timer: 25m"':
+    - generic: 25m
+- paragraph: 功能测试：线段计数
+- paragraph: 一条直线段被标记点分成 n 个小段时，共有 n+1 个不同的点。任意两个不同点确定一条线段。因此线段总数是 n(n+1)/2，也等于 1+2+…+n。分成 10 个小段时共有 11 个点和 55 条线段；分成 4 个小段时有 10 条线段。计数不依赖各小段的长度是否相等。常见错误是把小段数当成点数，或只统计相邻点构成的小线段。
+- paragraph: 独立练习：分成 6 个小段时有多少条线段？请分别用分类相加和选两点解释。
+- button "字体系列":
+  - generic: Inter
+- button "Font size":
+  - text: "11"
+- button "粗体":
+- button "斜体":
+- button "下划线":
+- button "删除线":
+- button "文本颜色":
+- button "左对齐" [pressed]:
+- button "居中对齐":
+- button "右对齐":
+- button "有序列表":
+- button "无序列表":
+- button "撤销" [disabled]:
+- button "重做" [disabled]:
+- button "插入":
+- button "版本历史":
+- button "打印":
+- button "折叠":
+- button "Chat history":
+  - generic: 聊天
+- button "New chat":
+- button "Collapse chat":
+- log "Chat transcript":
+  - button "更换角色":
+    - img "Sparky"
+  - button "更换角色"
+  - heading "有什么可以帮您的吗？" [level=2]:
+    - generic: 有什么可以帮您的吗？
+  - 'button "理解: Explain the difficult parts"':
+    - generic: Explain the difficult parts
+  - 'button "学习: Generate flashcards from this"':
+    - generic: Generate flashcards from this
+  - 'button "增强: Fill in the gaps"':
+    - generic: Fill in the gaps
+  - 'button "生成: Add a summary at the top"':
+    - generic: Add a summary at the top
+  - button "查看更多"
+  - button "插件":
+    - text: 插件
+  - button "开始引导式学习":
+    - generic: 开始引导式课程
+- status
+- button "Choose File"
+- textbox "向你的 AI tutor 提问任何问题..."
+- button "发送消息" [disabled]:
+- button "Chat actions":
+- button "Guided mode off":
+  - generic: 引导
+- button "1 material selected, open picker" [pressed]:
+  - generic: "1"
+- button "呼叫 Sparky":
+  - generic: 通话
+- button "口述消息":
+- separator "Resize chat sidebar"
+- alert
+- dialog "Modal":
+  - heading "创建插件" [level=1]
+  - heading "AI行为" [level=2]
+  - paragraph: 定义您的AI助手应该如何互动和回应
+  - button "聊天":
+    - generic: 聊天
+  - button "抽认卡":
+    - generic: 抽认卡
+  - button "测验":
+    - generic: 测验
+  - button "测验":
+    - generic: 测验
+  - button "Tutor Me":
+    - generic: Tutor Me
+  - button "音频回顾":
+    - generic: 音频回顾
+  - generic: 基础个性
+  - textbox "e.g., Friendly and encouraging, uses simple explanations": 你是一位中文数学老师。先问一个问题确认学生理解，再简洁解释。每次回复开头写“测试导师：”。
+  - generic: 聊天的自定义提示
+  - textbox "示例：始终使用苏格拉底式提问。将复杂主题分解为易于理解的部分。使用真实世界的例子和类比来解释概念。" [active]: 讨论线段计数时，先区分小段数与点数，再用选两点的方法解释。
+  - region "Plugin prompts":
+    - heading "Prompts" [level=3]
+    - button "Explore prompts"
+    - paragraph: Choose prompts to include in your plugin’s chat.
+  - button "返回"
+  - button "创建插件":
+    - text: 创建插件
+  - heading "Chat" [level=4]
+  - paragraph: 讨论线段计数时，先区分小段数与点数，再用选两点的方法解释。

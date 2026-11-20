@@ -1,0 +1,244 @@
+- navigation "Main navigation":
+  - link "主页":
+    - /url: /platform
+  - button "搜索":
+  - link "我的学习集":
+    - /url: /platform/studysets
+  - link "日历":
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/calendar
+  - link "题库":
+    - /url: /platform/qbank
+  - button "教程":
+  - button "Hide tutorials shortcut":
+  - button "Feedback and Help":
+  - button "yan zhang — account menu":
+    - generic: YZ
+  - menu:
+    - menuitem "您的个人资料":
+      - generic: 您的个人资料
+    - menuitem "设置":
+      - generic: 设置
+    - menuitem "教程":
+      - generic: 教程
+    - menuitem "给我们反馈":
+      - generic: 给我们反馈
+    - menuitem "订阅":
+      - generic: 订阅
+    - menuitem "支持":
+      - generic: 支持
+    - menuitem "Discord":
+      - generic: Discord
+    - menuitem "主题 主题":
+      - generic: 主题
+      - radiogroup "主题":
+        - radio "Dark mode":
+        - radio "Light mode" [checked]:
+        - radio "System preference":
+- button:
+  - generic: 功能测试 · 线段计数 · 2026-11-20
+- button:
+- button:
+- region:
+  - link:
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5
+    - generic: Dashboard
+  - button:
+    - generic: 学习计划
+  - link:
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/chat/new
+    - generic: 聊天
+  - link:
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/tutor-me
+    - generic: 辅导我
+  - link:
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/live-lecture
+    - generic: 录制讲座
+  - button:
+    - generic: 练习与活动
+  - button:
+    - text: 上传
+  - link:
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/materials
+    - generic: 资料
+  - link:
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/materials
+    - text: 查看全部
+  - button:
+  - button:
+    - link:
+      - /url: /platform/studyset/6affc0bb75798c45c17d21f5/material/6affc0bb75798c45c17d21f6/note
+      - paragraph: Untitled Document
+  - button:
+    - link:
+      - /url: /platform/studyset/6affc0bb75798c45c17d21f5/material/6affc141249fd40339c8c590/note
+      - paragraph: 功能测试：线段计数规律与计算方法
+- separator
+- navigation:
+  - button "Expand sidebar":
+  - navigation "Breadcrumb":
+    - generic "功能测试 · 线段计数 · 2026-11-20":
+      - generic: 功能测试 · 线段计数 · 2026-11-20
+  - button "升级":
+    - generic: 升级
+  - button "Share Study Set":
+    - generic: 分享
+  - button "创建进度":
+    - generic: Creation progress, one has an issue
+  - 'button "Study timer: 25m"':
+    - generic: 25m
+- main:
+  - img "功能测试 · 线段计数 · 2026-11-20"
+  - heading "功能测试 · 线段计数 · 2026-11-20" [level=1]
+  - button "Study set settings":
+  - button "克隆集合":
+  - group "Study plan mastery":
+    - generic: 12 个主题
+    - generic: 已涵盖3项
+    - generic: 已掌握 0
+    - progressbar "Topics mastered"
+  - 'button "模式: 综合"':
+  - region "Main":
+    - region "Recommended from your study plan":
+      - heading "功能测试：线段计数计划" [level=2]:
+        - generic "功能测试：线段计数计划"
+      - link "查看完整学习计划":
+        - /url: /zh/platform/studyset/6affc0bb75798c45c17d21f5/study-plan
+      - 'button "Unit 01: 功能测试：线段计数单元" [pressed]':
+        - generic: "01"
+        - generic: 功能测试：线段计数单元
+      - region "Continue learning 点与线段的关系":
+        - paragraph: 来自 功能测试：线段计数单元 的主题 1/12
+        - img "Not started"
+        - heading "点与线段的关系" [level=3]
+        - button "Skip 点与线段的关系":
+          - text: 跳过主题
+        - 'link "开始 引导式聊天: 点与线段的关系"':
+          - /url: /platform/studyset/6affc0bb75798c45c17d21f5/chat/new?studyTopicId=6affc143249fd40339c8c594&mode=guided&topicName=%E7%82%B9%E4%B8%8E%E7%BA%BF%E6%AE%B5%E7%9A%84%E5%85%B3%E7%B3%BB
+          - generic: 推荐
+          - button "About 推荐":
+          - generic: 引导式聊天
+        - 'link "开始 阅读: 点与线段的关系"':
+          - /url: /platform/studyset/6affc0bb75798c45c17d21f5/read/create?studyTopicId=6affc143249fd40339c8c594
+          - generic: 快速赶上
+          - button "About 快速赶上":
+          - generic: 阅读
+        - 'link "开始 QuizFetch: 点与线段的关系"':
+          - /url: /platform/studyset/6affc0bb75798c45c17d21f5/practice/quiz/create?studyTopicId=6affc143249fd40339c8c594
+          - generic: 最受欢迎的功能
+          - button "About 最受欢迎的功能":
+          - generic: QuizFetch
+          - button "自定义您的测验":
+        - button "探索更多":
+          - generic: 探索更多
+    - region "Or Start Learning Your Own Way":
+      - heading "或者开始用你自己的方式学习" [level=2]
+      - button "添加更多资料":
+        - text: 添加更多资料
+      - link "参加测验":
+        - /url: /platform/studyset/6affc0bb75798c45c17d21f5/practice/quiz/create
+        - text: 参加测验
+      - link "创建抽认卡集":
+        - /url: /platform/studyset/6affc0bb75798c45c17d21f5/flashcards/create
+        - text: 创建抽认卡集
+      - link "向 Sparky 提问":
+        - /url: /platform/studyset/6affc0bb75798c45c17d21f5/chat/new
+        - text: 向 Sparky 提问
+      - link "开始辅导课程":
+        - /url: /platform/studyset/6affc0bb75798c45c17d21f5/tutor-me/create
+        - text: 开始辅导课程
+      - link "开始听":
+        - /url: /platform/studyset/6affc0bb75798c45c17d21f5/audio-recap-v2/create
+        - text: 开始听
+      - button "开始录制":
+        - text: 开始录制
+      - link "启动街机":
+        - /url: /platform/studyset/6affc0bb75798c45c17d21f5/arcade
+        - text: 启动街机
+      - link "探索小程序":
+        - /url: /platform/apps
+        - text: 探索小程序
+    - region "Recent materials":
+      - heading "您的资料" [level=2]
+      - button "所有类型":
+        - generic: 所有类型
+      - link "Untitled Document":
+        - /url: /platform/studyset/6affc0bb75798c45c17d21f5/material/6affc0bb75798c45c17d21f6/note
+        - paragraph: Untitled Document
+      - link "Preview of 功能测试：线段计数规律与计算方法 功能测试：线段计数规律与计算方法":
+        - /url: /platform/studyset/6affc0bb75798c45c17d21f5/material/6affc141249fd40339c8c590/note
+        - img "Preview of 功能测试：线段计数规律与计算方法"
+        - paragraph: 功能测试：线段计数规律与计算方法
+    - region "Recent Highlights":
+      - heading "Recent Highlights" [level=2]
+      - link "View all highlights":
+        - /url: /platform/studyset/6affc0bb75798c45c17d21f5/highlights
+        - text: View all
+      - region "Recent highlights carousel":
+        - link "Open highlight in 功能测试：两题模拟考试":
+          - /url: /platform/studyset/6affc0bb75798c45c17d21f5/practice/test/6affc52f81532953d8502a37/take?highlightId=6affc53281532953d8502a38
+          - generic: Practice Test
+          - generic: 如果一条直线段被标记点分成了 8 个小段，那么这条线段上一共有多少条不同的线段？
+          - generic: A
+          - generic: "36"
+          - generic: B
+          - generic: "45"
+          - generic: C
+          - generic: "28"
+          - paragraph: 功能测试：两题模拟考试
+          - paragraph: Test
+    - complementary "Study set widgets":
+      - region "Add your syllabus":
+        - heading "教学大纲" [level=2]
+        - button "根据您的课程表和优先事项定制您的学习计划。 上传你的教学大纲，以便我们根据课程安排、考试权重和教师重点来优先安排主题。":
+        - button "添加教学大纲":
+          - text: 添加教学大纲
+      - region "Add exam dates":
+        - heading "考试日期" [level=2]
+        - button "确保你在考试前学习了你需要学习的内容。":
+        - button "添加考试":
+          - text: 添加考试
+- button "Chat history":
+  - generic: 功能测试与教学说明
+- button "New chat":
+- button "Collapse chat":
+- log "Chat transcript":
+  - paragraph: 功能测试：为什么6个小段不是6个点？请按你的教学方式开始。
+  - group "Message actions":
+    - button "Show message grade details":
+      - generic: B
+    - button "Copy message":
+    - status
+  - button "更换角色":
+    - img "功能测试：线段计数讲解方式"
+  - paragraph: 测试导师：先问你一个问题确认理解——一条线段上有6个小段，你觉得这条线段上一共有几个点（端点也算）？
+  - paragraph:
+    - text: （先记住这个关键区别：
+    - strong: 小段数
+    - text: 是相邻两点之间的间隔数；
+    - strong: 点数
+    - text: 是线段上所有端点和分点加起来的总数。两者不相等，因为点数总比小段数多1。用"选两点"的方法看：每一条线段都由两个点决定，所以先数清点数，再从点数里选2个，就能算出线段总数。例如6个小段对应7个点，线段总数是
+    - generic: (
+    - generic: "2"
+    - generic: "7"
+    - generic: )
+    - text: =
+    - generic: "21"
+    - text: ，而不是6。）
+  - button:
+  - button:
+  - button:
+  - button:
+  - button:
+  - button:
+- status
+- button "Choose File"
+- textbox "向你的 AI tutor 提问任何问题..." [active]
+- button "发送消息" [disabled]:
+- button "Chat actions":
+- button "Guided mode off":
+  - generic: 引导
+- button "呼叫 Sparky":
+  - generic: 通话
+- button "口述消息":
+- separator "Resize chat sidebar"
+- alert

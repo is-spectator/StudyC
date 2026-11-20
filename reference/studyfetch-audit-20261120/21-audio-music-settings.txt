@@ -1,0 +1,166 @@
+- navigation "Main navigation":
+  - link "主页":
+    - /url: /platform
+  - button "搜索":
+  - link "我的学习集":
+    - /url: /platform/studysets
+  - link "日历":
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/calendar
+  - link "题库":
+    - /url: /platform/qbank
+  - button "教程":
+  - button "Hide tutorials shortcut":
+  - button "Feedback and Help":
+  - button "yan zhang — account menu":
+    - generic: YZ
+  - menu:
+    - menuitem "您的个人资料":
+      - generic: 您的个人资料
+    - menuitem "设置":
+      - generic: 设置
+    - menuitem "教程":
+      - generic: 教程
+    - menuitem "给我们反馈":
+      - generic: 给我们反馈
+    - menuitem "订阅":
+      - generic: 订阅
+    - menuitem "支持":
+      - generic: 支持
+    - menuitem "Discord":
+      - generic: Discord
+    - menuitem "主题 主题":
+      - generic: 主题
+      - radiogroup "主题":
+        - radio "Dark mode":
+        - radio "Light mode" [checked]:
+        - radio "System preference":
+- button "切换学习集":
+  - generic: 功能测试 · 线段计数 · 2026-11-20
+- button "显示学习计划":
+- button "Collapse sidebar":
+- region "Study set navigation":
+  - link "Dashboard":
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5
+    - generic: Dashboard
+  - button "学习计划":
+    - generic: 学习计划
+  - link "聊天":
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/chat/new
+    - generic: 聊天
+  - link "辅导我":
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/tutor-me
+    - generic: 辅导我
+  - link "录制讲座":
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/live-lecture
+    - generic: 录制讲座
+  - button "练习与活动":
+    - generic: 练习与活动
+  - button "上传":
+    - text: 上传
+  - link "资料":
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/materials
+    - generic: 资料
+  - link "查看全部":
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/materials
+  - button "More options":
+  - button "Untitled Document":
+    - link "Untitled Document":
+      - /url: /platform/studyset/6affc0bb75798c45c17d21f5/material/6affc0bb75798c45c17d21f6/note
+      - paragraph: Untitled Document
+  - button "功能测试：线段计数规律与计算方法":
+    - link "功能测试：线段计数规律与计算方法":
+      - /url: /platform/studyset/6affc0bb75798c45c17d21f5/material/6affc141249fd40339c8c590/note
+      - paragraph: 功能测试：线段计数规律与计算方法
+- separator "Resize sidebar"
+- generic: Create an Audio Recap
+- button "Close":
+  - generic: 退出
+- paragraph: Step 3 of 3
+- heading "自定义您的音频回顾" [level=2]
+- paragraph: 选择你想要的音频回顾声音
+- generic: 为您的音频总结命名
+- textbox "例如：第五章复习，期中练习"
+- generic: 重点主题 (可选)
+- textbox "例如，关键概念，第三章词汇..."
+- paragraph: 明确audio recap应从你的资料中侧重哪些内容
+- generic: 回顾长度
+- button "十五秒":
+  - heading "十五秒" [level=3]
+- button "三十秒":
+  - heading "三十秒" [level=3]
+- button "一分钟":
+  - heading "一分钟" [level=3]
+- button "两分钟":
+  - heading "两分钟" [level=3]
+- generic: 复习类型
+- button "总结 将内容总结成易于理解的音频回顾。":
+  - heading "总结" [level=3]
+  - paragraph: 将内容总结成易于理解的音频回顾。
+- button "讲座 将您的材料转化为讲座音频回顾。":
+  - heading "讲座" [level=3]
+  - paragraph: 将您的材料转化为讲座音频回顾。
+- button "播客 将你的材料转化为播客音频回顾。":
+  - heading "播客" [level=3]
+  - paragraph: 将你的材料转化为播客音频回顾。
+- button "有声书 将您的材料转化为有声书音频回顾。":
+  - heading "有声书" [level=3]
+  - paragraph: 将您的材料转化为有声书音频回顾。
+- button "音乐 根据您的资料生成带人声的音乐。" [active]:
+  - heading "音乐" [level=3]
+  - paragraph: 根据您的资料生成带人声的音乐。
+- button "高级设置":
+  - text: 高级设置
+- generic: 您希望您的audio recap使用哪种语言？
+- button "中文 🇨🇳":
+  - generic: 中文 🇨🇳
+- button "返回"
+- button "生成音频回顾":
+  - text: 生成音频回顾
+- paragraph: 您的音频回顾标题
+- generic: 由
+- generic: YZ
+- generic: 你
+- generic: Language
+- generic: 中文 🇨🇳
+- generic: 长度
+- generic: Music
+- generic: 类型
+- generic: 音乐
+- generic: 对话
+- generic: 演讲者
+- paragraph: Sparky
+- paragraph: Morgan
+- paragraph: male
+- button "Chat history":
+  - generic: 聊天
+- button "New chat":
+- button "Collapse chat":
+- log "Chat transcript":
+  - button "更换角色":
+    - img "Sparky"
+  - button "更换角色"
+  - heading "有什么可以帮您的吗？" [level=2]:
+    - generic: 有什么可以帮您的吗？
+  - 'button "理解: 这个学习集是关于什么的？"':
+    - generic: 这个学习集是关于什么的？
+  - 'button "学习: 制定学习计划"':
+    - generic: 制定学习计划
+  - 'button "生成: 为这套卡片生成抽认卡"':
+    - generic: 为这套卡片生成抽认卡
+  - button "查看更多"
+  - button "插件":
+    - text: 插件
+  - button "开始引导式学习":
+    - generic: 开始引导式课程
+- status
+- button "Choose File"
+- textbox "向你的 AI tutor 提问任何问题..."
+- button "发送消息" [disabled]:
+- button "Chat actions":
+- button "Guided mode off":
+  - generic: 引导
+- button "呼叫 Sparky":
+  - generic: 通话
+- button "口述消息":
+- separator "Resize chat sidebar"
+- alert

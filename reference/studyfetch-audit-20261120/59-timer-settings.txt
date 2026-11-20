@@ -1,0 +1,189 @@
+- navigation "Main navigation":
+  - link "主页":
+    - /url: /platform
+  - button "搜索":
+  - link "我的学习集":
+    - /url: /platform/studysets
+  - link "日历":
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/calendar
+  - link "题库":
+    - /url: /platform/qbank
+  - button "教程":
+  - button "Hide tutorials shortcut":
+  - button "Feedback and Help":
+  - button "yan zhang — account menu":
+    - generic: YZ
+  - menu:
+    - menuitem "您的个人资料":
+      - generic: 您的个人资料
+    - menuitem "设置":
+      - generic: 设置
+    - menuitem "教程":
+      - generic: 教程
+    - menuitem "给我们反馈":
+      - generic: 给我们反馈
+    - menuitem "订阅":
+      - generic: 订阅
+    - menuitem "支持":
+      - generic: 支持
+    - menuitem "Discord":
+      - generic: Discord
+    - menuitem "主题 主题":
+      - generic: 主题
+      - radiogroup "主题":
+        - radio "Dark mode":
+        - radio "Light mode" [checked]:
+        - radio "System preference":
+- button:
+  - generic: 功能测试 · 线段计数 · 2026-11-20
+- button:
+- button:
+- region:
+  - link:
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5
+    - generic: Dashboard
+  - button:
+    - generic: 学习计划
+  - link:
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/chat/new
+    - generic: 聊天
+  - link:
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/tutor-me
+    - generic: 辅导我
+  - link:
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/live-lecture
+    - generic: 录制讲座
+  - button:
+    - generic: 练习与活动
+  - button:
+    - text: 上传
+  - link:
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/materials
+    - generic: 资料
+  - link:
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/materials
+    - text: 查看全部
+  - button:
+  - button:
+    - link:
+      - /url: /platform/studyset/6affc0bb75798c45c17d21f5/material/6affc0bb75798c45c17d21f6/note
+      - paragraph: Untitled Document
+  - button:
+    - link:
+      - /url: /platform/studyset/6affc0bb75798c45c17d21f5/material/6affc141249fd40339c8c590/note
+      - paragraph: 功能测试：线段计数规律与计算方法
+- separator
+- navigation:
+  - button "Expand sidebar":
+  - navigation "Breadcrumb":
+    - button "功能测试 · 线段计数 · 2026-11-20":
+      - generic: 功能测试 · 线段计数 · 2026-11-20
+    - button "功能测试：线段计数规律与计算方法":
+      - generic: 功能测试：线段计数规律与计算方法
+  - button "Turn into another learning format":
+    - text: 转换成
+  - button "升级":
+    - generic: 升级
+  - button "Share Material":
+    - generic: 分享
+  - button "创建进度":
+    - generic: Creation progress, one has an issue
+  - 'button "Study timer: 25m" [expanded]':
+    - generic: 25m
+  - paragraph: 设置
+  - button "Close timer settings" [expanded] [active]:
+  - paragraph: 模式
+  - group "Timer mode":
+    - button "计时器" [pressed]
+    - button "番茄钟"
+  - paragraph: 时长
+  - textbox "焦点 duration in minutes": "25"
+  - generic: 分钟
+  - paragraph: 颜色
+  - button "Teal"
+  - button "Peach"
+  - button "Purple"
+  - button "Yellow"
+  - button "Lime"
+  - button "Pink"
+  - button "Cream" [pressed]
+  - button "Bone"
+  - button "Charcoal"
+  - button "Create new timer":
+    - generic: Create new timer
+  - button "Pop out timer":
+    - generic: Pop out timer
+  - button "Resize timer nw"
+  - button "Resize timer ne"
+  - button "Resize timer sw"
+  - button "Resize timer se"
+- paragraph: 功能测试：线段计数
+- paragraph: 一条直线段被标记点分成 n 个小段时，共有 n+1 个不同的点。任意两个不同点确定一条线段。因此线段总数是 n(n+1)/2，也等于 1+2+…+n。分成 10 个小段时共有 11 个点和 55 条线段；分成 4 个小段时有 10 条线段。计数不依赖各小段的长度是否相等。常见错误是把小段数当成点数，或只统计相邻点构成的小线段。
+- paragraph: 独立练习：分成 6 个小段时有多少条线段？请分别用分类相加和选两点解释。
+- button "字体系列":
+  - generic: Inter
+- button "Font size":
+  - text: "11"
+- button "粗体":
+- button "斜体":
+- button "下划线":
+- button "删除线":
+- button "文本颜色":
+- button "左对齐" [pressed]:
+- button "居中对齐":
+- button "右对齐":
+- button "有序列表":
+- button "无序列表":
+- button "撤销" [disabled]:
+- button "重做" [disabled]:
+- button "插入":
+- button "版本历史":
+- button "打印":
+- button "折叠":
+- button "Chat history":
+  - generic: 功能测试与教学说明
+- button "New chat":
+- button "Collapse chat":
+- log "Chat transcript":
+  - paragraph: 功能测试：为什么6个小段不是6个点？请按你的教学方式开始。
+  - group "Message actions":
+    - button "Show message grade details":
+      - generic: B
+    - button "Copy message":
+    - status
+  - button "更换角色":
+    - img "功能测试：线段计数讲解方式"
+  - paragraph: 测试导师：先问你一个问题确认理解——一条线段上有6个小段，你觉得这条线段上一共有几个点（端点也算）？
+  - paragraph:
+    - text: （先记住这个关键区别：
+    - strong: 小段数
+    - text: 是相邻两点之间的间隔数；
+    - strong: 点数
+    - text: 是线段上所有端点和分点加起来的总数。两者不相等，因为点数总比小段数多1。用"选两点"的方法看：每一条线段都由两个点决定，所以先数清点数，再从点数里选2个，就能算出线段总数。例如6个小段对应7个点，线段总数是
+    - generic: (
+    - generic: "2"
+    - generic: "7"
+    - generic: )
+    - text: =
+    - generic: "21"
+    - text: ，而不是6。）
+  - button:
+  - button:
+  - button:
+  - button:
+  - button:
+  - button:
+- status
+- button "Choose File"
+- textbox "向你的 AI tutor 提问任何问题..."
+- button "发送消息" [disabled]:
+- button "Chat actions":
+- button "Guided mode off":
+  - generic: 引导
+- button "1 material selected, open picker" [pressed]:
+  - generic: "1"
+- button "呼叫 Sparky":
+  - generic: 通话
+- button "口述消息":
+- separator "Resize chat sidebar"
+- alert

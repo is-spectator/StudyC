@@ -1,0 +1,25 @@
+{
+  "status": "rendered-not-installed",
+  "domains": [
+    "study.clyna.ai",
+    "planplan.clyna.ai"
+  ],
+  "upstream": "127.0.0.1:8789",
+  "studyAuthRoutes": {
+    "/v1/auth/web/session": "GET",
+    "/v1/auth/web/email/code": "POST",
+    "/v1/auth/web/email/register": "POST",
+    "/v1/auth/web/email/login": "POST",
+    "/v1/auth/web/email/reset": "POST",
+    "/v1/me": "GET",
+    "/v1/logout": "POST"
+  },
+  "files": {
+    "clyna-study.conf": "3322731cd6af683182987b44ec68609154030663925c71e7b56e1bca35433ab7",
+    "clyna-planplan-alias.conf": "171028eba9a08abc4076c30f0216ec4ba9526b94c2a133684d50bdbc643f4728"
+  },
+  "certificateFilesChecked": false,
+  "nginxSyntaxChecked": false,
+  "existingClynaConfigurationModified": false,
+  "proxyMode": "direct-origin"
+}

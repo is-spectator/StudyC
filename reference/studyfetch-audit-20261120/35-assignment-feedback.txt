@@ -1,0 +1,171 @@
+- navigation "Main navigation":
+  - link "主页":
+    - /url: /platform
+  - button "搜索":
+  - link "我的学习集":
+    - /url: /platform/studysets
+  - link "日历":
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/calendar
+  - link "题库":
+    - /url: /platform/qbank
+  - button "教程":
+  - button "Hide tutorials shortcut":
+  - button "Feedback and Help":
+  - button "yan zhang — account menu":
+    - generic: YZ
+  - menu:
+    - menuitem "您的个人资料":
+      - generic: 您的个人资料
+    - menuitem "设置":
+      - generic: 设置
+    - menuitem "教程":
+      - generic: 教程
+    - menuitem "给我们反馈":
+      - generic: 给我们反馈
+    - menuitem "订阅":
+      - generic: 订阅
+    - menuitem "支持":
+      - generic: 支持
+    - menuitem "Discord":
+      - generic: Discord
+    - menuitem "主题 主题":
+      - generic: 主题
+      - radiogroup "主题":
+        - radio "Dark mode":
+        - radio "Light mode" [checked]:
+        - radio "System preference":
+- button "切换学习集":
+  - generic: 功能测试 · 线段计数 · 2026-11-20
+- button "显示学习计划":
+- button "Collapse sidebar":
+- region "Study set navigation":
+  - link "Dashboard":
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5
+    - generic: Dashboard
+  - button "学习计划":
+    - generic: 学习计划
+  - link "聊天":
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/chat/new
+    - generic: 聊天
+  - link "辅导我":
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/tutor-me
+    - generic: 辅导我
+  - link "录制讲座":
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/live-lecture
+    - generic: 录制讲座
+  - button "练习与活动":
+    - generic: 练习与活动
+  - button "上传":
+    - text: 上传
+  - link "资料":
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/materials
+    - generic: 资料
+  - link "查看全部":
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/materials
+  - button "More options":
+  - button "Untitled Document":
+    - link "Untitled Document":
+      - /url: /platform/studyset/6affc0bb75798c45c17d21f5/material/6affc0bb75798c45c17d21f6/note
+      - paragraph: Untitled Document
+  - button "功能测试：线段计数规律与计算方法":
+    - link "功能测试：线段计数规律与计算方法":
+      - /url: /platform/studyset/6affc0bb75798c45c17d21f5/material/6affc141249fd40339c8c590/note
+      - paragraph: 功能测试：线段计数规律与计算方法
+- separator "Resize sidebar"
+- navigation:
+  - navigation "Breadcrumb":
+    - button "Show breadcrumb ancestors": …
+    - 'generic "尝试 #1"':
+      - generic: "尝试 #1"
+  - button "升级":
+    - generic: 升级
+  - button "Share Study Set":
+    - generic: 分享
+  - button "创建进度":
+    - generic: Creation progress, one has an issue
+  - 'button "Study timer: 25m"':
+    - generic: 25m
+- link "Back":
+  - /url: /platform/studyset/6affc0bb75798c45c17d21f5/assignment-grader/6affc8aec9cd029b42cb8ff4
+  - text: Back
+- paragraph: "Please provide the assignment text within the `<existing_rubric_or_assignment>` tags so that I can analyze it and generate the title in Chinese for you."
+- 'heading "尝试 #1 · 2026/11/20" [level=1]'
+- button "查看评分标准":
+  - text: 查看评分标准
+- button "Back to Document":
+  - text: Back to Document
+- generic: You earned 8/10 (80%) on this assignment, demonstrating strong understanding of endpoint identification, counting methods, and accurate calculation of the final answer. However, your logical explanation needs improvement—you incorrectly assumed that a longer segment would increase the total number of line segments, when in fact the count depends only on the number of points, not segment lengths. To strengthen this area, revisit the relationship between points and segments and practice explaining why length is irrelevant to the count. Keep up the good computational work, and focus on refining your reasoning for full mastery.
+- heading "识别端点数量" [level=3]
+- paragraph: 你正确指出线段被分成6个小段后共有7个点，完全符合本项要求。
+- paragraph: 2/2 积分
+- heading "计数方法" [level=3]
+- paragraph: 你使用了正确的计数方法，即7×6÷2，逻辑清晰且计算过程完整，符合本项满分标准。
+- paragraph: 4/4 积分
+- heading "最终结果" [level=3]
+- paragraph: 你得出了正确答案21条线段，结果准确无误。
+- paragraph: 2/2 积分
+- heading "逻辑解释" [level=3]
+- paragraph: 你未能正确解释线段数量与各段长度无关，反而错误地认为某一段较长会增加总线段数，这与本项要求不符。
+- paragraph: 0/2 积分
+- heading "建议改写" [level=2]
+- heading "识别端点数量" [level=4]
+- heading "建议重写:" [level=5]
+- generic: "原始:"
+- paragraph: 线段被分成6个小段，所以共有7个点。
+- generic: "改进:"
+- paragraph: 线段被分成6个小段，因此共有7个端点。
+- generic: "分数: 2/2"
+- heading "计数方法" [level=4]
+- heading "建议重写:" [level=5]
+- generic: "原始:"
+- paragraph: 任意选两个点形成一条线段，共有7×6÷2=21条。
+- generic: "改进:"
+- paragraph: 任意选取两个端点即可确定一条线段，因此总数为7×6÷2=21条。
+- generic: "分数: 4/4"
+- heading "最终结果" [level=4]
+- heading "建议重写:" [level=5]
+- generic: "原始:"
+- paragraph: 共有7×6÷2=21条。
+- generic: "改进:"
+- paragraph: 因此线段总数为21条。
+- generic: "分数: 2/2"
+- heading "逻辑解释" [level=4]
+- heading "建议重写:" [level=5]
+- generic: "原始:"
+- paragraph: 我认为如果其中一小段比较长，总线段数就会增加。
+- generic: "改进:"
+- paragraph: 线段总数仅取决于端点的数量，与各小段的长度是否相等无关。
+- generic: "分数: 0/2"
+- button "Chat history":
+  - generic: 聊天
+- button "New chat":
+- button "Collapse chat":
+- log "Chat transcript":
+  - button "更换角色":
+    - img "Sparky"
+  - button "更换角色"
+  - heading "有什么可以帮您的吗？" [level=2]:
+    - generic: 有什么可以帮您的吗？
+  - 'button "理解: 这个学习集是关于什么的？"':
+    - generic: 这个学习集是关于什么的？
+  - 'button "学习: 制定学习计划"':
+    - generic: 制定学习计划
+  - 'button "生成: 为这套卡片生成抽认卡"':
+    - generic: 为这套卡片生成抽认卡
+  - button "查看更多"
+  - button "插件":
+    - text: 插件
+  - button "开始引导式学习":
+    - generic: 开始引导式课程
+- status
+- button "Choose File"
+- textbox "向你的 AI tutor 提问任何问题..."
+- button "发送消息" [disabled]:
+- button "Chat actions":
+- button "Guided mode off":
+  - generic: 引导
+- button "呼叫 Sparky":
+  - generic: 通话
+- button "口述消息":
+- separator "Resize chat sidebar"
+- alert

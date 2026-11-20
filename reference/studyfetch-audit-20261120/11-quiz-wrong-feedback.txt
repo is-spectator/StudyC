@@ -1,0 +1,148 @@
+- navigation "Main navigation":
+  - link "主页":
+    - /url: /platform
+  - button "搜索":
+  - link "我的学习集":
+    - /url: /platform/studysets
+  - link "日历":
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/calendar
+  - link "题库":
+    - /url: /platform/qbank
+  - button "教程":
+  - button "Hide tutorials shortcut":
+  - button "Feedback and Help":
+  - button "yan zhang — account menu":
+    - generic: YZ
+  - menu:
+    - menuitem "您的个人资料":
+      - generic: 您的个人资料
+    - menuitem "设置":
+      - generic: 设置
+    - menuitem "教程":
+      - generic: 教程
+    - menuitem "给我们反馈":
+      - generic: 给我们反馈
+    - menuitem "订阅":
+      - generic: 订阅
+    - menuitem "支持":
+      - generic: 支持
+    - menuitem "Discord":
+      - generic: Discord
+    - menuitem "主题 主题":
+      - generic: 主题
+      - radiogroup "主题":
+        - radio "Dark mode":
+        - radio "Light mode" [checked]:
+        - radio "System preference":
+- button "切换学习集":
+  - generic: 功能测试 · 线段计数 · 2026-11-20
+- button "显示学习计划":
+- button "Collapse sidebar":
+- region "Study set navigation":
+  - link "Dashboard":
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5
+    - generic: Dashboard
+  - button "学习计划":
+    - generic: 学习计划
+  - link "聊天":
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/chat/new
+    - generic: 聊天
+  - link "辅导我":
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/tutor-me
+    - generic: 辅导我
+  - link "录制讲座":
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/live-lecture
+    - generic: 录制讲座
+  - button "练习与活动":
+    - generic: 练习与活动
+  - button "上传":
+    - text: 上传
+  - link "资料":
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/materials
+    - generic: 资料
+  - link "查看全部":
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/materials
+  - button "More options":
+  - button "Untitled Document":
+    - link "Untitled Document":
+      - /url: /platform/studyset/6affc0bb75798c45c17d21f5/material/6affc0bb75798c45c17d21f6/note
+      - paragraph: Untitled Document
+  - button "功能测试：线段计数规律与计算方法":
+    - link "功能测试：线段计数规律与计算方法":
+      - /url: /platform/studyset/6affc0bb75798c45c17d21f5/material/6affc141249fd40339c8c590/note
+      - paragraph: 功能测试：线段计数规律与计算方法
+- separator "Resize sidebar"
+- navigation:
+  - navigation "Breadcrumb":
+    - link "功能测试 · 线段计数 · 2026-11-20":
+      - /url: /platform/studyset/6affc0bb75798c45c17d21f5
+      - generic: 功能测试 · 线段计数 · 2026-11-20
+    - button "功能测试：线段计数三题测验":
+      - generic: 功能测试：线段计数三题测验
+  - button "Turn into another learning format":
+    - text: 转换成
+  - button "升级":
+    - generic: 升级
+  - button "Share Quiz":
+    - generic: 分享
+  - button "创建进度":
+    - generic: Creation progress, one has an issue
+  - 'button "Study timer: 25m"':
+    - generic: 25m
+- generic: QuizFetch
+- button "Card 1, rated easy" [disabled]:
+- generic: 0%
+- button "Settings":
+- generic: 1 / 1
+- generic: 选择题
+- button "View 1 sources": "1"
+- heading "独立练习应用" [level=4]
+- paragraph: 练习计算 6 个小段情况下的线段总数，并尝试使用两种不同的方法进行验证。
+- link "功能测试：线段计数规律与计算方法":
+  - /url: /platform/studyset/6affc0bb75798c45c17d21f5/material/6affc141249fd40339c8c590/note
+  - generic: 功能测试：线段计数规律与计算方法
+- button "Good content":
+- button "Bad content":
+- paragraph: 如果一条直线段被标记点分成了 6 个小段，那么这条线段上总共有多少条不同的线段？
+- paragraph: "7"
+- paragraph: 继续练习
+- paragraph:
+  - text: 根据线段计数的数学逻辑，当一条线段被分成 n 个小段时，点的总数是
+  - generic: n +
+  - generic: "1"
+  - text: 。在本题中，分成了 6 个小段，因此点的总数是
+  - generic: 6 +
+  - generic: 1 =
+  - generic: "7"
+  - text: 个点。计算线段总数的方法有两种：
+- list:
+  - text: 等差数列求和法：将所有可能长度的线段相加，即
+  - generic: 1 +
+  - generic: 2 +
+  - generic: 3 +
+  - generic: 4 +
+  - generic: 5 +
+  - generic: 6 =
+  - generic: "21"
+  - text: 。
+  - text: 组合公式法：从 7 个点中任选 2 个点确定一条线段，公式为
+  - generic: "2"
+  - generic: n(n+1)
+  - text: ，此处 n 为小段数 6，计算过程为
+  - generic: "2"
+  - generic: 6×(6+1)
+  - text: =
+  - generic: "2"
+  - generic: "42"
+  - text: =
+  - generic: "21"
+  - text: 。因此，总共有 21 条线段。
+- text: 进度已重置。需要连续答对 2 题才能掌握。
+- button "Information about spaced repetition":
+- button "下一步 输入":
+  - text: 下一步
+  - generic: 输入
+- button "Open chat":
+  - img "Sparky"
+  - generic: 聊天
+- alert: 功能测试 · 线段计数 · 2026-11-20 | StudyFetch

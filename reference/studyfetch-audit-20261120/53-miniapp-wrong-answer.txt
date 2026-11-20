@@ -1,0 +1,130 @@
+- navigation "Main navigation":
+  - link "主页":
+    - /url: /platform
+  - button "搜索":
+  - link "我的学习集":
+    - /url: /platform/studysets
+  - link "日历":
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/calendar
+  - link "题库":
+    - /url: /platform/qbank
+  - button "教程":
+  - button "Hide tutorials shortcut":
+  - button "Feedback and Help":
+  - button "yan zhang — account menu":
+    - generic: YZ
+  - menu:
+    - menuitem "您的个人资料":
+      - generic: 您的个人资料
+    - menuitem "设置":
+      - generic: 设置
+    - menuitem "教程":
+      - generic: 教程
+    - menuitem "给我们反馈":
+      - generic: 给我们反馈
+    - menuitem "订阅":
+      - generic: 订阅
+    - menuitem "支持":
+      - generic: 支持
+    - menuitem "Discord":
+      - generic: Discord
+    - menuitem "主题 主题":
+      - generic: 主题
+      - radiogroup "主题":
+        - radio "Dark mode":
+        - radio "Light mode" [checked]:
+        - radio "System preference":
+- button "切换学习集":
+  - generic: 功能测试 · 线段计数 · 2026-11-20
+- button "Collapse sidebar":
+- link "Dashboard":
+  - /url: /platform/studyset/6affc0bb75798c45c17d21f5
+  - generic: Dashboard
+- button "学习计划":
+  - generic: 学习计划
+- link "聊天":
+  - /url: /platform/studyset/6affc0bb75798c45c17d21f5/chat/new
+  - generic: 聊天
+- link "辅导我":
+  - /url: /platform/studyset/6affc0bb75798c45c17d21f5/tutor-me
+  - generic: 辅导我
+- link "录制讲座":
+  - /url: /platform/studyset/6affc0bb75798c45c17d21f5/live-lecture
+  - generic: 录制讲座
+- button "练习与活动":
+  - generic: 练习与活动
+- link "资料":
+  - /url: /platform/studyset/6affc0bb75798c45c17d21f5/materials
+  - generic: 资料
+- link "查看全部":
+  - /url: /platform/studyset/6affc0bb75798c45c17d21f5/materials
+- button "Untitled Document":
+  - link "Untitled Document":
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/material/6affc0bb75798c45c17d21f6/note
+    - paragraph: Untitled Document
+- button "功能测试：线段计数规律与计算方法":
+  - link "功能测试：线段计数规律与计算方法":
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/material/6affc141249fd40339c8c590/note
+    - paragraph: 功能测试：线段计数规律与计算方法
+- separator "Resize sidebar"
+- navigation:
+  - navigation "Breadcrumb":
+    - link "Mini Apps":
+      - /url: /platform/apps
+      - generic: Mini Apps
+    - generic "App Builder":
+      - generic: App Builder
+  - button "升级":
+    - generic: 升级
+  - button "创建进度":
+    - generic: Creation progress, one has an issue
+  - 'button "Study timer: 25m"':
+    - generic: 25m
+- button "Line Segment Master":
+  - generic: Line Segment Master
+- button "More options":
+- button "Publish"
+- iframe [active]:
+  - alert
+  - iframe [active]:
+    - banner:
+      - heading "线段计数小工具" [level=1]
+      - paragraph: 一条线段上有 n 个小段，一共有多少条线段？先自己算一算。
+    - generic: 小段数 n（1 到 10 的整数）
+    - button "减少": −
+    - spinbutton "小段数 n（1 到 10 的整数）": "6"
+    - button "增加": +
+    - generic: 默认 n = 6
+    - generic: 线段示意图
+    - generic: 点数（n + 1）
+    - generic: 7个点
+    - generic: 线段总数
+    - generic: 21条
+    - generic: 先自己算一算：这条线段上一共有多少条线段？
+    - spinbutton "先自己算一算：这条线段上一共有多少条线段？" [disabled]: "7"
+    - button "检查" [disabled]
+    - generic: ❌ 再想一想
+    - text: 你填的是 7，正确答案是 21 条。
+    - text: 公式：n(n+1)/2 = 6×7÷2 = 21
+    - text: 思路：以每个点为起点，向右数到其他每个点，一共 1+2+…+6 = 21 条。
+    - generic: 线段总数 = n(n+1)/2
+    - button "换一个 n 再试"
+    - paragraph: 提示：线段总数 = n(n+1)/2
+- separator
+- generic: App Builder
+- button "New chat":
+- generic: 功能测试：创建一个中文线段计数交互小工具。输入小段数n（1到10的整数），显示点数n+1、线段总数n(n+1)/2和简单线段示意图。先让学习者输入答案，再点击检查，显示正确或错误和公式。默认n=6。不要联网或要求登录。
+- textbox:
+  - paragraph: 这个线段计数小工具听起来很棒！先问一个问题：你希望它整体给人什么感觉，是像数学课堂上那种清爽、专注的练习感，还是带点小游戏味道、有动画和得分反馈的活泼风格？
+- generic: 清爽、专注的中文数学练习风格。白色背景，蓝色点线。不需要再确认偏好，按上面要求直接生成。
+- textbox:
+  - paragraph: 好的，直接开始构建！
+- generic: "开始生成应用。 My style preferences: Use \"Ocean Teal\" color theme (primary: #0D9488, secondary: #5EEAD4) and \"Inter\" font from Google Fonts. Now start building!"
+- textbox:
+  - paragraph: 线段计数小工具已经做好了！整体是清爽的白色背景配海洋青绿色调，Inter 字体，专注的数学练习感。
+  - paragraph: 功能上：n 可以用加减按钮或直接输入（1 到 10，默认 6），下方实时显示点数和线段示意图，点数 n+1 直接给出，线段总数先用「？」藏起来。学习者输入答案点检查后，才会揭晓结果，正确显示绿色对勾和公式，错误显示红色提示并附上 1+2+…+n 的推导思路。还有「换一个 n 再试」按钮随机换题继续练。
+- button "Choose File"
+- button "Add image":
+- textbox "Describe a change you want..."
+- button "Send" [disabled]:
+- alert

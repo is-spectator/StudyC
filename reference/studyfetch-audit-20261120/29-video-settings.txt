@@ -1,0 +1,193 @@
+- navigation "Main navigation":
+  - link "主页":
+    - /url: /platform
+  - button "搜索":
+  - link "我的学习集":
+    - /url: /platform/studysets
+  - link "日历":
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/calendar
+  - link "题库":
+    - /url: /platform/qbank
+  - button "教程":
+  - button "Hide tutorials shortcut":
+  - button "Feedback and Help":
+  - button "yan zhang — account menu":
+    - generic: YZ
+  - menu:
+    - menuitem "您的个人资料":
+      - generic: 您的个人资料
+    - menuitem "设置":
+      - generic: 设置
+    - menuitem "教程":
+      - generic: 教程
+    - menuitem "给我们反馈":
+      - generic: 给我们反馈
+    - menuitem "订阅":
+      - generic: 订阅
+    - menuitem "支持":
+      - generic: 支持
+    - menuitem "Discord":
+      - generic: Discord
+    - menuitem "主题 主题":
+      - generic: 主题
+      - radiogroup "主题":
+        - radio "Dark mode":
+        - radio "Light mode" [checked]:
+        - radio "System preference":
+- button:
+  - generic: 功能测试 · 线段计数 · 2026-11-20
+- button:
+- button:
+- region:
+  - link:
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5
+    - generic: Dashboard
+  - button:
+    - generic: 学习计划
+  - link:
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/chat/new
+    - generic: 聊天
+  - link:
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/tutor-me
+    - generic: 辅导我
+  - link:
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/live-lecture
+    - generic: 录制讲座
+  - button:
+    - generic: 练习与活动
+  - button:
+    - text: 上传
+  - link:
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/materials
+    - generic: 资料
+  - link:
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/materials
+    - text: 查看全部
+  - button:
+  - button:
+    - link:
+      - /url: /platform/studyset/6affc0bb75798c45c17d21f5/material/6affc0bb75798c45c17d21f6/note
+      - paragraph: Untitled Document
+  - button:
+    - link:
+      - /url: /platform/studyset/6affc0bb75798c45c17d21f5/material/6affc141249fd40339c8c590/note
+      - paragraph: 功能测试：线段计数规律与计算方法
+- separator
+- generic: 製作解說影片
+- button "Exit":
+  - generic: 退出
+- paragraph: Step 4 of 4
+- heading "自定义你的讲解视频" [level=1]
+- paragraph: 描述您希望您的材料如何呈现
+- button "Professional Clear and structured":
+  - generic: Professional
+  - generic: Clear and structured
+- button "Teacher Friendly with examples" [pressed]:
+  - generic: Teacher
+  - generic: Friendly with examples
+- button "Quick Guide Concise and focused":
+  - generic: Quick Guide
+  - generic: Concise and focused
+- button "Storyteller 引人入胜且富有故事性":
+  - generic: Storyteller
+  - generic: 引人入胜且富有故事性
+- button "喜剧 幽默风趣":
+  - generic: 喜剧
+  - generic: 幽默风趣
+- button "深入探讨 详尽全面":
+  - generic: 深入探讨
+  - generic: 详尽全面
+- button "其他 自定义演示风格":
+  - generic: 其他
+  - generic: 自定义演示风格
+- paragraph: 视频时长
+- button "短 大约1分钟" [active] [pressed]:
+  - generic: 短
+  - generic: 大约1分钟
+- button "中等 大约3分钟":
+  - generic: 中等
+  - generic: 大约3分钟
+- button "长 大约5分钟":
+  - generic: 长
+  - generic: 大约5分钟
+- button "已延长 大约8分钟":
+  - generic: 已延长
+  - generic: 大约8分钟
+- paragraph: 视觉主题
+- button "Aa 清除" [pressed]:
+  - generic: Aa
+  - generic: 清除
+- button "Aa 深色专业":
+  - generic: Aa
+  - generic: 深色专业
+- button "Aa 黑板":
+  - generic: Aa
+  - generic: 黑板
+- button "Aa 最小":
+  - generic: Aa
+  - generic: 最小
+- button "Aa 温暖":
+  - generic: Aa
+  - generic: 温暖
+- button "Aa 自定义":
+  - generic: Aa
+  - generic: 自定义
+- paragraph: 用网络内容丰富你的视频
+- generic: 包括网页内容
+- generic: 获取网络上的相关信息和资源，以帮助解释你的主题。
+- switch "包括网页内容"
+- generic: 插入网络图片
+- generic: 查找网上相关的视觉资料和图表，以帮助阐明核心概念。
+- switch "插入网络图片" [disabled]
+- button "Back":
+  - text: Back
+- button "Create"
+- generic: Aa
+- generic: 您的解说视频标题
+- generic: "Y"
+- generic: You
+- generic: Style
+- generic: 老师
+- generic: Length
+- generic: 1分钟
+- generic: Theme
+- generic: 清除
+- button "Language 🇨🇳 中文":
+  - generic: Language
+  - generic: 🇨🇳
+  - generic: 中文
+- button "Chat history":
+  - generic: 聊天
+- button "New chat":
+- button "Collapse chat":
+- log "Chat transcript":
+  - button "更换角色":
+    - img "Sparky"
+  - button "更换角色"
+  - heading "有什么可以帮您的吗？" [level=2]:
+    - generic: 有什么可以帮您的吗？
+  - 'button "理解: Explain the difficult parts"':
+    - generic: Explain the difficult parts
+  - 'button "学习: Generate flashcards from this"':
+    - generic: Generate flashcards from this
+  - 'button "增强: Fill in the gaps"':
+    - generic: Fill in the gaps
+  - 'button "生成: Add a summary at the top"':
+    - generic: Add a summary at the top
+  - button "查看更多"
+  - button "插件":
+    - text: 插件
+  - button "开始引导式学习":
+    - generic: 开始引导式课程
+- status: 有新的回复可用
+- button "Choose File"
+- textbox "向你的 AI tutor 提问任何问题..."
+- button "发送消息" [disabled]:
+- button "Chat actions":
+- button "Guided mode off":
+  - generic: 引导
+- button "呼叫 Sparky":
+  - generic: 通话
+- button "口述消息":
+- separator "Resize chat sidebar"
+- alert: 功能测试 · 线段计数 · 2026-11-20 | StudyFetch

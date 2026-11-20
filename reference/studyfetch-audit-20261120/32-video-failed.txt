@@ -1,0 +1,161 @@
+Browser tab: 1192622034, Title: "功能测试 · 线段计数 · 2026-11-20 | StudyFetch", URL: "https://www.studyfetch.com/platform/studyset/6affc0bb75798c45c17d21f5/explainers/video/6affc7f22e638d7a299375e6".
+0 AXWebArea 功能测试 · 线段计数 · 2026-11-20 | StudyFetch, URL: studyfetch.com/platform/studyset/6affc0bb75798c45c17d21f5/explainers/video/6affc7f22e638d7a299375e6
+	1 container
+		2 container platform-layout
+			3 container
+				4 container Main navigation
+					5 link Description: 主页, Value: studyfetch.com/platform
+					6 button 搜索
+						7 image
+					8 link Description: 我的学习集, Value: studyfetch.com/platform/studysets
+					9 link Description: 日历, Value: studyfetch.com/platform/studyset/6affc0bb75798c45c17d21f5/calendar
+					10 link Description: 题库, Value: studyfetch.com/platform/qbank
+					11 container
+						12 button 教程
+							13 image
+						14 button Hide tutorials shortcut
+							15 image
+					16 button (collapsed) Description: Feedback and Help, Secondary Actions: Expand
+						17 image
+					18 container
+						19 pop up button (collapsed) Description: yan zhang — account menu, Secondary Actions: Expand
+						20 menu
+							21 您的个人资料
+								22 image
+								23 text 您的个人资料
+							24 设置
+								25 image
+								26 text 设置
+							27 教程
+								28 image
+								29 text 教程
+							30 (collapsed) 给我们反馈, Secondary Actions: Expand
+								31 image
+								32 text 给我们反馈
+							33 订阅
+								34 image
+								35 text 订阅
+							36 支持
+								37 image
+								38 text 支持
+							39 Discord
+								40 image
+								41 text Discord
+							42 主题 主题
+								43 image
+								44 text 主题
+								45 主题
+									46 radio button Description: Dark mode, Value: 0
+										47 image
+									48 radio button Description: Light mode, Value: 1
+										49 image
+									50 radio button Description: System preference, Value: 0
+										51 image
+				52 container
+					53 container
+						54 button (collapsed) Description: 切换学习集, Secondary Actions: Expand
+							55 text 功能测试 · 线段计数 · 2026-11-20
+							56 image
+						57 checkbox Description: 显示学习计划, Value: 0
+						58 button Collapse sidebar
+							59 image
+						60 container Description: Study set navigation, ID: sidebar-set-panel
+							61 link Description: Dashboard, Value: studyfetch.com/platform/studyset/6affc0bb75798c45c17d21f5
+							62 button 学习计划
+								63 image
+								64 text 学习计划
+							65 link Description: 聊天, Value: studyfetch.com/platform/studyset/6affc0bb75798c45c17d21f5/chat/new
+							66 link Description: 辅导我, Value: studyfetch.com/platform/studyset/6affc0bb75798c45c17d21f5/tutor-me
+							67 link Description: 录制讲座, Value: studyfetch.com/platform/studyset/6affc0bb75798c45c17d21f5/live-lecture
+							68 pop up button (collapsed) Description: 练习与活动, Secondary Actions: Expand
+								69 image
+								70 text 练习与活动
+							71 button 上传
+							72 link Description: 资料, Value: studyfetch.com/platform/studyset/6affc0bb75798c45c17d21f5/materials
+							73 link Description: 查看全部, Value: studyfetch.com/platform/studyset/6affc0bb75798c45c17d21f5/materials
+							74 button (collapsed) Description: More options, Secondary Actions: Expand
+								75 image
+							76 button Untitled Document
+								77 link Description: Untitled Document, Value: studyfetch.com/platform/studyset/6affc0bb75798c45c17d21f5/material/6affc0bb75798c45c17d21f6/note
+							78 button 功能测试：线段计数规律与计算方法
+								79 link Description: 功能测试：线段计数规律与计算方法, Value: studyfetch.com/platform/studyset/6affc0bb75798c45c17d21f5/material/6affc141249fd40339c8c590/note
+					80 splitter Description: Resize sidebar, Value: 224
+			81 container
+				82 container
+					83 container Breadcrumb
+						84 link Description: 功能测试 · 线段计数 · 2026-11-20, Value: studyfetch.com/platform/studyset/6affc0bb75798c45c17d21f5
+						85 pop up button (collapsed) Counting Line Segments: A Visual Animated Guide, Secondary Actions: Expand
+							86 text Counting Line Segments: A Visual Animated Guide
+							87 image
+					88 button 升级
+						89 image
+						90 text 升级
+					91 button Share Explainer Video
+						92 image
+						93 text 分享
+					94 button (collapsed) Description: 创建进度, Secondary Actions: Expand
+						95 text Creation progress
+						96 text , one has an issue
+					97 pop up button (collapsed) Description: Study timer: 25m, Help: Study timer, Secondary Actions: Expand
+						98 image
+						99 text 25m
+				100 container
+					101 image
+					102 heading 视频生成失败, Value: 1
+						103 text 视频生成失败
+					104 text 生成视频时出现了问题。
+					105 heading Counting Line Segments: A Visual Animated Guide, Value: 1
+						106 text Counting Line Segments: A Visual Animated Guide
+					107 text Y yan886400
+					108 checkbox Description: 喜欢, Value: 0
+						109 image
+					110 checkbox Description: 不喜欢, Value: 0
+						111 image
+					112 button 分享
+						113 image
+						114 text 分享
+					115 button
+						116 image
+					117 button 0 浏览量 • 4 minutes ago 这个视频以通俗易懂的方式讲解了重要内容。
+						118 text 0
+						119 text 浏览量
+						120 text •
+						121 text 4 minutes ago
+						122 text 这个视频以通俗易懂的方式讲解了重要内容。
+					123 text 继续观看
+					124 link Description: Edges: A Simple Animation Guide Edges: A Simple Animation Guide 0 浏览量 • 6 months ago Blood Blood, Value: studyfetch.com/platform/studyset/6affc0bb75798c45c17d21f5/explainers/video/6a0cf7935d6c40091398b61a
+					125 link Value: studyfetch.com/platform/studyset/6affc0bb75798c45c17d21f5/explainers/video/6a888fb85d742152d1e2f1b2, Description: Parallel and Intersecting Lines: Visual Animated Guide Parallel and Intersecting Lines: Visual Animated Guide 2 浏览量 • 3 months ago zebamoin zebamoin
+		126 container
+			127 button (collapsed) Description: Chat history, Secondary Actions: Expand
+				128 text 聊天
+				129 image
+			130 button New chat
+				131 image
+			132 button Collapse chat
+				133 image
+			134 container Chat transcript
+				135 container
+					136 button 更换角色
+						137 image Sparky
+					138 button 更换角色
+				139 heading 有什么可以帮您的吗？, Value: 2
+					140 text 有什么可以帮您的吗？
+				141 button 理解: Explain a part
+				142 button 学习: Summarize
+				143 button 生成: Make flashcards
+				144 button 查看更多
+				145 button 插件
+				146 button 开始引导式学习
+			147 button 选择文件
+			148 text entry area (settable)
+			149 button (disabled) 发送消息
+				150 image
+			151 button Chat actions
+				152 image
+			153 checkbox Description: Guided mode off, Value: 0
+			154 button 呼叫 Sparky
+			155 checkbox Description: 口述消息, Value: 0
+				156 image
+		157 splitter Description: Resize chat sidebar, Value: 400
+
+The focused UI element is 148 text entry area (settable)

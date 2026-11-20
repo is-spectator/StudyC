@@ -1,0 +1,1068 @@
+- navigation "Main navigation":
+  - link "主页":
+    - /url: /platform
+  - button "搜索":
+  - link "我的学习集":
+    - /url: /platform/studysets
+  - link "日历":
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/calendar
+  - link "题库":
+    - /url: /platform/qbank
+  - button "教程":
+  - button "Hide tutorials shortcut":
+  - button "Feedback and Help":
+  - button "yan zhang — account menu":
+    - generic: YZ
+  - menu:
+    - menuitem "您的个人资料":
+      - generic: 您的个人资料
+    - menuitem "设置":
+      - generic: 设置
+    - menuitem "教程":
+      - generic: 教程
+    - menuitem "给我们反馈":
+      - generic: 给我们反馈
+    - menuitem "订阅":
+      - generic: 订阅
+    - menuitem "支持":
+      - generic: 支持
+    - menuitem "Discord":
+      - generic: Discord
+    - menuitem "主题 主题":
+      - generic: 主题
+      - radiogroup "主题":
+        - radio "Dark mode":
+        - radio "Light mode" [checked]:
+        - radio "System preference":
+- button:
+  - generic: 功能测试 · 线段计数 · 2026-11-20
+- button:
+- button:
+- region:
+  - link:
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5
+    - generic: Dashboard
+  - button:
+    - generic: 学习计划
+  - link:
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/chat/new
+    - generic: 聊天
+  - link:
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/tutor-me
+    - generic: 辅导我
+  - link:
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/live-lecture
+    - generic: 录制讲座
+  - button:
+    - generic: 练习与活动
+  - button:
+    - text: 上传
+  - link:
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/materials
+    - generic: 资料
+  - link:
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/materials
+    - text: 查看全部
+  - button:
+  - button:
+    - link:
+      - /url: /platform/studyset/6affc0bb75798c45c17d21f5/material/6affc0bb75798c45c17d21f6/note
+      - paragraph: Untitled Document
+  - button:
+    - link:
+      - /url: /platform/studyset/6affc0bb75798c45c17d21f5/material/6affc141249fd40339c8c590/note
+      - paragraph: 功能测试：线段计数规律与计算方法
+- separator
+- generic: 创建 测验
+- button "Close":
+  - generic: 退出
+- paragraph: 3 of 4
+- heading "每种类型有多少题目？" [level=2]
+- paragraph: 选择您的类型和数量 quiz
+- generic: 总计：
+- generic: 20 / 250
+- generic: 每种类型最多 200 个
+- heading "选择题" [level=3]
+- paragraph: 从选项中选择正确答案
+- button:
+- spinbutton: "20"
+- button:
+- button "-10"
+- button "-5"
+- button "-1"
+- button "+1"
+- button "+5"
+- button "+10"
+- heading "对/错" [level=3]
+- paragraph: 判断陈述的真假
+- button [disabled]:
+- spinbutton: "0"
+- button:
+- button "-10" [disabled]
+- button "-5" [disabled]
+- button "-1" [disabled]
+- button "+1"
+- button "+5"
+- button "+10"
+- heading "填空" [level=3]
+- paragraph: 用所缺的词完成句子
+- button [disabled]:
+- spinbutton: "0"
+- button:
+- button "-10" [disabled]
+- button "-5" [disabled]
+- button "-1" [disabled]
+- button "+1"
+- button "+5"
+- button "+10"
+- heading "简答" [level=3]
+- paragraph: 给出简短的书面回复
+- button [disabled]:
+- spinbutton: "0"
+- button:
+- button "-10" [disabled]
+- button "-5" [disabled]
+- button "-1" [disabled]
+- button "+1"
+- button "+5"
+- button "+10"
+- heading "自由回答" [level=3]
+- paragraph: 用你自己的话写出详细的答案
+- button [disabled]:
+- spinbutton: "0"
+- button:
+- button "-10" [disabled]
+- button "-5" [disabled]
+- button "-1" [disabled]
+- button "+1"
+- button "+5"
+- button "+10"
+- heading "多层通道" [level=3]
+- paragraph: 基于文章的、具有三个渐进层次的问题
+- button [disabled]:
+- spinbutton: "0"
+- button:
+- button "-9" [disabled]
+- button "-6" [disabled]
+- button "-3" [disabled]
+- button "+3"
+- button "+6"
+- button "+9"
+- heading "考试特定问题类型" [level=3]
+- paragraph: 选择适用于各种标准化考试的专业问题格式
+- button "显示":
+  - text: 显示
+- button "Medicine & Healthcare 30 类型":
+  - heading "Medicine & Healthcare" [level=3]
+  - generic: 30 类型
+- button "Med School 12 类型":
+  - heading "Med School" [level=4]
+  - generic: 12 类型
+- button "Pre-Med 2 类型":
+  - heading "Pre-Med" [level=4]
+  - generic: 2 类型
+- heading "MCAT discrete (Stand Alone) Questions" [level=5]
+- button "Examples":
+  - text: Examples
+- paragraph: Passage-based questions testing integration of natural sciences, research methods, and critical analysis. Focus on data interpretation and application of scientific concepts to biological systems and research scenarios.
+- button [disabled]:
+- spinbutton: "0"
+- button:
+- button "-5" [disabled]
+- button "-1" [disabled]
+- button "+1"
+- button "+5"
+- heading "MCAT Passage-Based Questions" [level=5]
+- button "Examples":
+  - text: Examples
+- paragraph: "Research-based passages with progressive questions: Recognition (identify the concept or phenomenon), Mechanism (explain the scientific basis), and Application (apply to new scenarios or predict outcomes)."
+- button [disabled]:
+- spinbutton: "0"
+- button:
+- button "-5" [disabled]
+- button "-1" [disabled]
+- button "+1"
+- button "+5"
+- button "D.O. (Osteopathic) NBOME Exams 5 类型":
+  - heading "D.O. (Osteopathic) NBOME Exams" [level=4]
+  - generic: 5 类型
+- heading "COMLEX Level 1 Style" [level=5]
+- button "Examples":
+  - text: Examples
+- paragraph: Clinical vignette-based questions testing basic science mechanisms, pathophysiology, pharmacology, and osteopathic principles. Focus on integrating foundational medical concepts with osteopathic manipulative medicine (OMM) principles.
+- button [disabled]:
+- spinbutton: "0"
+- button:
+- button "-5" [disabled]
+- button "-1" [disabled]
+- button "+1"
+- button "+5"
+- heading "COMLEX Level 2 Cognitive Evaluation Style" [level=5]
+- button "Examples":
+  - text: Examples
+- paragraph: Patient-centered scenarios testing clinical knowledge, diagnosis, management, and osteopathic considerations. Focus on integrating OMM into comprehensive patient care and evidence-based clinical decision-making.
+- button [disabled]:
+- spinbutton: "0"
+- button:
+- button "-5" [disabled]
+- button "-1" [disabled]
+- button "+1"
+- button "+5"
+- heading "COMLEX Level 3 Style" [level=5]
+- button "Examples":
+  - text: Examples
+- paragraph: Complex clinical scenarios testing readiness for independent osteopathic practice. Focus on patient management over time, integrating OMM into comprehensive care plans, and demonstrating osteopathic philosophy in practice.
+- button [disabled]:
+- spinbutton: "0"
+- button:
+- button "-5" [disabled]
+- button "-1" [disabled]
+- button "+1"
+- button "+5"
+- heading "COMAT FBS Style" [level=5]
+- button "Examples":
+  - text: Examples
+- paragraph: Pre-clinical assessment covering foundational biomedical sciences with osteopathic integration. Tests basic science knowledge across body systems and disciplines including biochemistry, anatomy, microbiology, physiology, pharmacology, and neurosciences.
+- button [disabled]:
+- spinbutton: "0"
+- button:
+- button "-5" [disabled]
+- button "-1" [disabled]
+- button "+1"
+- button "+5"
+- heading "COMAT Clinical Subject Exam Style" [level=5]
+- button "Examples":
+  - text: Examples
+- paragraph: End-of-rotation clinical assessments integrating osteopathic principles with specialty knowledge. Tests clinical diagnosis, management, diagnostic interpretation, and application of osteopathic manipulative medicine across clinical disciplines.
+- button [disabled]:
+- spinbutton: "0"
+- button:
+- button "-5" [disabled]
+- button "-1" [disabled]
+- button "+1"
+- button "+5"
+- button "M.D. (Allopathic) NBME Exams 5 类型":
+  - heading "M.D. (Allopathic) NBME Exams" [level=4]
+  - generic: 5 类型
+- heading "USMLE Step 1 Style" [level=5]
+- button "Examples":
+  - text: Examples
+- paragraph: Clinical vignette-based questions testing basic science mechanisms, pathophysiology, and pharmacology. Focus on applying foundational medical concepts to patient scenarios.
+- button [disabled]:
+- spinbutton: "0"
+- button:
+- button "-5" [disabled]
+- button "-1" [disabled]
+- button "+1"
+- button "+5"
+- heading "USMLE Step 2 CK Style" [level=5]
+- button "Examples":
+  - text: Examples
+- paragraph: Patient-centered scenarios testing clinical knowledge, diagnosis, and management. Focus on next best steps, preventive care, and evidence-based clinical decision-making.
+- button [disabled]:
+- spinbutton: "0"
+- button:
+- button "-5" [disabled]
+- button "-1" [disabled]
+- button "+1"
+- button "+5"
+- heading "USMLE Step 3 Style" [level=5]
+- button "Examples":
+  - text: Examples
+- paragraph: Complex, multi-part clinical scenarios testing readiness for independent practice. Focus on patient management over time, resource utilization, and medical decision-making in realistic practice settings.
+- button [disabled]:
+- spinbutton: "0"
+- button:
+- button "-5" [disabled]
+- button "-1" [disabled]
+- button "+1"
+- button "+5"
+- heading "USMLE Step 1 Multi-Layered Passage" [level=5]
+- button "Examples":
+  - text: Examples
+- paragraph: "Clinical vignette passages with progressive questions: Recognition (identify the diagnosis/condition), Mechanism (explain the pathophysiology), and Application (determine the appropriate management or next step)."
+- button [disabled]:
+- spinbutton: "0"
+- button:
+- button "-5" [disabled]
+- button "-1" [disabled]
+- button "+1"
+- button "+5"
+- heading "USMLE Step 2 CK Multi-Layered Passage" [level=5]
+- button "Examples":
+  - text: Examples
+- paragraph: "Clinical case passages with progressive questions: Recognition (establish the diagnosis), Mechanism (understand the clinical reasoning), and Application (determine the best management or next step in care)."
+- button [disabled]:
+- spinbutton: "0"
+- button:
+- button "-5" [disabled]
+- button "-1" [disabled]
+- button "+1"
+- button "+5"
+- button "Nursing 2 类型":
+  - heading "Nursing" [level=4]
+  - generic: 2 类型
+- heading "NCLEX Exam Style" [level=5]
+- button "Examples":
+  - text: Examples
+- paragraph: Scenario-based, multiple-choice questions that test nursing judgment by presenting realistic patient situations and requiring candidates to identify the most appropriate nursing action, often with multiple correct answers but only one "best" choice."
+- button [disabled]:
+- spinbutton: "0"
+- button:
+- button "-5" [disabled]
+- button "-1" [disabled]
+- button "+1"
+- button "+5"
+- heading "NCLEX Multi-Layered Passage" [level=5]
+- button "Examples":
+  - text: Examples
+- paragraph: "Complex patient scenario passages with three progressive questions: Recognition (identify the clinical priority), Mechanism (understand the pathophysiology), and Application (determine the best nursing intervention)."
+- button [disabled]:
+- spinbutton: "0"
+- button:
+- button "-5" [disabled]
+- button "-1" [disabled]
+- button "+1"
+- button "+5"
+- button "Physician Assistant 2 类型":
+  - heading "Physician Assistant" [level=4]
+  - generic: 2 类型
+- heading "PANCE (NCCPA) Style" [level=5]
+- button "Examples":
+  - text: Examples
+- paragraph: Entry-level certification exam for Physician Assistants covering generalist medical knowledge across all organ systems and clinical tasks. Tests clinical decision-making, diagnostic reasoning, and evidence-based patient management.
+- button [disabled]:
+- spinbutton: "0"
+- button:
+- button "-5" [disabled]
+- button "-1" [disabled]
+- button "+1"
+- button "+5"
+- heading "PANRE (NCCPA) Style" [level=5]
+- button "Examples":
+  - text: Examples
+- paragraph: Recertification exam for practicing Physician Assistants covering generalist medical knowledge with emphasis on clinical experience and evidence-based practice. Tests advanced clinical reasoning, management of complex patients, and integration of current medical knowledge.
+- button [disabled]:
+- spinbutton: "0"
+- button:
+- button "-5" [disabled]
+- button "-1" [disabled]
+- button "+1"
+- button "+5"
+- button "Dentistry 3 类型":
+  - heading "Dentistry" [level=4]
+  - generic: 3 类型
+- heading "INBDE (Dental Licensure) Style" [level=5]
+- button "Examples":
+  - text: Examples
+- paragraph: Comprehensive dental licensure examination for DDS/DMD students testing integrated basic biomedical sciences, dental sciences, and clinical problem-solving. Replaced NBDE Part I and II. Focus on patient-centered care, diagnosis, treatment planning, and clinical decision-making in dentistry.
+- button [disabled]:
+- spinbutton: "0"
+- button:
+- button "-5" [disabled]
+- button "-1" [disabled]
+- button "+1"
+- button "+5"
+- heading "CDA (DANB) Certification Style" [level=5]
+- button "Examples":
+  - text: Examples
+- paragraph: National certification examination for dental assistants administered by DANB (Dental Assisting National Board). Tests knowledge of chairside assisting procedures, radiation health and safety, and infection control. Demonstrates competency in clinical dental assisting skills and safety protocols.
+- button [disabled]:
+- spinbutton: "0"
+- button:
+- button "-5" [disabled]
+- button "-1" [disabled]
+- button "+1"
+- button "+5"
+- heading "NBDHE (Dental Hygiene Licensure) Style" [level=5]
+- button "Examples":
+  - text: Examples
+- paragraph: National licensure examination for dental hygienists testing scientific basis of dental hygiene practice and clinical decision-making. Assesses ability to provide preventive oral health services, patient education, periodontal therapy, and comprehensive dental hygiene care.
+- button [disabled]:
+- spinbutton: "0"
+- button:
+- button "-5" [disabled]
+- button "-1" [disabled]
+- button "+1"
+- button "+5"
+- button "Optometry School 3 类型":
+  - heading "Optometry School" [level=4]
+  - generic: 3 类型
+- heading "NBEO Part I ABS Style" [level=5]
+- button "Examples":
+  - text: Examples
+- paragraph: Tests basic science concepts and their application to clinical optometry, including anatomy, physiology, optics, pharmacology, and pathology.
+- button [disabled]:
+- spinbutton: "0"
+- button:
+- button "-5" [disabled]
+- button "-1" [disabled]
+- button "+1"
+- button "+5"
+- heading "NBEO Part II PAM Style" [level=5]
+- button "Examples":
+  - text: Examples
+- paragraph: Tests clinical decision-making skills through patient cases, focusing on diagnosis, treatment, and management of ocular conditions.
+- button [disabled]:
+- spinbutton: "0"
+- button:
+- button "-5" [disabled]
+- button "-1" [disabled]
+- button "+1"
+- button "+5"
+- heading "NBEO Part III CSE Style" [level=5]
+- button "Examples":
+  - text: Examples
+- paragraph: Tests clinical procedures, patient communication, and professional judgment through practical scenarios and clinical skills assessment.
+- button [disabled]:
+- spinbutton: "0"
+- button:
+- button "-5" [disabled]
+- button "-1" [disabled]
+- button "+1"
+- button "+5"
+- button "Podiatry School 3 类型":
+  - heading "Podiatry School" [level=4]
+  - generic: 3 类型
+- heading "NBPME Part I (APMLE) Style" [level=5]
+- button "Examples":
+  - text: Examples
+- paragraph: Foundational basic science examination for podiatric medical students testing knowledge of general anatomy, lower extremity anatomy, biochemistry, physiology, microbiology, immunology, pathology, and pharmacology. Focus on scientific principles essential for podiatric medicine.
+- button [disabled]:
+- spinbutton: "0"
+- button:
+- button "-5" [disabled]
+- button "-1" [disabled]
+- button "+1"
+- button "+5"
+- heading "NBPME Part II (APMLE) Style" [level=5]
+- button "Examples":
+  - text: Examples
+- paragraph: Clinical sciences examination covering medicine, radiology, orthopedics, biomechanics, sports medicine, anesthesia, surgery, and professional practice. Tests clinical knowledge application and readiness for podiatric clinical rotations with emphasis on lower extremity pathology and systemic disease affecting the foot and ankle.
+- button [disabled]:
+- spinbutton: "0"
+- button:
+- button "-5" [disabled]
+- button "-1" [disabled]
+- button "+1"
+- button "+5"
+- heading "NBPME Part III (APMLE) Style" [level=5]
+- button "Examples":
+  - text: Examples
+- paragraph: Comprehensive licensure examination assessing clinical competency and readiness for independent podiatric practice. Tests advanced clinical knowledge, diagnostic reasoning, patient management, surgical decision-making, and evidence-based medicine across all aspects of podiatric care.
+- button [disabled]:
+- spinbutton: "0"
+- button:
+- button "-5" [disabled]
+- button "-1" [disabled]
+- button "+1"
+- button "+5"
+- button "Respiratory Therapy 2 类型":
+  - heading "Respiratory Therapy" [level=4]
+  - generic: 2 类型
+- heading "NBRC CRT Exam Style" [level=5]
+- button "Examples":
+  - text: Examples
+- paragraph: Entry-level certification exam for respiratory therapists testing foundational knowledge, clinical skills, and decision-making in respiratory care. Covers patient assessment, equipment management, therapeutic procedures, and critical care applications.
+- button [disabled]:
+- spinbutton: "0"
+- button:
+- button "-5" [disabled]
+- button "-1" [disabled]
+- button "+1"
+- button "+5"
+- heading "NBRC RRT Clinical Simulation Style" [level=5]
+- button "Examples":
+  - text: Examples
+- paragraph: Advanced certification exam using clinical simulations to assess decision-making, critical thinking, and comprehensive patient management in complex respiratory care scenarios. Tests ability to gather information, make clinical decisions, and evaluate outcomes.
+- button [disabled]:
+- spinbutton: "0"
+- button:
+- button "-5" [disabled]
+- button "-1" [disabled]
+- button "+1"
+- button "+5"
+- button "Pharmacy 1 类型":
+  - heading "Pharmacy" [level=4]
+  - generic: 1 类型
+- heading "NAPLEX Style" [level=5]
+- button "Examples":
+  - text: Examples
+- paragraph: Comprehensive pharmacist licensure examination testing ability to apply pharmaceutical knowledge to patient care, drug therapy management, safe medication dispensing, and clinical decision-making. Focus on patient safety, drug interactions, dosing, and evidence-based therapeutics.
+- button [disabled]:
+- spinbutton: "0"
+- button:
+- button "-5" [disabled]
+- button "-1" [disabled]
+- button "+1"
+- button "+5"
+- button "Physical Therapy 1 类型":
+  - heading "Physical Therapy" [level=4]
+  - generic: 1 类型
+- heading "NPTE (FSBPT) Style" [level=5]
+- button "Examples":
+  - text: Examples
+- paragraph: Entry-level licensure examination for physical therapists testing clinical decision-making, examination procedures, intervention strategies, and professional responsibilities. Focus on evidence-based practice, patient evaluation, treatment planning, and therapeutic interventions across all patient populations and practice settings.
+- button [disabled]:
+- spinbutton: "0"
+- button:
+- button "-5" [disabled]
+- button "-1" [disabled]
+- button "+1"
+- button "+5"
+- button "Emergency Medical Services 1 类型":
+  - heading "Emergency Medical Services" [level=4]
+  - generic: 1 类型
+- heading "NREMT Paramedic Certification Style" [level=5]
+- button "Examples":
+  - text: Examples
+- paragraph: National certification examination for paramedics testing advanced life support skills, critical thinking, patient assessment, and emergency medical interventions. Focus on scene management, advanced airway techniques, pharmacology, cardiac care, trauma management, and medical emergencies across all age groups.
+- button [disabled]:
+- spinbutton: "0"
+- button:
+- button "-5" [disabled]
+- button "-1" [disabled]
+- button "+1"
+- button "+5"
+- button "Finance 4 类型":
+  - heading "Finance" [level=4]
+  - generic: 4 类型
+- heading "Series 7 Exam Style" [level=5]
+- button "Examples":
+  - text: Examples
+- paragraph: Multiple-choice questions focusing on securities knowledge, investment suitability, trading strategies, and regulatory requirements. Questions often present realistic customer scenarios requiring analysis of investment products, risk assessment, and regulatory compliance.
+- button [disabled]:
+- spinbutton: "0"
+- button:
+- button "-5" [disabled]
+- button "-1" [disabled]
+- button "+1"
+- button "+5"
+- heading "Series 63 Exam Style" [level=5]
+- button "Examples":
+  - text: Examples
+- paragraph: Multiple-choice questions focusing on state securities laws, regulations, and ethical practices. Tests knowledge of Blue Sky laws, registration requirements, and regulatory responsibilities.
+- button [disabled]:
+- spinbutton: "0"
+- button:
+- button "-5" [disabled]
+- button "-1" [disabled]
+- button "+1"
+- button "+5"
+- heading "Series 65 Exam Style" [level=5]
+- button "Examples":
+  - text: Examples
+- paragraph: Multiple-choice questions testing knowledge of investment adviser regulations, investment vehicles, trading strategies, and economic factors affecting investment decisions.
+- button [disabled]:
+- spinbutton: "0"
+- button:
+- button "-5" [disabled]
+- button "-1" [disabled]
+- button "+1"
+- button "+5"
+- heading "CFA Exam Style" [level=5]
+- button "Examples":
+  - text: Examples
+- paragraph: Multiple-choice questions testing advanced knowledge of investment tools, asset valuation, portfolio management, and ethical standards with emphasis on practical application.
+- button [disabled]:
+- spinbutton: "0"
+- button:
+- button "-5" [disabled]
+- button "-1" [disabled]
+- button "+1"
+- button "+5"
+- button "Law School 5 类型":
+  - heading "Law School" [level=4]
+  - generic: 5 类型
+- heading "LSAT Style Questions" [level=5]
+- button "Examples":
+  - text: Examples
+- paragraph: Critical reasoning and analytical questions testing logical reasoning, reading comprehension, and argumentative analysis. Focus on identifying assumptions, evaluating arguments, and analyzing complex passages.
+- button [disabled]:
+- spinbutton: "0"
+- button:
+- button "-5" [disabled]
+- button "-1" [disabled]
+- button "+1"
+- button "+5"
+- heading "Bar Exam MBE Style" [level=5]
+- button "Examples":
+  - text: Examples
+- paragraph: Multiple-choice questions testing substantive law knowledge across core subjects. Focus on applying legal rules to fact patterns, identifying issues, and selecting the best legal answer among plausible options.
+- button [disabled]:
+- spinbutton: "0"
+- button:
+- button "-5" [disabled]
+- button "-1" [disabled]
+- button "+1"
+- button "+5"
+- heading "MPRE Style Questions" [level=5]
+- button "Examples":
+  - text: Examples
+- paragraph: Ethics and professional responsibility questions testing knowledge of legal ethics rules, professional conduct standards, and judicial ethics. Focus on identifying ethical violations and proper professional behavior.
+- button [disabled]:
+- spinbutton: "0"
+- button:
+- button "-5" [disabled]
+- button "-1" [disabled]
+- button "+1"
+- button "+5"
+- heading "Bar Exam MEE Style" [level=5]
+- button "Examples":
+  - text: Examples
+- paragraph: Essay questions requiring legal analysis and written communication. Focus on issue spotting, rule application, analysis, and conclusion (IRAC method) across multiple areas of law.
+- button [disabled]:
+- spinbutton: "0"
+- button:
+- button "-5" [disabled]
+- button "-1" [disabled]
+- button "+1"
+- button "+5"
+- heading "Bar Exam MPT Style" [level=5]
+- button "Examples":
+  - text: Examples
+- paragraph: Performance test simulating real legal tasks using a closed universe of materials. Focus on practical skills like memo drafting, brief writing, and client communication using only provided sources.
+- button [disabled]:
+- spinbutton: "0"
+- button:
+- button "-5" [disabled]
+- button "-1" [disabled]
+- button "+1"
+- button "+5"
+- button "AP Exams 38 类型":
+  - heading "AP Exams" [level=4]
+  - generic: 38 类型
+- heading "AP Biology Exam Style" [level=5]
+- button "Examples":
+  - text: Examples
+- paragraph: Multiple-choice and free-response questions testing understanding of biological concepts, experimental design, and data analysis. Focus on applying scientific practices to biological principles.
+- button [disabled]:
+- spinbutton: "0"
+- button:
+- button "-5" [disabled]
+- button "-1" [disabled]
+- button "+1"
+- button "+5"
+- heading "AP Calculus AB Exam Style" [level=5]
+- button "Examples":
+  - text: Examples
+- paragraph: Multiple-choice and free-response questions testing understanding of limits, derivatives, integrals, and their applications. Focus on mathematical reasoning, problem-solving, and connections between concepts.
+- button [disabled]:
+- spinbutton: "0"
+- button:
+- button "-5" [disabled]
+- button "-1" [disabled]
+- button "+1"
+- button "+5"
+- heading "AP Calculus BC Exam Style" [level=5]
+- button "Examples":
+  - text: Examples
+- paragraph: Multiple-choice and free-response questions testing understanding of all Calculus AB topics plus additional advanced calculus concepts including series, parametric equations, and polar coordinates.
+- button [disabled]:
+- spinbutton: "0"
+- button:
+- button "-5" [disabled]
+- button "-1" [disabled]
+- button "+1"
+- button "+5"
+- heading "AP Chemistry Exam Style" [level=5]
+- button "Examples":
+  - text: Examples
+- paragraph: Multiple-choice and free-response questions testing understanding of chemical principles, calculations, laboratory practices, and data analysis. Focus on applying scientific reasoning to chemical phenomena.
+- button [disabled]:
+- spinbutton: "0"
+- button:
+- button "-5" [disabled]
+- button "-1" [disabled]
+- button "+1"
+- button "+5"
+- heading "AP Physics 1 Exam Style" [level=5]
+- button "Examples":
+  - text: Examples
+- paragraph: Multiple-choice and free-response questions testing understanding of Newtonian mechanics, work, energy, power, mechanical waves, sound, and simple circuits. Focus on physics principles and scientific practices.
+- button [disabled]:
+- spinbutton: "0"
+- button:
+- button "-5" [disabled]
+- button "-1" [disabled]
+- button "+1"
+- button "+5"
+- heading "AP Physics 2 Exam Style" [level=5]
+- button "Examples":
+  - text: Examples
+- paragraph: Multiple-choice and free-response questions testing understanding of fluid mechanics, thermodynamics, electricity, magnetism, optics, and modern physics. Focus on physical principles and scientific practices.
+- button [disabled]:
+- spinbutton: "0"
+- button:
+- button "-5" [disabled]
+- button "-1" [disabled]
+- button "+1"
+- button "+5"
+- 'heading "AP Physics C: Mechanics Exam Style" [level=5]'
+- button "Examples":
+  - text: Examples
+- paragraph: Multiple-choice and free-response questions testing in-depth understanding of mechanics using calculus. Focus on kinematics, dynamics, energy, momentum, rotation, oscillation, and gravitation.
+- button [disabled]:
+- spinbutton: "0"
+- button:
+- button "-5" [disabled]
+- button "-1" [disabled]
+- button "+1"
+- button "+5"
+- 'heading "AP Physics C: Electricity and Magnetism Exam Style" [level=5]'
+- button "Examples":
+  - text: Examples
+- paragraph: Multiple-choice and free-response questions testing in-depth understanding of electricity and magnetism using calculus. Focus on electrostatics, conductors, capacitors, circuits, magnetic fields, and electromagnetic induction.
+- button [disabled]:
+- spinbutton: "0"
+- button:
+- button "-5" [disabled]
+- button "-1" [disabled]
+- button "+1"
+- button "+5"
+- heading "AP English Language and Composition Exam Style" [level=5]
+- button "Examples":
+  - text: Examples
+- paragraph: Multiple-choice and free-response questions testing rhetorical analysis, argumentation, and synthesis of information. Focus on analyzing texts, developing arguments, and applying effective writing strategies.
+- button [disabled]:
+- spinbutton: "0"
+- button:
+- button "-5" [disabled]
+- button "-1" [disabled]
+- button "+1"
+- button "+5"
+- heading "AP English Literature and Composition Exam Style" [level=5]
+- button "Examples":
+  - text: Examples
+- paragraph: Multiple-choice and free-response questions testing literary analysis, interpretation of poems, prose, and drama. Focus on exploring literary elements, techniques, and their effects on meaning.
+- button [disabled]:
+- spinbutton: "0"
+- button:
+- button "-5" [disabled]
+- button "-1" [disabled]
+- button "+1"
+- button "+5"
+- heading "AP US History Exam Style" [level=5]
+- button "Examples":
+  - text: Examples
+- paragraph: Multiple-choice, short-answer, and essay questions testing historical thinking skills applied to U.S. history. Focus on analyzing primary and secondary sources, making historical connections, and developing arguments.
+- button [disabled]:
+- spinbutton: "0"
+- button:
+- button "-5" [disabled]
+- button "-1" [disabled]
+- button "+1"
+- button "+5"
+- 'heading "AP World History: Modern Exam Style" [level=5]'
+- button "Examples":
+  - text: Examples
+- paragraph: Multiple-choice, short-answer, and essay questions testing historical thinking skills applied to world history from 1200 CE to present. Focus on analyzing sources, making connections across regions, and developing arguments.
+- button [disabled]:
+- spinbutton: "0"
+- button:
+- button "-5" [disabled]
+- button "-1" [disabled]
+- button "+1"
+- button "+5"
+- heading "AP European History Exam Style" [level=5]
+- button "Examples":
+  - text: Examples
+- paragraph: Multiple-choice, short-answer, and essay questions testing historical thinking skills applied to European history from 1450 to present. Focus on analyzing sources, making connections across time periods, and developing arguments.
+- button [disabled]:
+- spinbutton: "0"
+- button:
+- button "-5" [disabled]
+- button "-1" [disabled]
+- button "+1"
+- button "+5"
+- heading "AP US Government and Politics Exam Style" [level=5]
+- button "Examples":
+  - text: Examples
+- paragraph: Multiple-choice and free-response questions testing understanding of the U.S. government, political institutions, processes, and behaviors. Focus on analyzing data, political texts, and current political issues.
+- button [disabled]:
+- spinbutton: "0"
+- button:
+- button "-5" [disabled]
+- button "-1" [disabled]
+- button "+1"
+- button "+5"
+- heading "AP Comparative Government and Politics Exam Style" [level=5]
+- button "Examples":
+  - text: Examples
+- paragraph: Multiple-choice and free-response questions testing understanding of political systems across countries. Focus on comparing political concepts, institutions, processes, and behaviors across different political systems.
+- button [disabled]:
+- spinbutton: "0"
+- button:
+- button "-5" [disabled]
+- button "-1" [disabled]
+- button "+1"
+- button "+5"
+- heading "AP Macroeconomics Exam Style" [level=5]
+- button "Examples":
+  - text: Examples
+- paragraph: Multiple-choice and free-response questions testing understanding of macroeconomic principles, policies, and international economics. Focus on analyzing economic concepts, data, and real-world applications.
+- button [disabled]:
+- spinbutton: "0"
+- button:
+- button "-5" [disabled]
+- button "-1" [disabled]
+- button "+1"
+- button "+5"
+- heading "AP Microeconomics Exam Style" [level=5]
+- button "Examples":
+  - text: Examples
+- paragraph: Multiple-choice and free-response questions testing understanding of microeconomic principles, markets, and decision-making. Focus on analyzing economic concepts, data, and real-world applications at the individual and firm level.
+- button [disabled]:
+- spinbutton: "0"
+- button:
+- button "-5" [disabled]
+- button "-1" [disabled]
+- button "+1"
+- button "+5"
+- heading "AP Psychology Exam Style" [level=5]
+- button "Examples":
+  - text: Examples
+- paragraph: Multiple-choice and free-response questions testing understanding of psychological concepts, theories, and research methods. Focus on applying psychological principles to real-world examples.
+- button [disabled]:
+- spinbutton: "0"
+- button:
+- button "-5" [disabled]
+- button "-1" [disabled]
+- button "+1"
+- button "+5"
+- heading "AP Statistics Exam Style" [level=5]
+- button "Examples":
+  - text: Examples
+- paragraph: Multiple-choice and free-response questions testing understanding of data analysis, experimental design, probability, and statistical inference. Focus on applying statistical methods to real-world scenarios.
+- button [disabled]:
+- spinbutton: "0"
+- button:
+- button "-5" [disabled]
+- button "-1" [disabled]
+- button "+1"
+- button "+5"
+- heading "AP Environmental Science Exam Style" [level=5]
+- button "Examples":
+  - text: Examples
+- paragraph: Multiple-choice and free-response questions testing understanding of environmental processes, human impacts, and sustainability. Focus on analyzing environmental data, policies, and solutions to environmental problems.
+- button [disabled]:
+- spinbutton: "0"
+- button:
+- button "-5" [disabled]
+- button "-1" [disabled]
+- button "+1"
+- button "+5"
+- heading "AP Computer Science A Exam Style" [level=5]
+- button "Examples":
+  - text: Examples
+- paragraph: Multiple-choice and free-response questions testing understanding of Java programming, object-oriented design, algorithms, and data structures. Focus on code analysis, implementation, and problem-solving.
+- button [disabled]:
+- spinbutton: "0"
+- button:
+- button "-5" [disabled]
+- button "-1" [disabled]
+- button "+1"
+- button "+5"
+- heading "AP Computer Science Principles Exam Style" [level=5]
+- button "Examples":
+  - text: Examples
+- paragraph: Multiple-choice questions testing understanding of computing concepts, programming, data, algorithms, and the impact of computing. Focus on computational thinking and problem-solving in various contexts.
+- button [disabled]:
+- spinbutton: "0"
+- button:
+- button "-5" [disabled]
+- button "-1" [disabled]
+- button "+1"
+- button "+5"
+- heading "AP Spanish Language and Culture Exam Style" [level=5]
+- button "Examples":
+  - text: Examples
+- paragraph: Multiple-choice and free-response questions testing Spanish language proficiency in interpersonal, interpretive, and presentational modes. Focus on understanding authentic texts and communicating effectively in Spanish.
+- button [disabled]:
+- spinbutton: "0"
+- button:
+- button "-5" [disabled]
+- button "-1" [disabled]
+- button "+1"
+- button "+5"
+- heading "AP Spanish Literature and Culture Exam Style" [level=5]
+- button "Examples":
+  - text: Examples
+- paragraph: Multiple-choice and free-response questions testing understanding and analysis of Spanish-language literature. Focus on literary analysis, historical contexts, and themes in literature from Spain, Latin America, and U.S. Hispanic literature.
+- button [disabled]:
+- spinbutton: "0"
+- button:
+- button "-5" [disabled]
+- button "-1" [disabled]
+- button "+1"
+- button "+5"
+- heading "AP French Language and Culture Exam Style" [level=5]
+- button "Examples":
+  - text: Examples
+- paragraph: Multiple-choice and free-response questions testing French language proficiency in interpersonal, interpretive, and presentational modes. Focus on understanding authentic texts and communicating effectively in French.
+- button [disabled]:
+- spinbutton: "0"
+- button:
+- button "-5" [disabled]
+- button "-1" [disabled]
+- button "+1"
+- button "+5"
+- heading "AP Human Geography Exam Style" [level=5]
+- button "Examples":
+  - text: Examples
+- paragraph: Multiple-choice and free-response questions testing understanding of patterns and processes that have shaped human understanding, use, and alteration of Earth's surface. Focus on analyzing geographic models, data, and real-world applications.
+- button [disabled]:
+- spinbutton: "0"
+- button:
+- button "-5" [disabled]
+- button "-1" [disabled]
+- button "+1"
+- button "+5"
+- heading "AP Latin Exam Style" [level=5]
+- button "Examples":
+  - text: Examples
+- paragraph: Multiple-choice and free-response questions testing understanding and translation of Latin texts from Vergil's Aeneid and Caesar's Gallic War. Focus on analyzing language, context, and cultural and historical relevance.
+- button [disabled]:
+- spinbutton: "0"
+- button:
+- button "-5" [disabled]
+- button "-1" [disabled]
+- button "+1"
+- button "+5"
+- heading "AP Music Theory Exam Style" [level=5]
+- button "Examples":
+  - text: Examples
+- paragraph: Multiple-choice and free-response questions testing understanding of music notation, composition, and analysis. Focus on aural skills, written concepts, and analytical techniques in Western music.
+- button [disabled]:
+- spinbutton: "0"
+- button:
+- button "-5" [disabled]
+- button "-1" [disabled]
+- button "+1"
+- button "+5"
+- heading "AP Art History Exam Style" [level=5]
+- button "Examples":
+  - text: Examples
+- paragraph: Multiple-choice and free-response questions testing understanding of global artistic traditions, contexts, and connections. Focus on visual, contextual, and comparative analysis of art across cultures and time periods.
+- button [disabled]:
+- spinbutton: "0"
+- button:
+- button "-5" [disabled]
+- button "-1" [disabled]
+- button "+1"
+- button "+5"
+- heading "AP Chinese Language and Culture Exam Style" [level=5]
+- button "Examples":
+  - text: Examples
+- paragraph: Multiple-choice and free-response questions testing Chinese language proficiency in interpersonal, interpretive, and presentational modes. Focus on understanding authentic texts and communicating effectively in Mandarin Chinese.
+- button [disabled]:
+- spinbutton: "0"
+- button:
+- button "-5" [disabled]
+- button "-1" [disabled]
+- button "+1"
+- button "+5"
+- heading "AP Japanese Language and Culture Exam Style" [level=5]
+- button "Examples":
+  - text: Examples
+- paragraph: Multiple-choice and free-response questions testing Japanese language proficiency in interpersonal, interpretive, and presentational modes. Focus on understanding authentic texts and communicating effectively in Japanese.
+- button [disabled]:
+- spinbutton: "0"
+- button:
+- button "-5" [disabled]
+- button "-1" [disabled]
+- button "+1"
+- button "+5"
+- heading "AP Italian Language and Culture Exam Style" [level=5]
+- button "Examples":
+  - text: Examples
+- paragraph: Multiple-choice and free-response questions testing Italian language proficiency in interpersonal, interpretive, and presentational modes. Focus on understanding authentic texts and communicating effectively in Italian.
+- button [disabled]:
+- spinbutton: "0"
+- button:
+- button "-5" [disabled]
+- button "-1" [disabled]
+- button "+1"
+- button "+5"
+- heading "AP German Language and Culture Exam Style" [level=5]
+- button "Examples":
+  - text: Examples
+- paragraph: Multiple-choice and free-response questions testing German language proficiency in interpersonal, interpretive, and presentational modes. Focus on understanding authentic texts and communicating effectively in German.
+- button [disabled]:
+- spinbutton: "0"
+- button:
+- button "-5" [disabled]
+- button "-1" [disabled]
+- button "+1"
+- button "+5"
+- heading "AP 2D Art and Design Portfolio Exam Style" [level=5]
+- button "Examples":
+  - text: Examples
+- paragraph: Portfolio-based assessment evaluating mastery of two-dimensional design principles in visual compositions. Focus on developing a cohesive portfolio demonstrating inquiry, experimentation, and revision in 2D mediums.
+- button [disabled]:
+- spinbutton: "0"
+- button:
+- button "-5" [disabled]
+- button "-1" [disabled]
+- button "+1"
+- button "+5"
+- heading "AP 3D Art and Design Portfolio Exam Style" [level=5]
+- button "Examples":
+  - text: Examples
+- paragraph: Portfolio-based assessment evaluating mastery of three-dimensional design principles in sculptural forms. Focus on developing a cohesive portfolio demonstrating inquiry, experimentation, and revision in 3D mediums.
+- button [disabled]:
+- spinbutton: "0"
+- button:
+- button "-5" [disabled]
+- button "-1" [disabled]
+- button "+1"
+- button "+5"
+- heading "AP Drawing Portfolio Exam Style" [level=5]
+- button "Examples":
+  - text: Examples
+- paragraph: Portfolio-based assessment evaluating mastery of drawing techniques and concepts. Focus on developing a cohesive portfolio demonstrating inquiry, experimentation, and revision in mark-making approaches.
+- button [disabled]:
+- spinbutton: "0"
+- button:
+- button "-5" [disabled]
+- button "-1" [disabled]
+- button "+1"
+- button "+5"
+- heading "AP Research Exam Style" [level=5]
+- button "Examples":
+  - text: Examples
+- paragraph: Performance-based assessment evaluating the ability to design, plan, and conduct a year-long research investigation. Focus on developing an academic paper and presentation demonstrating research methodology and communication skills.
+- button [disabled]:
+- spinbutton: "0"
+- button:
+- button "-5" [disabled]
+- button "-1" [disabled]
+- button "+1"
+- button "+5"
+- heading "AP Seminar Exam Style" [level=5]
+- button "Examples":
+  - text: Examples
+- paragraph: Performance-based assessment evaluating the ability to analyze topics through multiple lenses, gather information from various sources, develop perspectives, and effectively communicate arguments. Focus on critical thinking, research, collaboration, and presentation skills.
+- button [disabled]:
+- spinbutton: "0"
+- button:
+- button "-5" [disabled]
+- button "-1" [disabled]
+- button "+1"
+- button "+5"
+- checkbox "Save as my defaults"
+- generic: 保存我的偏好设置
+- button "返回":
+  - text: 返回
+- button "下一步":
+  - text: 下一步
+- button "20":
+  - generic: "20"
+- generic: 选择题
+- generic: "A:"
+- generic: "B:"
+- generic: "C:"
+- button "Open chat":
+  - img "Sparky"
+  - generic: 聊天
+- alert

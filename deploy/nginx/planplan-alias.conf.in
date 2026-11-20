@@ -1,0 +1,33 @@
+# Additive alias only. Existing clyna.ai/www configuration remains in place.
+server {
+    listen 80;
+    server_name planplan.clyna.ai;
+    access_log off;
+@ACME_LOCATION@
+    location / { return 308 https://planplan.clyna.ai$request_uri; }
+}
+server {
+    listen 443 ssl;
+    server_name planplan.clyna.ai;
+    ssl_certificate @PLANPLAN_CERT@;
+    ssl_certificate_key @PLANPLAN_KEY@;
+    ssl_protocols TLSv1.2 TLSv1.3;
+@TRUSTED_PROXY_INCLUDE@
+    root @PLANPLAN_ROOT@;
+    index index.html;
+    access_log off;
+    error_log /dev/null crit;
+    client_max_body_size 256k;
+@SECURITY_HEADERS@
+    add_header Cache-Control "no-store, private" always;
+    location ~ ^/(v1(?:/|$)|legal(?:/|$)|healthz$|readyz$) {
+@PROXY_DIRECTIVES@
+    }
+    location ^~ /assets/ {
+        try_files $uri =404;
+        add_header Cache-Control "public, max-age=31536000, immutable";
+@SECURITY_HEADERS@
+    }
+    location / { try_files $uri $uri/ /index.html; }
+    location ~ /\. { deny all; }
+}

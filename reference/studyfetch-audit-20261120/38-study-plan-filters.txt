@@ -1,0 +1,244 @@
+- navigation "Main navigation":
+  - link "主页":
+    - /url: /platform
+  - button "搜索":
+  - link "我的学习集":
+    - /url: /platform/studysets
+  - link "日历":
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/calendar
+  - link "题库":
+    - /url: /platform/qbank
+  - button "教程":
+  - button "Hide tutorials shortcut":
+  - button "Feedback and Help":
+  - button "yan zhang — account menu":
+    - generic: YZ
+  - menu:
+    - menuitem "您的个人资料":
+      - generic: 您的个人资料
+    - menuitem "设置":
+      - generic: 设置
+    - menuitem "教程":
+      - generic: 教程
+    - menuitem "给我们反馈":
+      - generic: 给我们反馈
+    - menuitem "订阅":
+      - generic: 订阅
+    - menuitem "支持":
+      - generic: 支持
+    - menuitem "Discord":
+      - generic: Discord
+    - menuitem "主题 主题":
+      - generic: 主题
+      - radiogroup "主题":
+        - radio "Dark mode":
+        - radio "Light mode" [checked]:
+        - radio "System preference":
+- button "切换学习集":
+  - generic: 功能测试 · 线段计数 · 2026-11-20
+- button "显示学习计划":
+- button "Collapse sidebar":
+- region "Study set navigation":
+  - link "Dashboard":
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5
+    - generic: Dashboard
+  - button "学习计划":
+    - generic: 学习计划
+  - link "聊天":
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/chat/new
+    - generic: 聊天
+  - link "辅导我":
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/tutor-me
+    - generic: 辅导我
+  - link "录制讲座":
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/live-lecture
+    - generic: 录制讲座
+  - button "练习与活动":
+    - generic: 练习与活动
+  - button "上传":
+    - text: 上传
+  - link "资料":
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/materials
+    - generic: 资料
+  - link "查看全部":
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/materials
+  - button "More options":
+  - button "Untitled Document":
+    - link "Untitled Document":
+      - /url: /platform/studyset/6affc0bb75798c45c17d21f5/material/6affc0bb75798c45c17d21f6/note
+      - paragraph: Untitled Document
+  - button "功能测试：线段计数规律与计算方法":
+    - link "功能测试：线段计数规律与计算方法":
+      - /url: /platform/studyset/6affc0bb75798c45c17d21f5/material/6affc141249fd40339c8c590/note
+      - paragraph: 功能测试：线段计数规律与计算方法
+- separator "Resize sidebar"
+- navigation:
+  - navigation "Breadcrumb":
+    - link "功能测试 · 线段计数 · 2026-11-20":
+      - /url: /zh/platform/studyset/6affc0bb75798c45c17d21f5
+      - generic: 功能测试 · 线段计数 · 2026-11-20
+    - generic "学习计划":
+      - generic: 学习计划
+  - button "升级":
+    - generic: 升级
+  - button "Share Study Set":
+    - generic: 分享
+  - button "创建进度":
+    - generic: Creation progress, one has an issue
+  - 'button "Study timer: 25m"':
+    - generic: 25m
+- main:
+  - img "功能测试 · 线段计数 · 2026-11-20"
+  - heading "功能测试 · 线段计数 · 2026-11-20" [level=1]
+  - button "Study set settings":
+  - button "克隆集合":
+  - region "Study plans":
+    - group "Choose a study plan":
+      - button "All topics" [pressed]:
+        - generic: All topics
+    - button "New plan":
+      - generic: New plan
+  - region "Study path":
+    - toolbar "Study plan controls":
+      - paragraph: 自定义
+      - generic: 排序方式
+      - button "材料":
+        - generic: 材料
+      - button "Filter study plan":
+      - button "Study plan settings":
+      - button "Edit study plan":
+        - generic: Edit
+    - group "从这里开始学习":
+      - heading "从这里开始学习" [level=3]
+    - button "Covered, 34% 功能测试：线段计数规律与计算方法" [expanded]:
+      - img "Covered, 34%":
+      - heading "功能测试：线段计数规律与计算方法" [level=3]
+    - region "功能测试：线段计数规律与计算方法":
+      - paragraph: 看看你已经知道了什么
+      - paragraph: 需要3分钟
+      - button "节省时间"
+      - button "Open 点与线段的关系 features":
+        - checkbox "Select 点与线段的关系"
+        - img "Not started"
+        - generic: 点与线段的关系
+        - button "Topic options":
+      - button "Open 组合公式推导 features":
+        - checkbox "Select 组合公式推导"
+        - img "Covered, 51%":
+        - generic: 组合公式推导
+        - button "Topic options":
+      - button "Open 常见逻辑错误识别 features":
+        - checkbox "Select 常见逻辑错误识别"
+        - img "Not started"
+        - generic: 常见逻辑错误识别
+        - button "Topic options":
+      - button "Open 点数计算规则 features":
+        - checkbox "Select 点数计算规则"
+        - img "Covered, 1%":
+        - generic: 点数计算规则
+        - button "Topic options":
+      - button "Open 等差数列求和法 features":
+        - checkbox "Select 等差数列求和法"
+        - img "Not started"
+        - generic: 等差数列求和法
+        - button "Topic options":
+      - button "Open 典型数值案例分析 features":
+        - checkbox "Select 典型数值案例分析"
+        - img "Not started"
+        - generic: 典型数值案例分析
+        - button "Topic options":
+      - button "Open 线段定义的理解 features":
+        - checkbox "Select 线段定义的理解"
+        - img "Not started"
+        - generic: 线段定义的理解
+        - button "Topic options":
+      - button "Open 分类相加法 features":
+        - checkbox "Select 分类相加法"
+        - img "Not started"
+        - generic: 分类相加法
+        - button "Topic options":
+      - button "Open 独立练习应用 features":
+        - checkbox "Select 独立练习应用"
+        - img "Covered, 51%":
+        - generic: 独立练习应用
+        - button "Topic options":
+      - button "Open 计数独立性原则 features":
+        - checkbox "Select 计数独立性原则"
+        - img "Not started"
+        - generic: 计数独立性原则
+        - button "Topic options":
+      - button "Open 两点确定法 features":
+        - checkbox "Select 两点确定法"
+        - img "Not started"
+        - generic: 两点确定法
+        - button "Topic options":
+      - button "Open 解题思维总结 features":
+        - checkbox "Select 解题思维总结"
+        - img "Not started"
+        - generic: 解题思维总结
+        - button "Topic options":
+  - complementary "Study set widgets":
+    - region "学习计划进度":
+      - heading "您的进度" [level=2]
+      - generic: 0%
+      - progressbar "总体学习计划进度"
+      - list:
+        - generic: 12 个主题
+        - generic: 3 已涵盖
+        - generic: 已掌握 0
+    - region "Add your syllabus":
+      - heading "教学大纲" [level=2]
+      - button "根据您的课程表和优先事项定制您的学习计划。 上传你的教学大纲，以便我们根据课程安排、考试权重和教师重点来优先安排主题。":
+      - button "添加教学大纲":
+        - text: 添加教学大纲
+    - region "Add exam dates":
+      - heading "考试日期" [level=2]
+      - button "确保你在考试前学习了你需要学习的内容。":
+      - button "添加考试":
+        - text: 添加考试
+- button "Chat history":
+  - generic: 聊天
+- button "New chat":
+- button "Collapse chat":
+- log "Chat transcript":
+  - button "更换角色":
+    - img "Sparky"
+  - button "更换角色"
+  - heading "有什么可以帮您的吗？" [level=2]:
+    - generic: 有什么可以帮您的吗？
+  - 'button "理解: 这个计划包含哪些内容？"':
+    - generic: 这个计划包含哪些内容？
+  - 'button "学习: 计划里下一步是什么？"':
+    - generic: 计划里下一步是什么？
+  - 'button "生成: 按考试调整我的计划"':
+    - generic: 按考试调整我的计划
+  - button "查看更多"
+  - button "插件":
+    - text: 插件
+  - button "开始引导式学习":
+    - generic: 开始引导式课程
+- status
+- button "Choose File"
+- textbox "向你的 AI tutor 提问任何问题..."
+- button "发送消息" [disabled]:
+- button "Chat actions":
+- button "Guided mode off":
+  - generic: 引导
+- button "呼叫 Sparky":
+  - generic: 通话
+- button "口述消息":
+- separator "Resize chat sidebar"
+- alert: 功能测试 · 线段计数 · 2026-11-20
+- menu:
+  - menuitem "模式 综合" [active]:
+    - generic: 模式
+    - generic: 综合
+  - paragraph: 按主题筛选
+  - menuitem "已保存的主题":
+    - generic: 已保存的主题
+  - menuitem "理解":
+    - generic: 理解
+  - menuitem "材料":
+    - generic: 材料
+  - menuitem "考试":
+    - generic: 考试

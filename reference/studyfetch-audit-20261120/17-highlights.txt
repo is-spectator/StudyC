@@ -1,0 +1,191 @@
+- navigation "Main navigation":
+  - link "主页":
+    - /url: /platform
+  - button "搜索":
+  - link "我的学习集":
+    - /url: /platform/studysets
+  - link "日历":
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/calendar
+  - link "题库":
+    - /url: /platform/qbank
+  - button "教程":
+  - button "Hide tutorials shortcut":
+  - button "Feedback and Help":
+  - button "yan zhang — account menu":
+    - generic: YZ
+  - menu:
+    - menuitem "您的个人资料":
+      - generic: 您的个人资料
+    - menuitem "设置":
+      - generic: 设置
+    - menuitem "教程":
+      - generic: 教程
+    - menuitem "给我们反馈":
+      - generic: 给我们反馈
+    - menuitem "订阅":
+      - generic: 订阅
+    - menuitem "支持":
+      - generic: 支持
+    - menuitem "Discord":
+      - generic: Discord
+    - menuitem "主题 主题":
+      - generic: 主题
+      - radiogroup "主题":
+        - radio "Dark mode":
+        - radio "Light mode" [checked]:
+        - radio "System preference":
+- button "切换学习集":
+  - generic: 功能测试 · 线段计数 · 2026-11-20
+- button "显示学习计划":
+- button "Collapse sidebar":
+- region "Study set navigation":
+  - link "Dashboard":
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5
+    - generic: Dashboard
+  - button "学习计划":
+    - generic: 学习计划
+  - link "聊天":
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/chat/new
+    - generic: 聊天
+  - link "辅导我":
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/tutor-me
+    - generic: 辅导我
+  - link "录制讲座":
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/live-lecture
+    - generic: 录制讲座
+  - button "练习与活动":
+    - generic: 练习与活动
+  - button "上传":
+    - text: 上传
+  - link "资料":
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/materials
+    - generic: 资料
+  - link "查看全部":
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/materials
+  - button "More options":
+  - button "Untitled Document":
+    - link "Untitled Document":
+      - /url: /platform/studyset/6affc0bb75798c45c17d21f5/material/6affc0bb75798c45c17d21f6/note
+      - paragraph: Untitled Document
+  - button "功能测试：线段计数规律与计算方法":
+    - link "功能测试：线段计数规律与计算方法":
+      - /url: /platform/studyset/6affc0bb75798c45c17d21f5/material/6affc141249fd40339c8c590/note
+      - paragraph: 功能测试：线段计数规律与计算方法
+- separator "Resize sidebar"
+- navigation:
+  - button "升级":
+    - generic: 升级
+  - button "Share Study Set":
+    - generic: 分享
+  - button "创建进度":
+    - generic: Creation progress, one has an issue
+  - 'button "Study timer: 25m"':
+    - generic: 25m
+- region "Highlights Hub":
+  - heading "Your Highlights" [level=1]
+  - group "Filter by highlight color":
+    - button "All (1)" [pressed]
+    - button "Lime": "1"
+    - button "Orange": "0"
+    - button "Pink": "0"
+    - button "Blue": "0"
+  - button "Sort and filter highlights":
+  - button "Highlight settings":
+  - searchbox "Search highlights"
+  - checkbox "Select all highlights in Today"
+  - heading "Today (1)" [level=2]
+  - article:
+    - checkbox "Select 如果一条直线段被标记点分成了 8 个小段，那么这条线段上一共有多少条不同的线段？ 36 45 28 9 根据线段计数的数学规律，当一条直线段被分成 $$n$$ 个小段时，点的总数为 $$n + 1$$。线段是由任意两个不同的点确定的，因此线段的总数可以通过组合公式 $$n(n + 1) / 2$$ 或等差数列求和 $$1 + 2 + 3 + ... + n$$ 来计算。在本题中，$$n = 8$$，代入公式计算：$$8 \\times (8 + 1) / 2 = 8 \\times 9 / 2 = 36$$。或者使用累加法：$$1 + 2 + 3 + 4 + 5 + 6 + 7 + 8 = 36$$。"
+    - paragraph: 如果一条直线段被标记点分成了 8 个小段，那么这条线段上一共有多少条不同的线段？
+    - list "Answer options":
+      - generic: A
+      - paragraph: "36"
+      - img "Correct answer"
+      - generic: B
+      - paragraph: "45"
+      - generic: C
+      - paragraph: "28"
+      - generic: D
+      - paragraph: "9"
+    - paragraph:
+      - text: 根据线段计数的数学规律，当一条直线段被分成
+      - generic: "n"
+      - text: 个小段时，点的总数为
+      - generic: n +
+      - generic: "1"
+      - text: 。线段是由任意两个不同的点确定的，因此线段的总数可以通过组合公式
+      - generic: n(n +
+      - generic: 1)/2
+      - text: 或等差数列求和
+      - generic: 1 +
+      - generic: 2 +
+      - generic: 3 +
+      - generic: ... +
+      - generic: "n"
+      - text: 来计算。在本题中，
+      - generic: n =
+      - generic: "8"
+      - text: ，代入公式计算：
+      - generic: 8 ×
+      - generic: (8 +
+      - generic: 1)/2 =
+      - generic: 8 ×
+      - generic: 9/2 =
+      - generic: "36"
+      - text: 。或者使用累加法：
+      - generic: 1 +
+      - generic: 2 +
+      - generic: 3 +
+      - generic: 4 +
+      - generic: 5 +
+      - generic: 6 +
+      - generic: 7 +
+      - generic: 8 =
+      - generic: "36"
+      - text: 。
+    - link "功能测试：两题模拟考试":
+      - /url: /platform/studyset/6affc0bb75798c45c17d21f5/practice/test/6affc52f81532953d8502a37/take?highlightId=6affc53281532953d8502a38
+      - generic: 功能测试：两题模拟考试
+    - generic: "| Today"
+    - button "Highlight options":
+    - button "Ask Sparky"
+- button "Chat history":
+  - generic: 聊天
+- button "New chat":
+- button "Collapse chat":
+- log "Chat transcript":
+  - button "更换角色":
+    - img "Sparky"
+  - button "更换角色"
+  - heading "有什么可以帮您的吗？" [level=2]:
+    - generic: 有什么可以帮您的吗？
+  - 'button "理解: 这个学习集是关于什么的？"':
+    - generic: 这个学习集是关于什么的？
+  - 'button "学习: 制定学习计划"':
+    - generic: 制定学习计划
+  - 'button "生成: 为这套卡片生成抽认卡"':
+    - generic: 为这套卡片生成抽认卡
+  - button "查看更多"
+  - button "插件":
+    - text: 插件
+  - button "开始引导式学习":
+    - generic: 开始引导式课程
+- status
+- button "Choose File"
+- textbox "向你的 AI tutor 提问任何问题..."
+- button "发送消息" [disabled]:
+- button "Chat actions":
+- button "Guided mode off":
+  - generic: 引导
+- button "呼叫 Sparky":
+  - generic: 通话
+- button "口述消息":
+- separator "Resize chat sidebar"
+- alert: Your Highlights
+- dialog "Turn highlights into study tools":
+  - generic: 1 of 2
+  - heading "Turn highlights into study tools" [level=3]
+  - paragraph: Select highlights with these checkboxes, or select a whole section. The action bar that appears lets you turn them into flashcards, practice tests, audio recaps, and more.
+  - button "Skip"
+  - button "Next" [active]:
+    - text: Next

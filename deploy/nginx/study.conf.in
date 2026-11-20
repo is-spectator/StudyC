@@ -1,0 +1,34 @@
+# New host only. Do not replace an existing PlanPlan/clyna.ai server block.
+server {
+    listen 80;
+    server_name study.clyna.ai;
+    access_log off;
+@ACME_LOCATION@
+    location / { return 308 https://study.clyna.ai$request_uri; }
+}
+server {
+    listen 443 ssl;
+    server_name study.clyna.ai;
+    ssl_certificate @STUDY_CERT@;
+    ssl_certificate_key @STUDY_KEY@;
+    ssl_protocols TLSv1.2 TLSv1.3;
+@TRUSTED_PROXY_INCLUDE@
+    root /opt/clyna-study/current/web;
+    index index.html;
+    access_log off;
+    error_log /dev/null crit;
+    client_max_body_size 16k;
+@SECURITY_HEADERS@
+    add_header Cache-Control "no-store, private" always;
+
+@AUTH_LOCATIONS@
+    # Exact auth locations above win; no other PlanPlan API is exposed here.
+    location ^~ /v1 { return 404; }
+    location ^~ /assets/ {
+        try_files $uri =404;
+        add_header Cache-Control "public, max-age=31536000, immutable";
+@SECURITY_HEADERS@
+    }
+    location / { try_files $uri $uri/ /index.html; }
+    location ~ /\. { deny all; }
+}

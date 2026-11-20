@@ -1,0 +1,154 @@
+- navigation "Main navigation":
+  - link "主页":
+    - /url: /platform
+  - button "搜索":
+  - link "我的学习集":
+    - /url: /platform/studysets
+  - link "日历":
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/calendar
+  - link "题库" [active]:
+    - /url: /platform/qbank
+  - button "教程":
+  - button "Hide tutorials shortcut":
+  - button "Feedback and Help":
+  - button "yan zhang — account menu":
+    - generic: YZ
+  - menu:
+    - menuitem "您的个人资料":
+      - generic: 您的个人资料
+    - menuitem "设置":
+      - generic: 设置
+    - menuitem "教程":
+      - generic: 教程
+    - menuitem "给我们反馈":
+      - generic: 给我们反馈
+    - menuitem "订阅":
+      - generic: 订阅
+    - menuitem "支持":
+      - generic: 支持
+    - menuitem "Discord":
+      - generic: Discord
+    - menuitem "主题 主题":
+      - generic: 主题
+      - radiogroup "主题":
+        - radio "Dark mode":
+        - radio "Light mode" [checked]:
+        - radio "System preference":
+- navigation:
+  - generic: 题库
+  - button "升级":
+    - generic: 升级
+  - button "创建进度":
+    - generic: Creation progress, one has an issue
+  - 'button "Study timer: 25m"':
+    - generic: 25m
+- heading "专家审核的 题库" [level=1]:
+  - text: 专家审核的
+  - text: 题库
+- paragraph: 理解每一个答案，逐题查看你的进度。
+- generic: 测验
+- generic: 13 / 25
+- paragraph: Every question is expert verified
+- paragraph: A nurse educator reviews each question, answer, and explanation before it reaches your bank.
+- paragraph: 降低潜在风险
+- paragraph: 对于膝下新打石膏的患者，哪项评估发现最令人担忧？
+- generic: A
+- text: 改变体位后缓解的脚趾刺痛感
+- button:
+  - generic: B
+  - generic: 抬高患肢和使用镇痛药后仍未缓解的疼痛
+- paragraph: 降低潜在风险
+- generic: B
+- generic: 抬高患肢和使用镇痛药后仍未缓解的疼痛
+- text: 答案解析
+- paragraph: 与损伤程度不相称、常规措施无法缓解的疼痛，是骨筋膜室综合征最早的可靠征象。
+- paragraph:
+  - text: 你的题库进度
+  - generic: · 示例
+- term: 已做题目
+- definition:
+  - text: "563"
+  - generic: / 1,000
+- term: 正确率
+- definition: 72%
+- generic: 仍有 160 道题答错
+- text: 继续练习
+- group "题库预览步骤":
+  - button "Expert verified"
+  - button "练习"
+  - button "理解"
+  - button "追踪进度" [pressed]
+- heading "选择你的考试" [level=2]
+- article:
+  - button "打开NCLEX-RN"
+  - generic: RN
+  - heading "NCLEX-RN" [level=3]
+  - generic: Nursing
+  - paragraph: 涵盖全部八大患者需求类别的新一代题型。
+  - generic: 1,538 道题
+  - text: 专家审核
+- article:
+  - button "打开NCLEX-PN"
+  - generic: PN
+  - heading "NCLEX-PN" [level=3]
+  - generic: Nursing
+  - paragraph: 执业护士范围，侧重协调护理与安全。
+  - generic: 1,306 道题
+  - text: 专家审核
+- article:
+  - button "打开FNP"
+  - generic: FNP
+  - heading "FNP" [level=3]
+  - generic: Nursing
+  - paragraph: 家庭执业护士认证，ANCC 与 AANP。
+  - generic: 864 道题
+  - text: 专家审核
+- paragraph:
+  - generic: 没有找到你的考试？
+  - button "申请题库":
+    - text: 申请题库
+- button "Chat history":
+  - generic: 功能测试与教学说明
+- button "New chat":
+- button "Collapse chat":
+- log "Chat transcript":
+  - paragraph: 功能测试：为什么6个小段不是6个点？请按你的教学方式开始。
+  - group "Message actions":
+    - button "Show message grade details":
+      - generic: B
+    - button "Copy message":
+    - status
+  - button "更换角色" [disabled]:
+    - img "Sparky"
+  - paragraph: 测试导师：先问你一个问题确认理解——一条线段上有6个小段，你觉得这条线段上一共有几个点（端点也算）？
+  - paragraph:
+    - text: （先记住这个关键区别：
+    - strong: 小段数
+    - text: 是相邻两点之间的间隔数；
+    - strong: 点数
+    - text: 是线段上所有端点和分点加起来的总数。两者不相等，因为点数总比小段数多1。用"选两点"的方法看：每一条线段都由两个点决定，所以先数清点数，再从点数里选2个，就能算出线段总数。例如6个小段对应7个点，线段总数是
+    - generic: (
+    - generic: "2"
+    - generic: "7"
+    - generic: )
+    - text: =
+    - generic: "21"
+    - text: ，而不是6。）
+  - button:
+  - button:
+  - button:
+  - button:
+  - button:
+  - button:
+- status
+- button "Choose File"
+- textbox "向你的 AI tutor 提问任何问题..."
+- button "发送消息" [disabled]:
+- button "Chat actions":
+- button "请先打开学习集并上传资料，才能使用引导式聊天。" [disabled]:
+  - generic: 引导
+- button "呼叫 Sparky":
+  - generic: 通话
+- button "口述消息":
+- separator "Resize chat sidebar"
+- alert

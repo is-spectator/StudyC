@@ -1,0 +1,271 @@
+- navigation "Main navigation":
+  - link "主页":
+    - /url: /platform
+  - button "搜索":
+  - link "我的学习集":
+    - /url: /platform/studysets
+  - link "日历":
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/calendar
+  - link "题库":
+    - /url: /platform/qbank
+  - button "教程":
+  - button "Hide tutorials shortcut":
+  - button "Feedback and Help":
+  - button "yan zhang — account menu":
+    - generic: YZ
+  - menu:
+    - menuitem "您的个人资料":
+      - generic: 您的个人资料
+    - menuitem "设置":
+      - generic: 设置
+    - menuitem "教程":
+      - generic: 教程
+    - menuitem "给我们反馈":
+      - generic: 给我们反馈
+    - menuitem "订阅":
+      - generic: 订阅
+    - menuitem "支持":
+      - generic: 支持
+    - menuitem "Discord":
+      - generic: Discord
+    - menuitem "主题 主题":
+      - generic: 主题
+      - radiogroup "主题":
+        - radio "Dark mode":
+        - radio "Light mode" [checked]:
+        - radio "System preference":
+- button "切换学习集":
+  - generic: 功能测试 · 线段计数 · 2026-11-20
+- button "显示学习计划":
+- button "Collapse sidebar":
+- region "Study set navigation":
+  - link "Dashboard":
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5
+    - generic: Dashboard
+  - button "学习计划":
+    - generic: 学习计划
+  - link "聊天":
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/chat/new
+    - generic: 聊天
+  - link "辅导我":
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/tutor-me
+    - generic: 辅导我
+  - link "录制讲座":
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/live-lecture
+    - generic: 录制讲座
+  - button "练习与活动":
+    - generic: 练习与活动
+  - button "上传":
+    - text: 上传
+  - link "资料":
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/materials
+    - generic: 资料
+  - link "查看全部":
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/materials
+  - button "More options":
+  - button "Untitled Document":
+    - link "Untitled Document":
+      - /url: /platform/studyset/6affc0bb75798c45c17d21f5/material/6affc0bb75798c45c17d21f6/note
+      - paragraph: Untitled Document
+  - button "功能测试：线段计数规律与计算方法":
+    - link "功能测试：线段计数规律与计算方法":
+      - /url: /platform/studyset/6affc0bb75798c45c17d21f5/material/6affc141249fd40339c8c590/note
+      - paragraph: 功能测试：线段计数规律与计算方法
+- separator "Resize sidebar"
+- navigation:
+  - generic: 日历
+  - button "升级":
+    - generic: 升级
+  - button "Share Study Set":
+    - generic: 分享
+  - button "创建进度":
+    - generic: Creation progress, one has an issue
+  - 'button "Study timer: 25m"':
+    - generic: 25m
+- button "今天"
+- button "上一个":
+- button "下一个":
+- generic: 2026/11/15 – 2026/11/21
+- tablist "日历视图":
+  - tab "日"
+  - tab "周" [selected]
+  - tab "月"
+- button "添加":
+  - text: 添加
+- link "日历设置":
+  - /url: /platform/studyset/6affc0bb75798c45c17d21f5/calendar/settings
+- paragraph: Be ready when class starts
+- paragraph: Get reminders for classes, exams and study sessions, plus a nudge to record when class starts.
+- button "Enable reminders"
+- button "Maybe later":
+- complementary:
+  - generic: 十一月 2026
+  - button "上个月":
+  - button "下个月":
+  - generic: 周
+  - generic: 周
+  - generic: 周
+  - generic: 周
+  - generic: 周
+  - generic: 周
+  - generic: 周
+  - button "1"
+  - button "2"
+  - button "3"
+  - button "4"
+  - button "5"
+  - button "6"
+  - button "7"
+  - button "8"
+  - button "9"
+  - button "10"
+  - button "11"
+  - button "12"
+  - button "13"
+  - button "14"
+  - button "15"
+  - button "16"
+  - button "17"
+  - button "18"
+  - button "19"
+  - button "20"
+  - button "21"
+  - button "22"
+  - button "23"
+  - button "24"
+  - button "25"
+  - button "26"
+  - button "27"
+  - button "28"
+  - button "29"
+  - button "30"
+  - button "1"
+  - button "2"
+  - button "3"
+  - button "4"
+  - button "5"
+  - button "6"
+  - button "7"
+  - button "8"
+  - button "9"
+  - button "10"
+  - button "11"
+  - button "12"
+  - button "Link Canvas calendar":
+    - text: Link Canvas calendar
+  - button "关联 Google 日历":
+    - text: 关联 Google 日历
+  - region "上传你的教学大纲":
+    - heading "上传你的教学大纲" [level=3]
+    - paragraph: 我们会自动填入你的考试日期，并告诉你该学什么
+    - list:
+      - button "为 功能测试 · 线段计数 · 2026-11-20 上传教学大纲":
+        - generic: 功能测试 · 线段计数 · 2026-11-20
+      - button "为 My First Study Set 上传教学大纲":
+        - generic: My First Study Set
+    - button "新建学习集":
+      - text: 新建学习集
+- generic "中国标准时间 — Asia/Shanghai":
+  - generic: 中国时间
+- generic: 周日
+- generic: "15"
+- generic: 周一
+- generic: "16"
+- generic: 周二
+- generic: "17"
+- generic: 周三
+- generic: "18"
+- generic: 周四
+- generic: "19"
+- generic: 周五
+- generic: "20"
+- generic: 周六
+- generic: "21"
+- generic: 0:00
+- generic: 1:00
+- generic: 2:00
+- generic: 3:00
+- generic: 4:00
+- generic: 5:00
+- generic: 6:00
+- generic: 7:00
+- generic: 8:00
+- generic: 9:00
+- generic: 10:00
+- generic: 11:00
+- generic: 12:00
+- generic: 13:00
+- generic: 14:00
+- generic: 15:00
+- generic: 16:00
+- generic: 17:00
+- generic: 18:00
+- generic: 19:00
+- generic: 20:00
+- generic: 21:00
+- generic: 22:00
+- generic: 23:00
+- generic: 13:00 – 14:00
+- button "Chat history":
+  - generic: 聊天
+- button "New chat":
+- button "Collapse chat":
+- log "Chat transcript":
+  - button "更换角色":
+    - img "Sparky"
+  - button "更换角色"
+  - heading "有什么可以帮您的吗？" [level=2]:
+    - generic: 有什么可以帮您的吗？
+  - 'button "计划: 今日计划"':
+    - generic: 今日计划
+  - button "查看更多"
+  - button "插件":
+    - text: 插件
+  - button "开始引导式学习":
+    - generic: 开始引导式课程
+- status
+- button "Choose File"
+- textbox "向你的 AI tutor 提问任何问题..."
+- button "发送消息" [disabled]:
+- button "Chat actions":
+- button "Guided mode off":
+  - generic: 引导
+- button "呼叫 Sparky":
+  - generic: 通话
+- button "口述消息":
+- separator "Resize chat sidebar"
+- alert
+- button "关闭":
+- heading "新建日程" [level=3]
+- tablist:
+  - tab "学习时段"
+  - tab "考试"
+  - tab "课程"
+  - tab "其他" [selected]
+- generic: 标题
+- textbox "标题" [active]:
+  - /placeholder: 例如：健身房
+  - text: 功能测试：线段计数（测试日程）
+- generic: 日期
+- button "日期": 2026/11/20
+- generic: 开始
+- combobox "开始":
+  - generic: 13:00
+- generic: 结束
+- combobox "结束":
+  - generic: 14:00
+- generic: 日程颜色
+- button "青色"
+- button "青柠色"
+- button "黄色"
+- button "桃色"
+- button "红色"
+- button "薰衣草色"
+- button "紫色"
+- button "蓝色"
+- button "棕褐色"
+- button "灰色"
+- generic: 每周周五重复
+- switch "每周周五重复"
+- button "取消"
+- button "创建"

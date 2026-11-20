@@ -1,0 +1,137 @@
+- navigation "Main navigation":
+  - link "主页":
+    - /url: /platform
+  - button "搜索":
+  - link "我的学习集":
+    - /url: /platform/studysets
+  - link "日历":
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/calendar
+  - link "题库":
+    - /url: /platform/qbank
+  - button "教程":
+  - button "Hide tutorials shortcut":
+  - button "Feedback and Help":
+  - button "yan zhang — account menu":
+    - generic: YZ
+  - menu:
+    - menuitem "您的个人资料":
+      - generic: 您的个人资料
+    - menuitem "设置":
+      - generic: 设置
+    - menuitem "教程":
+      - generic: 教程
+    - menuitem "给我们反馈":
+      - generic: 给我们反馈
+    - menuitem "订阅":
+      - generic: 订阅
+    - menuitem "支持":
+      - generic: 支持
+    - menuitem "Discord":
+      - generic: Discord
+    - menuitem "主题 主题":
+      - generic: 主题
+      - radiogroup "主题":
+        - radio "Dark mode":
+        - radio "Light mode" [checked]:
+        - radio "System preference":
+- button:
+  - generic: 功能测试 · 线段计数 · 2026-11-20
+- button:
+- button:
+- region:
+  - link:
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5
+    - generic: Dashboard
+  - button:
+    - generic: 学习计划
+  - link:
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/chat/new
+    - generic: 聊天
+  - link:
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/tutor-me
+    - generic: 辅导我
+  - link:
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/live-lecture
+    - generic: 录制讲座
+  - button:
+    - generic: 练习与活动
+  - button:
+    - text: 上传
+  - link:
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/materials
+    - generic: 资料
+  - link:
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/materials
+    - text: 查看全部
+  - button:
+  - button:
+    - link:
+      - /url: /platform/studyset/6affc0bb75798c45c17d21f5/material/6affc0bb75798c45c17d21f6/note
+      - paragraph: Untitled Document
+  - button:
+    - link:
+      - /url: /platform/studyset/6affc0bb75798c45c17d21f5/material/6affc141249fd40339c8c590/note
+      - paragraph: 功能测试：线段计数规律与计算方法
+- separator
+- navigation:
+  - button "Expand sidebar":
+  - navigation "Breadcrumb":
+    - button "功能测试 · 线段计数 · 2026-11-20":
+      - generic: 功能测试 · 线段计数 · 2026-11-20
+    - button "功能测试：线段计数混合卡":
+      - generic: 功能测试：线段计数混合卡
+  - button "Turn into another learning format":
+    - text: 转换成
+  - button "升级":
+    - generic: 升级
+  - button "Share Flashcards":
+    - generic: 分享
+  - button "创建进度":
+    - generic: Creation progress, new results ready
+  - 'button "Study timer: 25m"':
+    - generic: 25m
+- 'button "Study mode: 标准" [expanded] [active]':
+  - generic: 标准
+- button "Card 1, pending"
+- button "Card 2, current"
+- button "Card 3, pending"
+- button "Card 4, pending"
+- button "Card 5, pending"
+- button "Card 6, pending"
+- button "Card 7, pending"
+- button "Settings":
+- button "随机播放":
+- button "Previous":
+- generic: 2 / 7
+- button "Next":
+- generic: 定义
+- button "Good content":
+- button "Bad content":
+- button "书签":
+- button "Show term":
+  - list:
+    - listitem: 任意两个不同点确定一条线段
+  - paragraph: 任意两个不同的点可以唯一确定一条线段。
+- button "上一页":
+  - text: 上一页
+- button "Space 翻转":
+  - generic: Space
+  - generic: 翻转
+- button "下一步":
+  - text: 下一步
+- button "Open chat":
+  - img "Sparky"
+  - generic: 聊天
+- alert: 功能测试 · 线段计数 · 2026-11-20 | StudyFetch
+- menu "Study mode":
+  - generic: Study mode
+  - menuitemradio "标准" [checked]:
+    - generic: 标准
+  - menuitemradio "间隔重复":
+    - generic: 间隔重复
+  - menuitemradio "信心":
+    - generic: 信心
+  - menuitemradio "收藏的抽认卡":
+    - generic: 收藏的抽认卡
+  - menuitem "Highlights":
+    - generic: Highlights

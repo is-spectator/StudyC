@@ -1,0 +1,22 @@
+node_modules/
+dist/
+.env*
+!.env.example
+*.local
+.DS_Store
+reference/*_files/
+reference/*.html
+*.tsbuildinfo
+__pycache__/
+*.pyc
+
+# Generated deployment bundles and private operational material.
+deploy/artifacts/
+deploy/packages/
+deploy/backups/
+deploy/private/
+deploy/runtime/
+deploy/**/study-*.tar.gz
+deploy/**/study-*.tar.gz.sha256
+deploy/**/*.pem
+deploy/**/*.key

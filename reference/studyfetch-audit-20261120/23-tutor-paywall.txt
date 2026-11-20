@@ -1,0 +1,120 @@
+- navigation "Main navigation":
+  - link "主页":
+    - /url: /platform
+  - button "搜索":
+  - link "我的学习集":
+    - /url: /platform/studysets
+  - link "日历":
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/calendar
+  - link "题库":
+    - /url: /platform/qbank
+  - button "教程":
+  - button "Hide tutorials shortcut":
+  - button "Feedback and Help":
+  - button "yan zhang — account menu":
+    - generic: YZ
+  - menu:
+    - menuitem "您的个人资料":
+      - generic: 您的个人资料
+    - menuitem "设置":
+      - generic: 设置
+    - menuitem "教程":
+      - generic: 教程
+    - menuitem "给我们反馈":
+      - generic: 给我们反馈
+    - menuitem "订阅":
+      - generic: 订阅
+    - menuitem "支持":
+      - generic: 支持
+    - menuitem "Discord":
+      - generic: Discord
+    - menuitem "主题 主题":
+      - generic: 主题
+      - radiogroup "主题":
+        - radio "Dark mode":
+        - radio "Light mode" [checked]:
+        - radio "System preference":
+- button:
+  - generic: 功能测试 · 线段计数 · 2026-11-20
+- button:
+- button:
+- region:
+  - link:
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5
+    - generic: Dashboard
+  - button:
+    - generic: 学习计划
+  - link:
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/chat/new
+    - generic: 聊天
+  - link:
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/tutor-me
+    - generic: 辅导我
+  - link:
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/live-lecture
+    - generic: 录制讲座
+  - button:
+    - generic: 练习与活动
+  - button:
+    - text: 上传
+  - link:
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/materials
+    - generic: 资料
+  - link:
+    - /url: /platform/studyset/6affc0bb75798c45c17d21f5/materials
+    - text: 查看全部
+  - button:
+  - button:
+    - link:
+      - /url: /platform/studyset/6affc0bb75798c45c17d21f5/material/6affc0bb75798c45c17d21f6/note
+      - paragraph: Untitled Document
+  - button:
+    - link:
+      - /url: /platform/studyset/6affc0bb75798c45c17d21f5/material/6affc141249fd40339c8c590/note
+      - paragraph: 功能测试：线段计数规律与计算方法
+- separator
+- generic: 开始辅导会话
+- button "Close":
+  - generic: 退出
+- generic: 3/3
+- generic: 制定你这节课的学习目标
+- generic: 学习模式
+- button "探索 灵活的自定进度学习":
+  - generic: 探索
+  - generic: 灵活的自定进度学习
+- button "精通 全面、引导式学习":
+  - generic: 精通
+  - generic: 全面、引导式学习
+- text: 这次学习会话你的学习目标是什么？
+- generic: (可选)
+- textbox "帮助我了解这个": 功能测试：用一道问题检查我是否能区分点数与线段数。
+- generic: 角色
+- button "Sparky 更换":
+  - generic: S
+  - generic: Sparky
+  - generic: 更换
+- heading "使用插件自定义您的Tutor Me session" [level=3]
+- button "探索插件":
+  - generic: 探索插件
+- button "标准 StudyFetch Tutor Me sessions 准备就绪 Tutor Me sessions 可以直接使用，无需修改。":
+  - heading "标准 StudyFetch Tutor Me sessions" [level=4]
+  - paragraph: 准备就绪 Tutor Me sessions 可以直接使用，无需修改。
+- generic: 您的会话希望使用什么语言？
+- button "🇨🇳 中文":
+  - generic: 🇨🇳
+  - generic: 中文
+- button "返回":
+  - text: 返回
+- button "创建会话":
+  - text: 创建会话
+- heading "探索模式" [level=3]
+- paragraph: 灵活的自主学习
+- img "Sparky mascot"
+- paragraph: "目标: \"功能测试：用一道问题检查我是否能区分点数与线段数。\""
+- paragraph: 您的个性化学习会话即将准备就绪！
+- dialog "Payments Modal" [active]:
+  - img "Sparky upgrade"
+  - heading "需要升级！" [level=2]
+  - paragraph: Tutor Me is a premium feature. Upgrade to premium for unlimited sessions!
+  - button "继续"
+- alert
