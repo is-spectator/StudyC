@@ -64,7 +64,7 @@ AI 对话、自动从资料生成卡片/试题/游戏、作业 AI 批改、语�
 
 ## 参考与验证范围
 
-[实施路线与分期](docs/implementation-roadmap.md) 定义第一版闭环、各功能模块的开发顺序和发布门槛；[PR-001 开发任务书](docs/pr-001-study-data-api.md) 可交给开发者，范围为共享 PlanPlan 后端的学习集与纯文本资料 API，前端另开 PR 接入。两份文件是待实施规划，不代表功能已经上线。
+[实施路线与分期](docs/implementation-roadmap.md) 定义第一版闭环、各功能模块的开发顺序和发布门槛；[PR-001 开发任务书](docs/pr-001-study-data-api.md) 记录共享 PlanPlan 后端的学习集与纯文本资料 API。该后端已提交 [PR #40](https://github.com/is-spectator/planplan/pull/40) 审查，前端另开 PR 接入，尚未部署，不代表功能已经上线。
 
 [功能研究与开发索引](reference/STUDYFETCH_AUDIT.md) 汇总原站功能登记、实测证据、回归用例和 StudyC 实现缺口。后续功能开发先从此处读取，区分官方说明、实际操作结果和本地已实现能力。
 

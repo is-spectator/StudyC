@@ -1,6 +1,10 @@
 # PR-001：StudyC 学习集与纯文本资料后端
 
-状态：待开发；2026-11-20 制定。所属路线：[S1 学习空间与文本资料](implementation-roadmap.md)。
+状态：2026-11-20 已实现并提交草稿 [PR #40](https://github.com/is-spectator/planplan/pull/40)，待审查/合并，未部署。所属路线：[S1 学习空间与文本资料](implementation-roadmap.md)。
+
+实现提交 `5083016`，接口与运行说明见 [后端 STUDYC_API.md](https://github.com/is-spectator/planplan/blob/50830163407548a31d965b7db53e5cc4ca723fd3/server/STUDYC_API.md)。认证前置另列 [PR #41](https://github.com/is-spectator/planplan/pull/41)，基线 `d6f6166`。本地 StudyC 集成测试 17/17 通过，后端全量 334 项通过、1 项 PostgreSQL 专用测试跳过，类型检查和构建通过；GitHub CI 结果以 PR 页面为准。
+
+实施中的迁移边界：干净远程基线只有迁移 1–10，本 PR 追加迁移 11；原脏工作区另有模板迁移 11–17。发布前必须统一完整迁移序列，不能把此分支直接用于那条迁移线的库；回退应用也须保留已应用迁移的 registry。下文保留完整任务契约供审查。
 
 **建议标题：** `feat(studyc): persist study sets and text materials with account isolation`
 
@@ -21,11 +25,11 @@ StudyC 目前把学习集保存为名字数组，资料写在账户级 localStor
 | StudyC | `https://github.com/is-spectator/StudyC`，审计基线 `89ecc31`。只用于核对当前前端契约。 |
 | 后端仓库 | `https://github.com/is-spectator/planplan`。需同时拥有该仓库读取与提交 PR 的权限。 |
 | 本地认证实现线索 | `/Users/fangnaoke/Documents/ChatGPT/planplan-web-session`；分支 `codex/web-session`、HEAD `1fc1bc5`。工作区有大量未提交内容，`server/src/api/web-session.ts`、对应测试尚为未跟踪文件。**这些不是已合入远程 main 的证据。** |
-| 必要交接 | 仓库维护者提供包含现有 Cookie Web Session、CSRF、测试和运行配置的可访问提交 SHA；开发者从该干净基线建分支，在 PR 描述记录 SHA。不能只 checkout `1fc1bc5` 就假定认证齐全，也不要把整个脏工作区顺带提交。 |
+| 基线交接（已完成） | 已提取并推送独立基线 `d6f6166a7eedbeafffbfcf757f03d1c7ee9fe219`，分支 `codex/studyc-web-session-base`，见认证 PR #41。包含 Cookie/CSRF、测试和配置文档；没有带入其他未提交功能。PR #40 当前以该分支为 base，认证先合入主线后再调整 base。 |
 | 已发现栈 | Hono、TypeScript、现有 `Db` 抽象与 PostgreSQL/PGlite；沿用仓库锁文件与运行方式，不另选 ORM/数据库或建立第二份账户表。 |
 | 环境 | 使用临时测试库和测试账户；不连接生产数据库跑迁移或验收。线上部署不在此开发 PR 的验收动作内。 |
 
-**基线交接是开工依赖，不是本 PR 内的认证重构任务。** 若接手者无法获得该提交，先向仓库维护者报告缺少的基线，不能用伪造用户 ID 或绕过会话完成替代实现。先阅读目标仓库实际的 `AGENTS.md` 和贡献规则。
+**认证基线已经独立固定，不属于 PR #40 的业务差异。** 后续接手者从上述可访问分支/提交读取，不能用伪造用户 ID 或绕过会话完成替代实现。先阅读目标仓库实际的 `AGENTS.md` 和贡献规则。
 
 ## 3. 必做与不做
 
