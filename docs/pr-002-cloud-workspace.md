@@ -1,5 +1,7 @@
 # PR-002：云端学习空间与文本编辑
 
+状态：2026-11-21 已部署并完成真实浏览器验收；[StudyC PR #2](https://github.com/is-spectator/StudyC/pull/2) 待审查。
+
 StudyC 仓库内的前端接入，基于 PR-001 独立后端。分支 `codex/studyc-cloud-workspace` 从 `97adfc6` 开始；业务后端与数据库结构不变。前端保留原有米色内容区、深色导航和卡片视觉。
 
 ## 可执行流程
@@ -29,5 +31,17 @@ StudyC 仓库内的前端接入，基于 PR-001 独立后端。分支 `codex/stu
 Vite 本地 `/v1/study/` 转发 8790，账户 `/v1` 转发 8789。开发代理不放宽 Cookie、Origin 或 CSRF；浏览器故障验收使用独立状态化夹具，生产验收使用真实服务器和合成测试账户。
 
 本次只切换 StudyC 静态版本，沿用已验证的 Nginx 8790 业务路由。不能重新生成默认关闭学习 API 的旧候选；不切换 Clyna/PlanPlan 页面，不重启两个后端，不迁移数据库。保留上一静态版本 JS/CSS，支持已打开页面继续加载；故障回退静态 current 软链接。
+
+## 当前静态发布与回退
+
+- 构建源码：`7bc261b3b2a340ad21c6035eda03e907bc4e6e82`。
+- 当前产物：`/opt/clyna-study/releases/5a2e540a2a427c30e074c597da70aa6ab9898de97453cd49e99d1406a52339c3`。
+- 上一产物：`/opt/clyna-study/releases/8e77afb69baebb995287145bb625d7e6b4dc7f6e9dec69c18ee573fe22350371`。
+- 激活仅原子替换 `/opt/clyna-study/current`。既有 StudyC API、共享账户服务和其他产品静态版本不变；本轮没有数据库迁移。
+- 服务器私密操作记录位于 `/root/studyc-pr002-20261121/activation.json`；前端验收脚本、截图和临时身份不进入仓库。
+
+需要回退时，先确认 `current` 仍指向上述当前产物，再创建指向上一产物的临时软链接，并在同目录用原子 rename 替换 `current`。不要改 Nginx、数据库或两个后端。回退后旧页面没有云端资料入口，已经保存的云端数据仍保留；重新发布本版本后可以继续读取。
+
+PR #2 暂以 PR #1 的 `codex/studyc-independent-backend` 分支为基线，保持前端改动独立可审查；PR #1 合并后再改为 `main`。
 
 PR-003 再处理文件上传与 PDF 文本解析；此 PR 只保存纯文本，不声称实现 AI、OCR、分享或资料删除。

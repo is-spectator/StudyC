@@ -1,5 +1,7 @@
 # StudyC 独立后端发布记录
 
+本记录描述 PR-001 后端发布时点。随后 PR-002 已上线云端前端；当前页面版本与静态回退见 [PR-002 记录](../docs/pr-002-cloud-workspace.md)。
+
 状态：**2026-11-21 已部署并通过公网验收。** 业务 PR：[StudyC #1](https://github.com/is-spectator/StudyC/pull/1)。原 PlanPlan #40 已关闭并指向本 PR。
 
 ## 架构与历史状态

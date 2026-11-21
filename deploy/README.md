@@ -1,10 +1,12 @@
 # StudyC / PlanPlan 双域部署
 
+2026-11-21 **PR-002 云端学习空间前端已上线**，当前静态产物为 `5a2e540a2a427c30e074c597da70aa6ab9898de97453cd49e99d1406a52339c3`，源码为 `7bc261b3b2a340ad21c6035eda03e907bc4e6e82`。本次只切换 StudyC 静态软链接；[版本与回退操作](../docs/pr-002-cloud-workspace.md#当前静态发布与回退)另列。
+
 2026-11-21 **StudyC 独立后端已部署并通过 112 项公网验收**；参见 [PR-001 发布结果](release-20261121-independent-backend.md)。`render-config.py --enable-study-api` 可显式生成八个学习数据接口的白名单，默认仍不启用。下文的注册与静态站点发布状态是此前已完成的记录。
 
-状态：**统一注册首页已激活。** `https://clyna.ai/` 承载 Clyna 注册，StudyC 与 PlanPlan 的注册入口均指向主站；两个产品保留各自登录/重置流程和 host-only Cookie。当前 Study 静态产物为 `8e77afb69baebb995287145bb625d7e6b4dc7f6e9dec69c18ee573fe22350371`；Clyna/PlanPlan 静态 UI 为 `0dbe9865a46c472edea6ece13598417004624e0c95b3db5a69219e15ed4358ee`，独立目录 `/opt/planplan-web-ui/current/web`。统一注册发布时的后端为 `9f763547…`；当前账户服务为兼容包 `4692cb11…`，StudyC 业务为独立服务，详见上述 11 月 21 日记录。统一激活返回 `activated-and-probed`，备份 `/var/backups/clyna-central-registration/20261120T030319Z-e9c28888`。真实生产注册和邮件投递未在本次执行；本地模拟注册验证通过。
+状态：**统一注册首页已激活。** `https://clyna.ai/` 承载 Clyna 注册，StudyC 与 PlanPlan 的注册入口均指向主站；两个产品保留各自登录/重置流程和 host-only Cookie。统一注册发布时 Study 静态产物为 `8e77afb69baebb995287145bb625d7e6b4dc7f6e9dec69c18ee573fe22350371`；Clyna/PlanPlan 静态 UI 为 `0dbe9865a46c472edea6ece13598417004624e0c95b3db5a69219e15ed4358ee`，独立目录 `/opt/planplan-web-ui/current/web`。统一注册发布时的后端为 `9f763547…`；当前账户服务为兼容包 `4692cb11…`，StudyC 业务为独立服务，详见上述 11 月 21 日记录。统一激活返回 `activated-and-probed`，备份 `/var/backups/clyna-central-registration/20261120T030319Z-e9c28888`。真实生产注册和邮件投递未在本次执行；本地模拟注册验证通过。
 
-本次只把注册变更应用到核对过的线上 PlanPlan 源快照，未部署本地 main 中其他尚未上线的功能。保留 58 个原公开哈希资源，供已打开页面继续加载。新增 `activate-central-registration.py` 用于本次双前端切换，默认只检查，显式 `--apply` 才修改；包含三配置摘要/旧链接守卫、备份、语法检查、严格 TLS 探针与失败回滚。首次迁移专用脚本不能原样重跑（当前根目录已迁移）。后续仅更新 Study 时，先用下面的新静态根重新渲染配置，再核对当前配置摘要，不能复用历史候选。
+本次只把注册变更应用到核对过的线上 PlanPlan 源快照，未部署本地 main 中其他尚未上线的功能。保留 58 个原公开哈希资源，供已打开页面继续加载。新增 `activate-central-registration.py` 用于本次双前端切换，默认只检查，显式 `--apply` 才修改；包含三配置摘要/旧链接守卫、备份、语法检查、严格 TLS 探针与失败回滚。首次迁移专用脚本不能原样重跑（当前根目录已迁移）。后续仅更新 Study 静态文件时，保留已启用 8790 学习 API 的现有 Nginx，校验新产物后只原子切换 `current`，无需重渲染或 reload。确需调整路由时才生成新配置，必须显式保留 `--enable-study-api` 并核对当前配置摘要，不能复用历史候选。
 
 保留[此前品牌发布记录](release-20261120-studyc.md)和[首次双域发布记录](release-20261120.md)。
 
@@ -49,7 +51,7 @@ PlanPlan 新别名沿用原站 `/v1`、`/legal`、`/healthz`、`/readyz` 的 API
 
 两站共用注册账户，但 `__Host-planplan-session` 是各自 host 的 Cookie，所以默认分别登录，不宣称跨子域免登。退出或重置密码的跨站失效语义由现有 PlanPlan 服务控制。现有注册白名单等规则继续生效，不在部署脚本中扩大权限。
 
-## StudyC 独立后端模板（待安装）
+## StudyC 独立后端模板与已安装服务
 
 `backend/studyc.service` 是 StudyC 仓库内独立后端的 systemd 模板；模板本身不执行安装；本次实际安装及启用结果见独立后端发布记录。学习业务代码、迁移和运行版本由 StudyC 管理。`render-config.py --enable-study-api` 将四组路径的八个学习接口转发至 `127.0.0.1:8790`；上述七个账号接口继续转发至 `127.0.0.1:8789`，PlanPlan 配置不变。严格 UUID 路径、方法白名单、16 KiB 默认请求上限、材料接口 2 MiB 上限以及禁止缓存、禁止上游重试的设置保持一致。未启用开关时不开放学习接口。
 
@@ -90,10 +92,13 @@ python3 deploy/check-release.py /受限候选目录/study/study-实际SHA.tar.gz
 
 ## 2. 渲染两个独立域名配置
 
+本节用于需要调整 Nginx 的发布；纯静态更新跳过此节及后续双域激活。线上学习 API 已启用，生成候选必须保留 `--enable-study-api`，不能使用默认关闭业务 API 的配置。
+
 下列参数对应主代理确认的服务器状态；渲染器不读取证书内容，也不判断证书是否已安装。使用一个新的输出目录：
 
 ```sh
 python3 deploy/render-config.py \
+  --enable-study-api \
   --study-cert /etc/letsencrypt/live/clyna-products/fullchain.pem \
   --study-key /etc/letsencrypt/live/clyna-products/privkey.pem \
   --planplan-cert /etc/letsencrypt/live/clyna-products/fullchain.pem \
