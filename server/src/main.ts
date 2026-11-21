@@ -3,11 +3,13 @@ import { createApp } from './api/app.js';
 import { openDb } from './db/db.js';
 import { checkMigrations, migrate } from './db/migrations.js';
 import { runtimeConfig } from './runtime/config.js';
+import { resolveFileRoot } from './services/study-files.js';
 
 async function main() {
   const command = process.argv[2] ?? 'serve';
   if (!['serve', 'check', 'migrate'].includes(command) || process.argv.length > 3) throw new Error('Invalid command');
   const config = runtimeConfig();
+  const fileRoot = resolveFileRoot(process.env.STUDYC_FILE_ROOT ?? '');
   const db = await openDb(config.databaseUrl, { ssl: config.ssl, migrations: 'none',
     onPoolError: () => console.error(JSON.stringify({ event: 'database_connection_failed' })) });
   try {
@@ -18,7 +20,7 @@ async function main() {
       console.log(JSON.stringify({ ok: true, command, service: 'studyc', release: config.releaseId }));
       return;
     }
-    const app = createApp(db, { releaseId: config.releaseId, rateLimitSecret: config.rateLimitSecret });
+    const app = createApp(db, { releaseId: config.releaseId, rateLimitSecret: config.rateLimitSecret, fileRoot });
     const server = serve({ fetch: app.fetch, port: config.port, hostname: '127.0.0.1' }, () => {
       console.log(JSON.stringify({ event: 'server_started', service: 'studyc', release: config.releaseId }));
     });

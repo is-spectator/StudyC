@@ -1,6 +1,6 @@
 # StudyC 实施路线与交接顺序
 
-日期：2026-11-21。状态：[PR-001 / StudyC #1](https://github.com/is-spectator/StudyC/pull/1) 独立后端、[PR-002 / StudyC #2](https://github.com/is-spectator/StudyC/pull/2) 云端前端均已部署验收，PR 待审查。下一步是 PR-003 文件与来源处理，后续阶段尚未实现。
+日期：2026-11-21。状态：[PR-001 / StudyC #1](https://github.com/is-spectator/StudyC/pull/1) 与 [PR-002 / StudyC #2](https://github.com/is-spectator/StudyC/pull/2) 已合并。PR-003 在本仓库增加文本型 PDF 上传与页码提取，尚未部署；OCR、AI 与其他文件类型仍未实现。
 
 实施边界：StudyC 的前后端、业务迁移和 PR 统一在 `is-spectator/StudyC`；Clyna 继续提供共享账户体系。后端与前端交付边界分别见 [PR-001 任务书](pr-001-study-data-api.md)和 [PR-002 任务书](pr-002-cloud-workspace.md)。
 
@@ -50,8 +50,8 @@ PR-001/002 已把正式账户的学习集和纯文本资料接到独立后端：
 | PR | 仓库 | 明确交付 | 前置 |
 | --- | --- | --- | --- |
 | **PR-001** | `is-spectator/StudyC` | 受现有认证保护的学习集和纯文本资料 API、迁移、隔离/冲突/幂等测试，已部署；发布时已配置精确 Nginx 白名单和请求大小。**无前端改动。** | 固定含 Web Session 的可访问后端提交。 |
-| **PR-002** | `is-spectator/StudyC` | 列表/创建/改名、按 UUID 路由、文本资料编辑与保存状态、错误/冲突处理、本机旧数据导出；已部署验收、PR 待审查，沿用 PR-001 的 Nginx 路由。 | PR-001 API 契约。 |
-| **PR-003（下一步）** | 后端为主，前端另开配套 PR | 文件存储与授权下载、文本型 PDF 解析、任务状态和页码来源；浏览器上传/预览。 | PR-001/002。 |
+| **PR-002** | `is-spectator/StudyC` | 列表/创建/改名、按 UUID 路由、文本资料编辑与保存状态、错误/冲突处理、本机旧数据导出。已合并并部署。 | PR-001 API 契约。 |
+| **PR-003** | `is-spectator/StudyC` | 文本型 PDF 原文件私有存储、文字提取、页码和失败状态；云端学习集内上传与下载。不含 OCR、Word 或 AI。见 [PR-003 说明](pr-003-pdf-upload.md)。 | PR-002。 |
 | **PR-004** | 后端 | 统一生成任务、不可变输入快照、配置版本、输出校验、停止/重试、调用记录及限额。 | PR-001/003；确定模型与服务端凭据配置方式。 |
 | **PR-005** | 后端及前端配套 PR | 资料选择、对话历史、流式回答、来源引用与跳转、停止和重试。 | PR-004。 |
 | **PR-006** | 后端及前端配套 PR | 多牌组、手动编辑与从资料生成、翻面与自评记录；第一版先做文字问答卡。 | PR-004。 |

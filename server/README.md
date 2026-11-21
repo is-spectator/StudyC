@@ -12,7 +12,9 @@ Node 24、pnpm 10.33.2：在本目录运行 `pnpm install --frozen-lockfile`，�
 
 每次请求使用固定的本机 Clyna 会话接口验证 Cookie，无身份缓存，不持有 JWT 签名密钥。身份接口返回用户 ID 与 CSRF 后，StudyC 校验 `X-PlanPlan-Expected-User`；POST/PATCH 还要求 `Origin: https://study.clyna.ai` 和匹配的 `X-CSRF-Token`。认证失败 401、账号不符 409、Origin/CSRF 不符 403、上游不可用 503。仅支持现有安全 Cookie，未另建 Bearer 认证。PlanPlan 原认证能力不受影响。
 
-共用 PostgreSQL 的 `users`、`request_rate_limits` 和已有生命周期触发器；只维护 `study_sets`、`study_materials`、`studyc_schema_migrations`。事务沿用账户 advisory lock，删除账户可级联清理学习资料。共用 RATE_LIMIT_SECRET 使两个进程共享每账户写入预算，该密钥独立于 JWT 密钥。
+共用 PostgreSQL 的 `users`、`request_rate_limits` 和已有生命周期触发器；维护 `study_sets`、`study_materials`、`study_source_files`、`study_source_pages` 和 `studyc_schema_migrations`。事务沿用账户 advisory lock，删除账户可级联清理学习资料和上传记录。共用 RATE_LIMIT_SECRET 使两个进程共享每账户写入预算，该密钥独立于 JWT 密钥。
+
+PDF 原文件只放在 `STUDYC_FILE_ROOT` 下的 `{userId}/{fileId}`，不使用用户提供的路径。单文件不超过 8 MiB、30 页，提取正文不超过 1 MiB。扫描件、加密件和损坏文件只记录失败状态，不写入空的成功正文。解析超时不落库，可用同一次 `clientRequestId` 重试。
 
 `migrate` 在现有身份数据库契约上创建 StudyC 表，或逐项校验既有列、默认值、约束、索引和触发器后登记接管。结构缺损、部分表存在、历史/指纹漂移均拒绝继续；不自动修补未知 schema，不执行 PlanPlan 迁移。
 
@@ -25,6 +27,7 @@ STUDYC_SECRETS_FILE=/etc/studyc/secrets.json
 PG_CA_FILE=/etc/studyc/pg-ca.pem
 PORT=8790
 RELEASE_ID=git:<StudyC-commit>
+STUDYC_FILE_ROOT=/var/lib/studyc/files
 ```
 
 `secrets.json` 只允许 `DATABASE_URL` 与 `RATE_LIMIT_SECRET` 两个字符串。文件由 root 管理，组为 studyc，0640（或更严格），目录 0750；禁止 JWT、邮箱、AI 或其他应用秘密。数据库使用显式 TLS CA 与证书验证；URL 不接受覆盖 SSL 的参数。迁移用 owner 权限另行执行，运行服务只用 `studyc_app`。

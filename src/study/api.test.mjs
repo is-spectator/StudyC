@@ -168,6 +168,30 @@ test('ambiguous create failure preserves the caller request ID and payload for a
   assert.deepEqual(input, { clientRequestId: requestId, title: '资料', body: material.body });
 });
 
+test('PDF upload uses form data, keeps failure records distinct from extracted text, and rejects an oversized file locally', async () => {
+  const fileId = 'e5555555-5555-4555-8555-555555555555';
+  const source = { id: fileId, studySetId: setId, materialId, displayName: '线段.pdf', byteSize: 12, status: 'ready', pageCount: 1, pages: [{ page: 1, start: 0, end: 8 }], createdAt: time, updatedAt: time };
+  const failed = { ...source, id: 'f6666666-6666-4666-8666-666666666666', materialId: null, displayName: '扫描.pdf', status: 'no_extractable_text', pageCount: 0, pages: [] };
+  let seen;
+  const api = createStudyApi(async (path, options) => {
+    seen = { path, method: options.method, body: options.body, formData: options.formData };
+    return path.endsWith('/files') && options.method === 'POST' ? { file: source } : { items: [source, failed], nextCursor: null };
+  });
+  const file = new File([Buffer.from('%PDF-1.4')], '线段.pdf', { type: 'application/pdf' });
+  assert.deepEqual(await api.uploadPdf(setId, file, requestId), source);
+  assert.equal(seen.path, `/v1/study/sets/${setId}/files`);
+  assert.equal(seen.method, 'POST');
+  assert.equal(seen.body, undefined);
+  assert.equal(seen.formData.get('clientRequestId'), requestId);
+  assert.equal(seen.formData.get('file').name, '线段.pdf');
+  const listed = await api.listFiles(setId);
+  assert.equal(listed[1].status, 'no_extractable_text');
+  assert.equal(listed[1].materialId, null);
+  const huge = new File([new Uint8Array(8 * 1024 * 1024 + 1)], 'big.pdf');
+  await assert.rejects(api.uploadPdf(setId, huge, requestId), error => error instanceof AuthApiError && error.status === 413);
+  await assert.rejects(api.uploadPdf(setId, new File([], 'empty.pdf'), requestId), error => error instanceof AuthApiError && error.status === 400);
+});
+
 test('cancellation is preserved and late cancelled responses are not accepted', async () => {
   const cancelled = new AbortController();
   cancelled.abort();

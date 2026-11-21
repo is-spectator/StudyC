@@ -1,6 +1,10 @@
 export interface RequestOptions {
   method?: string;
   body?: unknown;
+  /** Multipart upload. Do not also set body; the browser supplies the boundary. */
+  formData?: FormData;
+  /** Return the response body as a Blob instead of JSON. Errors remain JSON. */
+  binary?: boolean;
   headers?: Record<string, string>;
   signal?: AbortSignal;
 }
@@ -52,17 +56,18 @@ export function sessionHeaders(session: CookieSession): Record<string, string> {
 export async function authApi<T>(path: string, options: RequestOptions = {}, fetcher: typeof fetch = fetch): Promise<T> {
   throwIfAborted(options.signal);
   if (!path.startsWith('/v1/') || path.includes('\\') || /[\r\n]/.test(path)) throw new AuthApiError('invalid_request', '请求地址无效。');
+  if (options.formData !== undefined && options.body !== undefined) throw new AuthApiError('invalid_request', '请求格式不正确。');
   const headers = new Headers(options.headers);
   if (headers.has('Authorization') || headers.has('Cookie')) throw new AuthApiError('credential_conflict', '请使用浏览器账户会话。');
-  headers.set('Accept', 'application/json');
-  if (options.body !== undefined) headers.set('Content-Type', 'application/json');
+  headers.set('Accept', options.binary ? 'application/pdf, application/json' : 'application/json');
+  if (options.formData === undefined && options.body !== undefined) headers.set('Content-Type', 'application/json');
   const service = path.startsWith('/v1/study/') ? '学习服务' : '账户服务';
   let response: Response;
   try {
     const timeout = AbortSignal.timeout(20_000);
     response = await fetcher(path, {
       method: options.method ?? 'GET', credentials: 'same-origin', cache: 'no-store', redirect: 'error', headers,
-      body: options.body === undefined ? undefined : JSON.stringify(options.body),
+      body: options.formData ?? (options.body === undefined ? undefined : JSON.stringify(options.body)),
       signal: options.signal ? AbortSignal.any([timeout, options.signal]) : timeout,
     });
   } catch (error) {
@@ -71,6 +76,11 @@ export async function authApi<T>(path: string, options: RequestOptions = {}, fet
     throw new AuthApiError('connection_lost', `暂时无法连接${service}，请检查网络后重试。`);
   }
   throwIfAborted(options.signal);
+  if (options.binary && response.ok) {
+    const blob = await response.blob();
+    throwIfAborted(options.signal);
+    return blob as T;
+  }
   let value: unknown;
   try { value = await response.json(); } catch (error) {
     if (isAbortError(error)) throw error;

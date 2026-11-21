@@ -20,6 +20,8 @@ STUDY_API_ROUTES = {
     '/v1/study/sets/{setId}': ['GET', 'PATCH'],
     '/v1/study/sets/{setId}/materials': ['GET', 'POST'],
     '/v1/study/sets/{setId}/materials/{materialId}': ['GET', 'PATCH'],
+    '/v1/study/sets/{setId}/files': ['GET', 'POST'],
+    '/v1/study/sets/{setId}/files/{fileId}/content': ['GET'],
 }
 UUID_PATTERN = r'[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[1-8][0-9A-Fa-f]{3}-[89ABab][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}'
 STUDY_API_BEGIN = '    # BEGIN StudyC authenticated data API'
@@ -61,12 +63,12 @@ def study_api_locations() -> str:
     the existing ^~ /v1 denial. Regex matching occurs inside this chosen prefix.
     The final nested regex rejects every unrecognized Study API path.
     """
-    def proxy_location(selector: str, methods: list[str], indent: int, material: bool = False) -> str:
+    def proxy_location(selector: str, methods: list[str], indent: int, body: str = '') -> str:
         space = ' ' * indent
         directives = [f'{space}location {selector} {{',
                       f'{space}    if ($request_method !~ ^({"|".join(methods)})$) {{ return 405; }}']
-        if material:
-            directives.append(f'{space}    client_max_body_size 2m;')
+        if body:
+            directives.append(f'{space}    client_max_body_size {body};')
         directives.extend(space + '    ' + line.strip() for line in STUDY_PROXY_DIRECTIVES.splitlines())
         directives.append(space + '}')
         return '\n'.join(directives)
@@ -74,12 +76,14 @@ def study_api_locations() -> str:
     routes = [STUDY_API_BEGIN,
               proxy_location('= /v1/study/sets', ['GET', 'POST'], 4),
               '    location ^~ /v1/study/ {']
-    for suffix, methods, material in [('', ['GET', 'PATCH'], False),
-                                      ('/materials', ['GET', 'POST'], True),
-                                      (f'/materials/{UUID_PATTERN}', ['GET', 'PATCH'], True)]:
+    for suffix, methods, body in [('', ['GET', 'PATCH'], ''),
+                                   ('/materials', ['GET', 'POST'], '2m'),
+                                   (f'/materials/{UUID_PATTERN}', ['GET', 'PATCH'], '2m'),
+                                   ('/files', ['GET', 'POST'], '8m'),
+                                   (f'/files/{UUID_PATTERN}/content', ['GET'], '')]:
         pattern = f'^/v1/study/sets/{UUID_PATTERN}{suffix}$'
         # Quoting keeps the repetition braces part of the regex, not Nginx blocks.
-        routes.append(proxy_location(f'~ "{pattern}"', methods, 8, material))
+        routes.append(proxy_location(f'~ "{pattern}"', methods, 8, body))
     routes.extend(['        location ~ ^/v1/study/ { return 404; }', '    }', STUDY_API_END])
     return '\n'.join(routes)
 
