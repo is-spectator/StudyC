@@ -30,6 +30,8 @@ PrivateTmp=true
 PrivateDevices=true
 ProtectSystem=strict
 ProtectHome=true
+# Original PDFs live only here. systemd creates the directory for the service user.
+StateDirectory=studyc
 ProtectKernelTunables=true
 ProtectKernelModules=true
 ProtectKernelLogs=true

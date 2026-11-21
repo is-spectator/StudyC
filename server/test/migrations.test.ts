@@ -12,8 +12,9 @@ describe('independent StudyC migration registry', () => {
     try {
       const before = await db.query('SELECT id,deleted_at,created_at FROM users');
       await migrate(db); await migrate(db); await checkMigrations(db);
-      expect(await db.query('SELECT version,name,adopted FROM studyc_schema_migrations')).toEqual([
+      expect(await db.query('SELECT version,name,adopted FROM studyc_schema_migrations ORDER BY version')).toEqual([
         { version: 1, name: 'studyc_sets_and_text_materials', adopted: false },
+        { version: 2, name: 'studyc_source_files', adopted: false },
       ]);
       expect(await db.query('SELECT id,deleted_at,created_at FROM users')).toEqual(before);
       expect(await db.query("SELECT to_regclass('schema_migrations') AS registry")).toEqual([{ registry: null }]);
@@ -34,7 +35,9 @@ describe('independent StudyC migration registry', () => {
       await migrate(db); await migrate(db); await checkMigrations(db);
       expect(await db.query('SELECT * FROM schema_migrations ORDER BY version')).toEqual(history);
       expect(await db.query('SELECT * FROM study_materials')).toEqual(notes);
-      expect(await db.query('SELECT adopted FROM studyc_schema_migrations')).toEqual([{ adopted: true }]);
+      expect(await db.query('SELECT version, adopted FROM studyc_schema_migrations ORDER BY version')).toEqual([
+        { version: 1, adopted: true }, { version: 2, adopted: false },
+      ]);
     } finally { await db.close(); }
   });
 

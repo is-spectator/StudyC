@@ -9,6 +9,19 @@ export interface UpdateStudySetInput { version: number; title: string }
 export interface CreateTextMaterialInput extends CreateStudySetInput { body: string }
 export interface UpdateTextMaterialInput { version: number; title?: string; body?: string }
 export type StudyRequest = <T>(path: string, options?: RequestOptions) => Promise<T>;
+export type SourceFileStatus = 'ready' | 'no_extractable_text' | 'encrypted_pdf' | 'invalid_pdf' | 'text_too_large' | 'too_many_pages';
+export interface SourceFile {
+  id: string;
+  studySetId: string;
+  materialId: string | null;
+  displayName: string;
+  byteSize: number;
+  status: SourceFileStatus;
+  pageCount: number;
+  pages: { page: number; start: number; end: number }[];
+  createdAt: string;
+  updatedAt: string;
+}
 
 export const STUDY_TITLE_MAX = 60;
 export const MATERIAL_TITLE_MAX = 120;
@@ -85,7 +98,7 @@ function parseMaterial(value: unknown, setId: string, materialId?: string): Text
   return { ...base, body: value.body };
 }
 
-function unwrap(value: unknown, key: 'studySet' | 'material'): unknown {
+function unwrap(value: unknown, key: 'studySet' | 'material' | 'file'): unknown {
   if (!record(value) || !(key in value)) throw invalidResponse();
   return value[key];
 }
@@ -150,6 +163,54 @@ export function createStudyApi(request: StudyRequest) {
         ...(input.body === undefined ? {} : { body: validateTextBody(input.body) }) };
       return parseMaterial(unwrap(await send(`/v1/study/sets/${target}/materials/${material}`, { method: 'PATCH', body, signal }), 'material'), target, material);
     },
+    async listFiles(setId: string, signal?: AbortSignal): Promise<SourceFile[]> {
+      const target = id(setId);
+      const value = await send(`/v1/study/sets/${target}/files`, { signal });
+      if (!record(value) || !Array.isArray(value.items) || value.items.length > 100) throw invalidResponse();
+      return value.items.map(item => parseSourceFile(item, target));
+    },
+    async uploadPdf(setId: string, file: File, clientRequestId: string, signal?: AbortSignal): Promise<SourceFile> {
+      const target = id(setId);
+      if (!(file instanceof File) || file.size <= 0) throw invalidInput('请选择一个 PDF 文件。');
+      if (file.size > 8 * 1024 * 1024) throw new AuthApiError('payload_too_large', 'PDF 不能超过 8 MiB，这次没有保存。', 413);
+      const formData = new FormData();
+      formData.set('clientRequestId', id(clientRequestId));
+      formData.set('file', file, file.name);
+      const value = await send(`/v1/study/sets/${target}/files`, { method: 'POST', formData, signal });
+      return parseSourceFile(unwrap(value, 'file'), target);
+    },
+    async downloadPdf(setId: string, fileId: string, signal?: AbortSignal): Promise<Blob> {
+      const target = id(setId);
+      const source = id(fileId);
+      const blob = await request(`/v1/study/sets/${target}/files/${source}/content`, { binary: true, signal });
+      if (!(blob instanceof Blob)) throw invalidResponse();
+      return blob;
+    },
+  };
+}
+
+const sourceStatuses = new Set(['ready', 'no_extractable_text', 'encrypted_pdf', 'invalid_pdf', 'text_too_large', 'too_many_pages']);
+
+function parseSourceFile(value: unknown, setId: string): SourceFile {
+  if (!record(value) || typeof value.id !== 'string' || !uuid.test(value.id)
+    || typeof value.studySetId !== 'string' || value.studySetId.toLowerCase() !== setId
+    || (value.materialId !== null && (typeof value.materialId !== 'string' || !uuid.test(value.materialId)))
+    || typeof value.displayName !== 'string' || !value.displayName || value.displayName.includes('/') || value.displayName.includes('\\')
+    || typeof value.byteSize !== 'number' || !Number.isInteger(value.byteSize) || value.byteSize < 1 || value.byteSize > 8 * 1024 * 1024
+    || typeof value.status !== 'string' || !sourceStatuses.has(value.status)
+    || (value.status === 'ready') !== (value.materialId !== null)
+    || typeof value.pageCount !== 'number' || !Number.isInteger(value.pageCount) || value.pageCount < 0 || value.pageCount > 30
+    || !Array.isArray(value.pages) || value.pages.length > 30
+    || !timestamp(value.createdAt) || !timestamp(value.updatedAt)) throw invalidResponse();
+  const pages = value.pages.map(page => {
+    if (!record(page) || typeof page.page !== 'number' || typeof page.start !== 'number' || typeof page.end !== 'number') throw invalidResponse();
+    return { page: page.page, start: page.start, end: page.end };
+  });
+  return {
+    id: value.id.toLowerCase(), studySetId: setId,
+    materialId: value.materialId === null ? null : value.materialId.toLowerCase(),
+    displayName: value.displayName, byteSize: value.byteSize, status: value.status as SourceFile['status'],
+    pageCount: value.pageCount, pages, createdAt: value.createdAt, updatedAt: value.updatedAt,
   };
 }
 

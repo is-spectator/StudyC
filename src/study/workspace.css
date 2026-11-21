@@ -81,6 +81,18 @@
 .cloud-material-list small { color: #938d80; font-size: 11px; }
 .cloud-material-list > a > svg { color: #a59d8a; }
 .cloud-material-icon { width: 41px; height: 45px; border-radius: 9px; background: #f4efdc; display: grid; place-items: center; color: #a79148; flex-shrink: 0; }
+.cloud-pdf-section { margin-top: 22px; padding-top: 18px; border-top: 1px solid #ece8dc; }
+.cloud-pdf-section .section-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.cloud-pdf-section h2 { display: flex; align-items: center; gap: 8px; margin: 0; font-size: 16px; }
+.cloud-pdf-input { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+.cloud-pdf-note { color: #7d776c; font-size: 12px; line-height: 1.7; margin: 8px 0; }
+.cloud-pdf-error { color: #9a4034; font-size: 13px; margin: 8px 0; }
+.cloud-pdf-list { display: grid; gap: 8px; }
+.cloud-pdf-item { display: flex; align-items: center; gap: 10px; padding: 12px; border: 1px solid #e8e5da; border-radius: 12px; background: white; }
+.cloud-pdf-item strong { display: block; font-size: 13px; overflow-wrap: anywhere; }
+.cloud-pdf-item small { color: #7d776c; font-size: 11px; }
+.cloud-pdf-item.is-ready small { color: #5d7344; }
+.cloud-pdf-item span { flex: 1; min-width: 0; }
 .cloud-tools-preview { margin-top: 28px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
 .cloud-tools-preview > div { display: flex; align-items: center; gap: 12px; padding: 18px; border-radius: 15px; background: #efeee6; color: #858175; }
 .cloud-tools-preview > div > svg { width: 23px; height: 23px; stroke-width: 1.3; }

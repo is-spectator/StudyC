@@ -4,12 +4,16 @@ import type { Db } from '../db/db.js';
 import { SharedRateLimiter } from '../runtime/rate-limit.js';
 import { DomainError } from '../services/errors.js';
 import { StudyError, StudyInputError } from '../services/study-data.js';
+import { StudyFileError } from '../services/study-files.js';
 import { requireStudySession, SessionError, type StudyEnv } from './auth.js';
+import { registerFileRoutes } from './files.js';
 import { registerStudyRoutes } from './study.js';
 
 export interface AppOptions {
   releaseId: string;
   rateLimitSecret: Uint8Array;
+  /** Absolute private directory for original PDFs. File routes stay unmounted without it. */
+  fileRoot?: string;
   /** Test transport injection only; the destination remains a fixed loopback URL. */
   sessionFetch?: typeof fetch;
 }
@@ -54,6 +58,10 @@ export function createApp(db: Db, options: AppOptions) {
   });
   app.onError((error, c) => {
     if (error instanceof StudyInputError) return c.json({ error: { code: 'invalid_input', message: error.message } }, 400);
+    if (error instanceof StudyFileError) {
+      const status = error.code === 'parse_timeout' ? 503 : error.code === 'text_too_large' ? 413 : 422;
+      return c.json({ error: { code: error.code, message: error.message } }, status);
+    }
     if (error instanceof DomainError || error instanceof StudyError || error instanceof SessionError) {
       return c.json({ error: { code: error.code, message: error.message, details: error.details } }, statuses[error.code]);
     }
@@ -69,14 +77,18 @@ export function createApp(db: Db, options: AppOptions) {
   });
   app.use('/v1/study/*', requireStudySession(options.sessionFetch));
   app.use('/v1/study/*', async (c, next) => {
-    const collection = /^\/v1\/study\/sets(?:\/[^/]+\/materials)?$/.test(c.req.path);
-    const detail = /^\/v1\/study\/sets\/[^/]+(?:\/materials\/[^/]+)?$/.test(c.req.path);
-    if ((collection && !['GET', 'POST'].includes(c.req.method)) || (detail && !['GET', 'PATCH'].includes(c.req.method))) {
+    const path = c.req.path;
+    const collection = /^\/v1\/study\/sets(?:\/[^/]+\/(?:materials|files))?$/.test(path);
+    const detail = /^\/v1\/study\/sets\/[^/]+\/materials\/[^/]+$/.test(path);
+    const setDetail = /^\/v1\/study\/sets\/[^/]+$/.test(path);
+    const fileRead = /^\/v1\/study\/sets\/[^/]+\/files\/[^/]+\/content$/.test(path);
+    if ((collection && !['GET', 'POST'].includes(c.req.method)) || ((detail || setDetail) && !['GET', 'PATCH'].includes(c.req.method)) || (fileRead && c.req.method !== 'GET')) {
       return c.json({ error: { code: 'method_not_allowed', message: '此接口不支持该请求方法。' } }, 405);
     }
     await next();
   });
   registerStudyRoutes(app, db, limits);
+  if (options.fileRoot) registerFileRoutes(app, db, limits, options.fileRoot);
   // No PlanPlan or account-management routes are mounted.
   app.notFound(c => c.json({ error: { code: 'not_found', message: '没有找到该接口。' } }, 404));
   return app;

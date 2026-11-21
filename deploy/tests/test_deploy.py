@@ -123,10 +123,11 @@ class ReleaseChecks(unittest.TestCase):
                     self.assertIn('proxy_pass http://127.0.0.1:8789;', auth_location)
                     self.assertNotIn('127.0.0.1:8790', auth_location)
                 self.assertEqual(text.count('proxy_pass http://127.0.0.1:8789;'), len(renderer.AUTH_METHODS))
-                self.assertEqual(text.count('proxy_pass http://127.0.0.1:8790;'), 4 if enabled else 0)
+                self.assertEqual(text.count('proxy_pass http://127.0.0.1:8790;'), 6 if enabled else 0)
                 if enabled:
                     self.assertEqual(text.count('client_max_body_size 2m;'), 2)
-                    self.assertEqual(sum(len(methods) for methods in review['studyApiRoutes'].values()), 8)
+                    self.assertEqual(text.count('client_max_body_size 8256k;'), 1)
+                    self.assertEqual(sum(len(methods) for methods in review['studyApiRoutes'].values()), 11)
                 planplan = (output / 'clyna-planplan-alias.conf').read_bytes()
                 self.assertIn(b'proxy_pass http://127.0.0.1:8789;', planplan)
                 self.assertNotIn(b'127.0.0.1:8790', planplan)
@@ -139,10 +140,10 @@ class ReleaseChecks(unittest.TestCase):
         self.assertIn('location ^~ /v1/study/ {', locations)
         self.assertIn('location ~ ^/v1/study/ { return 404; }', locations)
         patterns = re.findall(r'location ~ "([^"]+)"', locations)
-        self.assertEqual(len(patterns), 3)
+        self.assertEqual(len(patterns), 5)
         uuid = '3f623e5a-1111-4111-8111-111111111111'
         base = '/v1/study/sets/' + uuid
-        valid = [base, base + '/materials', base + '/materials/' + uuid.upper()]
+        valid = [base, base + '/materials', base + '/materials/' + uuid.upper(), base + '/files', base + '/files/' + uuid + '/content']
         for index, path in enumerate(valid):
             self.assertEqual([i for i, pattern in enumerate(patterns) if re.fullmatch(pattern, path)], [index])
         for path in [base + '/', base + '/materials/', base + '/materials/' + uuid + '/extra',
@@ -150,18 +151,21 @@ class ReleaseChecks(unittest.TestCase):
                      '/v1/study/sets/' + uuid + 'f', '/v1/study/templates', '/v1/templates',
                      '/v1/study/sets/' + uuid.replace('-', ''), '/v1/study/sets/' + uuid.replace('3', 'g'),
                      '/v1/study/sets/' + uuid.replace('-4111-', '-0111-'),
-                     '/v1/study/sets/' + uuid.replace('-8111-', '-7111-')]:
+                     '/v1/study/sets/' + uuid.replace('-8111-', '-7111-'),
+                     base + '/files/' + uuid, base + '/files/content']:
             self.assertFalse(any(re.fullmatch(pattern, path) for pattern in patterns), path)
-        self.assertEqual(locations.count('if ($request_method !~ ^(GET|POST)$) { return 405; }'), 2)
+        self.assertEqual(locations.count('if ($request_method !~ ^(GET|POST)$) { return 405; }'), 3)
         self.assertEqual(locations.count('if ($request_method !~ ^(GET|PATCH)$) { return 405; }'), 2)
-        self.assertEqual(locations.count('proxy_pass http://127.0.0.1:8790;'), 4)
+        self.assertEqual(locations.count('if ($request_method !~ ^(GET)$) { return 405; }'), 1)
+        self.assertEqual(locations.count('proxy_pass http://127.0.0.1:8790;'), 6)
+        self.assertEqual(locations.count('client_max_body_size 8256k;'), 1)
         self.assertNotIn('127.0.0.1:8789', locations)
         for directive in ['proxy_set_header Host $http_host;', 'proxy_set_header Origin $http_origin;',
                           'proxy_set_header X-CSRF-Token $http_x_csrf_token;',
                           'proxy_set_header X-PlanPlan-Expected-User $http_x_planplan_expected_user;',
                           'proxy_cache off;', 'proxy_no_cache 1;', 'proxy_next_upstream off;',
                           'proxy_hide_header Cache-Control;']:
-            self.assertEqual(locations.count(directive), 4)
+            self.assertEqual(locations.count(directive), 6)
 
     def test_study_api_surgical_insertion_preserves_existing_config_and_guards_duplicates(self):
         original = '''server { server_name study.clyna.ai; }
@@ -197,6 +201,7 @@ server {
         self.assertEqual(service['MemoryMax'], '512M')
         self.assertEqual(service['MemorySwapMax'], '0')
         self.assertEqual(service['ProtectSystem'], 'strict')
+        self.assertEqual(service['StateDirectory'], 'studyc')
         self.assertEqual(service['NoNewPrivileges'], 'true')
         self.assertEqual(service['InaccessiblePaths'], '/etc/planplan-web')
         self.assertEqual(service['LimitCORE'], '0')

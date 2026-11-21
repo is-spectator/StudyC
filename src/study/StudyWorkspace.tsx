@@ -4,6 +4,7 @@ import { useAuth } from '../auth/AuthProvider';
 import { appStorage, captureStorageSession } from '../lib/account-storage';
 import { createStudyApi, validateStudyTitle, type MaterialSummary, type StudySet, type TextMaterial } from './api';
 import MaterialEditor from './MaterialEditor';
+import PdfUpload from './PdfUpload';
 import { confirmStudyLeave, useStudyNavigation } from './navigation';
 import { materialPath, parseStudyRoute, studySetPath } from './routes';
 import '../app.css';
@@ -180,6 +181,7 @@ export default function StudyWorkspace() {
             {materials.loaded && !materials.items.length ? <div className="cloud-material-empty"><FileText size={29} /><h3>这里还没有资料</h3><p>写下笔记，或粘贴一段想学习的内容。</p><button className="btn" onClick={() => go(materialPath(route.studySetId))}>添加第一份文本资料<ArrowRight size={16} /></button></div> : null}
             <div className="cloud-material-list">{materials.items.map(item => <a key={item.id} data-material-id={item.id} href={materialPath(route.studySetId, item.id)} onClick={event => followLink(event, go, materialPath(route.studySetId, item.id))}><span className="cloud-material-icon"><FileText size={21} /></span><span><strong>{item.title}</strong><small>纯文本 · 更新于 {formatDate(item.updatedAt)}</small></span><ChevronRight size={17} /></a>)}</div>
             {materials.nextCursor ? <div className="cloud-load-more"><button className="btn" disabled={materials.loadingMore} onClick={() => void materials.loadMore()}>{materials.loadingMore ? '正在加载…' : '加载更多资料'}</button></div> : null}
+            <PdfUpload api={api} studySetId={route.studySetId} onExtracted={materials.reload} />
           </section>
           <section className="cloud-tools-preview"><div><MessageCircle /><span>资料问答<small>尚未开放</small></span></div><div><Layers /><span>闪卡与练习<small>尚未开放</small></span></div><div><Route /><span>学习计划<small>尚未开放</small></span></div></section>
         </div> : null}
