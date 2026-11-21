@@ -1,6 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useRef, useState, type ReactNode } from 'react';
 import { authApi, AuthApiError, isUserId, parseSession, parseUser, sessionHeaders, type AccountUser, type CodeResponse, type CookieSession, type RequestOptions } from './api';
-import type { AuthState, AuthStatus } from './session-state';
+import { invalidIdentity, requestWithSession, type AuthState, type AuthStatus } from './session-state';
 
 export const previewAvailable = import.meta.env.DEV && !import.meta.env.PROD;
 type AuthContextValue = AuthState & {
@@ -17,7 +17,6 @@ type AuthContextValue = AuthState & {
 const AuthContext = createContext<AuthContextValue | null>(null);
 const initialPreview = previewAvailable && import.meta.env.VITE_AUTH_MODE === 'preview';
 const messageOf = (error: unknown) => error instanceof Error ? error.message : '账户请求未完成，请重试。';
-const invalidIdentity = (error: unknown) => error instanceof AuthApiError && (error.status === 401 || error.code === 'account_mismatch');
 
 async function withSessionLock<T>(task: () => Promise<T>): Promise<T> {
   if (navigator.locks) return navigator.locks.request('planplan-browser-session', task);
@@ -111,21 +110,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [clear, lock, readSession]);
 
   const request = useCallback(async <T,>(path: string, options: RequestOptions = {}): Promise<T> => {
-    const current = session.current;
-    const started = epoch.current;
-    if (!current || preview.current) throw new AuthApiError('unauthorized', '请先登录。', 401);
-    try {
-      const result = await authApi<T>(path, { ...options, headers: { ...options.headers, ...sessionHeaders(current) } });
-      if (epoch.current !== started || session.current?.userId !== current.userId) throw new AuthApiError('account_mismatch', '账户已切换，请重新核对。', 409);
-      return result;
-    } catch (error) {
-      if (epoch.current === started) {
-        if (invalidIdentity(error)) clear('anonymous', messageOf(error));
-        else if (error instanceof AuthApiError && (error.code === 'connection_lost' || error.status >= 500)) lock('unavailable', messageOf(error));
-      }
-      throw error;
-    }
-  }, [clear, lock]);
+    return requestWithSession<T>(path, options, {
+      session, epoch, preview, mounted,
+      clearIdentity: message => clear('anonymous', message),
+      reverify: expectedUserId => {
+        // Preserve the keyed account subtree and its drafts while refreshing
+        // CSRF. Never automatically replay a write whose outcome is unknown.
+        lock('verifying');
+        void readSession(expectedUserId);
+      },
+    });
+  }, [clear, lock, readSession]);
 
   async function authenticate(body: Record<string, string>) {
     if (mutation.current) throw new AuthApiError('busy', '请等待当前账户操作完成。');

@@ -16,6 +16,14 @@ export class AuthApiError extends Error {
   }
 }
 
+export function isAbortError(error: unknown): error is Error {
+  return error instanceof Error && error.name === 'AbortError';
+}
+
+export function throwIfAborted(signal?: AbortSignal): void {
+  if (signal?.aborted) throw isAbortError(signal.reason) ? signal.reason : new DOMException('请求已取消。', 'AbortError');
+}
+
 export interface CookieSession { userId: string; csrfToken: string }
 export interface AccountUser { id: string; signInMethod?: string; aiConsent?: boolean; roles?: string[] }
 export interface CodeResponse { challengeId: string; expiresIn: number; retryAfter: number; message: string }
@@ -42,11 +50,13 @@ export function sessionHeaders(session: CookieSession): Record<string, string> {
 
 /** Credentials never enter JavaScript storage. Only same-origin API URLs are accepted. */
 export async function authApi<T>(path: string, options: RequestOptions = {}, fetcher: typeof fetch = fetch): Promise<T> {
+  throwIfAborted(options.signal);
   if (!path.startsWith('/v1/') || path.includes('\\') || /[\r\n]/.test(path)) throw new AuthApiError('invalid_request', '请求地址无效。');
   const headers = new Headers(options.headers);
   if (headers.has('Authorization') || headers.has('Cookie')) throw new AuthApiError('credential_conflict', '请使用浏览器账户会话。');
   headers.set('Accept', 'application/json');
   if (options.body !== undefined) headers.set('Content-Type', 'application/json');
+  const service = path.startsWith('/v1/study/') ? '学习服务' : '账户服务';
   let response: Response;
   try {
     const timeout = AbortSignal.timeout(20_000);
@@ -55,11 +65,19 @@ export async function authApi<T>(path: string, options: RequestOptions = {}, fet
       body: options.body === undefined ? undefined : JSON.stringify(options.body),
       signal: options.signal ? AbortSignal.any([timeout, options.signal]) : timeout,
     });
-  } catch {
-    throw new AuthApiError('connection_lost', '暂时无法连接账户服务，请检查网络后重试。');
+  } catch (error) {
+    if (isAbortError(error)) throw error;
+    throwIfAborted(options.signal);
+    throw new AuthApiError('connection_lost', `暂时无法连接${service}，请检查网络后重试。`);
   }
+  throwIfAborted(options.signal);
   let value: unknown;
-  try { value = await response.json(); } catch { throw new AuthApiError('invalid_response', '账户服务暂时没有返回有效回复，请稍后重试。', response.status); }
+  try { value = await response.json(); } catch (error) {
+    if (isAbortError(error)) throw error;
+    throwIfAborted(options.signal);
+    throw new AuthApiError('invalid_response', `${service}暂时没有返回有效回复，请稍后重试。`, response.status);
+  }
+  throwIfAborted(options.signal);
   if (!response.ok) {
     const error = (value as { error?: { code?: unknown; message?: unknown } } | null)?.error;
     throw new AuthApiError(typeof error?.code === 'string' ? error.code : 'request_failed', typeof error?.message === 'string' ? error.message : '这次请求未完成，请重试。', response.status);
