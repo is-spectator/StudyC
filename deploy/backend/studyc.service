@@ -1,0 +1,47 @@
+[Unit]
+Description=StudyC independent data API
+Wants=network-online.target
+After=network-online.target
+StartLimitIntervalSec=60
+StartLimitBurst=3
+
+[Service]
+Type=simple
+User=studyc
+Group=studyc
+WorkingDirectory=/opt/studyc-api/current/server
+Environment=NODE_ENV=production
+Environment=PORT=8790
+EnvironmentFile=/etc/studyc/runtime.env
+ExecStartPre=/usr/bin/node-24 dist/main.js check
+ExecStart=/usr/bin/node-24 dist/main.js
+Restart=on-failure
+RestartSec=3
+TimeoutStartSec=30
+TimeoutStopSec=30
+UMask=0077
+LimitCORE=0
+MemoryHigh=384M
+MemoryMax=512M
+MemorySwapMax=0
+TasksMax=64
+NoNewPrivileges=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectSystem=strict
+ProtectHome=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectKernelLogs=true
+ProtectControlGroups=true
+LockPersonality=true
+RestrictSUIDSGID=true
+RestrictRealtime=true
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+CapabilityBoundingSet=
+AmbientCapabilities=
+# Shared accounts are accessed only through loopback HTTP, never secret files.
+InaccessiblePaths=/etc/planplan-web
+
+[Install]
+WantedBy=multi-user.target

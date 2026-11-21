@@ -1,5 +1,6 @@
 """Offline deployment safety checks, using synthetic files only."""
 import argparse
+import configparser
 from contextlib import redirect_stdout
 import importlib.util
 import io
@@ -108,14 +109,28 @@ class ReleaseChecks(unittest.TestCase):
                 review = json.loads((output / 'review.json').read_text())
                 self.assertEqual(review['studyApiEnabled'], enabled)
                 self.assertEqual(review['studyApiRoutes'], renderer.STUDY_API_ROUTES if enabled else {})
+                self.assertEqual(review['authUpstream'], '127.0.0.1:8789')
+                self.assertEqual(review['studyApiUpstream'], '127.0.0.1:8790' if enabled else None)
                 self.assertEqual(renderer.STUDY_API_BEGIN in text, enabled)
                 self.assertIn('client_max_body_size 16k;', text)
                 self.assertIn('location ^~ /v1 { return 404; }', text)
                 self.assertNotIn('@STUDY_API_LOCATIONS@', text)
+                # Each exact authentication route keeps the account service;
+                # enabling business routes must not change its upstream.
+                for path, method in renderer.AUTH_METHODS.items():
+                    auth_location = re.search(r'location = ' + re.escape(path) + r' \{\n(.*?)\n    \}', text, re.S).group(1)
+                    self.assertIn(f'if ($request_method != {method}) {{ return 405; }}', auth_location)
+                    self.assertIn('proxy_pass http://127.0.0.1:8789;', auth_location)
+                    self.assertNotIn('127.0.0.1:8790', auth_location)
+                self.assertEqual(text.count('proxy_pass http://127.0.0.1:8789;'), len(renderer.AUTH_METHODS))
+                self.assertEqual(text.count('proxy_pass http://127.0.0.1:8790;'), 4 if enabled else 0)
                 if enabled:
                     self.assertEqual(text.count('client_max_body_size 2m;'), 2)
                     self.assertEqual(sum(len(methods) for methods in review['studyApiRoutes'].values()), 8)
-                outputs.append((output / 'clyna-planplan-alias.conf').read_bytes())
+                planplan = (output / 'clyna-planplan-alias.conf').read_bytes()
+                self.assertIn(b'proxy_pass http://127.0.0.1:8789;', planplan)
+                self.assertNotIn(b'127.0.0.1:8790', planplan)
+                outputs.append(planplan)
             self.assertEqual(outputs[0], outputs[1])
 
     def test_study_api_nested_routes_are_anchored_and_methods_and_headers_are_preserved(self):
@@ -139,7 +154,8 @@ class ReleaseChecks(unittest.TestCase):
             self.assertFalse(any(re.fullmatch(pattern, path) for pattern in patterns), path)
         self.assertEqual(locations.count('if ($request_method !~ ^(GET|POST)$) { return 405; }'), 2)
         self.assertEqual(locations.count('if ($request_method !~ ^(GET|PATCH)$) { return 405; }'), 2)
-        self.assertEqual(locations.count('proxy_pass http://127.0.0.1:8789;'), 4)
+        self.assertEqual(locations.count('proxy_pass http://127.0.0.1:8790;'), 4)
+        self.assertNotIn('127.0.0.1:8789', locations)
         for directive in ['proxy_set_header Host $http_host;', 'proxy_set_header Origin $http_origin;',
                           'proxy_set_header X-CSRF-Token $http_x_csrf_token;',
                           'proxy_set_header X-PlanPlan-Expected-User $http_x_planplan_expected_user;',
@@ -165,6 +181,28 @@ server {
             renderer.insert_study_api_locations(original.replace('study.clyna.ai', 'clyna.ai'))
         with self.assertRaises(ValueError):
             renderer.insert_study_api_locations(original.replace('    location ^~ /v1 { return 404; }', ''))
+
+    def test_independent_backend_unit_checks_schema_and_constrains_service_resources(self):
+        # Parse the deployed template, including repeated Environment entries.
+        unit = configparser.ConfigParser(interpolation=None, strict=False)
+        unit.read(DEPLOY / 'backend/studyc.service')
+        service = unit['Service']
+        self.assertEqual(service['User'], 'studyc')
+        self.assertEqual(service['Group'], 'studyc')
+        self.assertEqual(service['WorkingDirectory'], '/opt/studyc-api/current/server')
+        self.assertEqual(service['EnvironmentFile'], '/etc/studyc/runtime.env')
+        self.assertEqual(service['ExecStartPre'], '/usr/bin/node-24 dist/main.js check')
+        self.assertEqual(service['ExecStart'], '/usr/bin/node-24 dist/main.js')
+        self.assertEqual(service['Environment'], 'PORT=8790')
+        self.assertEqual(service['MemoryMax'], '512M')
+        self.assertEqual(service['MemorySwapMax'], '0')
+        self.assertEqual(service['ProtectSystem'], 'strict')
+        self.assertEqual(service['NoNewPrivileges'], 'true')
+        self.assertEqual(service['InaccessiblePaths'], '/etc/planplan-web')
+        self.assertEqual(service['LimitCORE'], '0')
+        self.assertEqual(unit['Install']['WantedBy'], 'multi-user.target')
+        self.assertNotIn('migrate', service['ExecStartPre'])
+        self.assertNotIn('DATABASE_URL', (DEPLOY / 'backend/studyc.service').read_text())
 
     def test_failed_activation_restores_only_owned_configs_and_symlink(self):
         with tempfile.TemporaryDirectory() as temp:

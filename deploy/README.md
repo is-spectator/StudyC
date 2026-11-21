@@ -49,6 +49,27 @@ PlanPlan 新别名沿用原站 `/v1`、`/legal`、`/healthz`、`/readyz` 的 API
 
 两站共用注册账户，但 `__Host-planplan-session` 是各自 host 的 Cookie，所以默认分别登录，不宣称跨子域免登。退出或重置密码的跨站失效语义由现有 PlanPlan 服务控制。现有注册白名单等规则继续生效，不在部署脚本中扩大权限。
 
+## StudyC 独立后端模板（待安装）
+
+`backend/studyc.service` 是 StudyC 仓库内独立后端的 systemd 模板；本地生成模板不表示服务已经安装或启用。学习业务代码、迁移和运行版本由 StudyC 管理。`render-config.py --enable-study-api` 将四组路径的八个学习接口转发至 `127.0.0.1:8790`；上述七个账号接口继续转发至 `127.0.0.1:8789`，PlanPlan 配置不变。严格 UUID 路径、方法白名单、16 KiB 默认请求上限、材料接口 2 MiB 上限以及禁止缓存、禁止上游重试的设置保持一致。未启用开关时不开放学习接口。
+
+模板使用独立系统用户和组 `studyc`，工作目录 `/opt/studyc-api/current/server`，Node 24 可执行文件 `/usr/bin/node-24`。`ExecStartPre` 执行 `dist/main.js check`，只检查数据库迁移状态；正式进程运行 `dist/main.js`，代码固定监听 `127.0.0.1`。服务的内存硬上限为 512 MiB，384 MiB 开始回收压力，不使用交换空间；最多 64 个任务，禁止 core dump。发布文件及软链接应由 root 持有，不能被 `studyc` 写入。
+
+`/etc/studyc/runtime.env` 由 root 持有、权限 `0600`，只配置以下非秘密值；`RELEASE_ID` 必须填写此次实际发布版本，端口必须与 Nginx 的 8790 一致：
+
+```dotenv
+STUDYC_SECRETS_FILE=/etc/studyc/secrets.json
+PG_CA_FILE=/etc/studyc/pg-ca.pem
+PORT=8790
+RELEASE_ID=git:实际提交SHA
+```
+
+`secrets.json` 精确包含 `DATABASE_URL` 与 `RATE_LIMIT_SECRET` 两项，不得包含 PlanPlan 的 JWT、Cookie 签名或其他认证秘密。文件可设为 `root:studyc 0640`，父目录 `/etc/studyc` 为 `root:studyc 0750`；权限仅允许 root 与服务读取。数据库 URL 只放在该私有文件中，禁止写入 unit、命令参数、Git 或日志，也不通过 URL 参数关闭 TLS。`pg-ca.pem` 是独立复制到 StudyC 目录的可信数据库 CA；连接固定验证证书。限流密钥需符合应用配置的至少 32 字节要求，并按共享写入预算契约配置；它不是账号签名密钥。
+
+认证上游由代码固定为 `http://127.0.0.1:8789/v1/auth/web/session`，不从环境读取可变 URL。StudyC 通过该只读接口确认会话；模板禁止进程读取 `/etc/planplan-web`。不得把 PlanPlan 的整份 `runtime.env`、秘密文件或用户凭据复制进 StudyC。
+
+安装前由发布流程核对独立服务账号、目录权限、TLS CA、数据库权限及迁移验收，使用迁移专用的私有 owner 配置单独执行 `dist/main.js migrate`；运行服务只使用日常业务权限，启动前检查不会自动迁移。安装 unit 后需在目标 Linux 主机执行 `systemd-analyze verify`，再由发布流程安装并启用 `studyc.service`、验证本地 `http://127.0.0.1:8790/readyz` 的 `service: "studyc"` 和准确版本，最后审核 Study 专属 Nginx 候选、执行 `nginx -t` 后再开放路由。既有静态发布脚本不负责安装此服务或执行业务迁移。
+
 ## 1. 认证完成后构建与打包
 
 每次发布先确认最终认证代码及错误提示完成，再执行以下本地命令。本轮已经完成，后续不要在没有代码变化或验证需要时重复生成候选。
