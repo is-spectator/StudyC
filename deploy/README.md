@@ -1,8 +1,8 @@
 # StudyC / PlanPlan 双域部署
 
-2026-11-20 后续 API 发布正在准备，**尚未激活**；参见 [PR-001 部署进度](release-20261120-study-api.md)。`render-config.py --enable-study-api` 可显式生成八个学习数据接口的白名单，默认仍不启用。下文的注册与静态站点发布状态是此前已完成的记录。
+2026-11-21 **StudyC 独立后端已部署并通过 112 项公网验收**；参见 [PR-001 发布结果](release-20261121-independent-backend.md)。`render-config.py --enable-study-api` 可显式生成八个学习数据接口的白名单，默认仍不启用。下文的注册与静态站点发布状态是此前已完成的记录。
 
-状态：**统一注册首页已激活。** `https://clyna.ai/` 承载 Clyna 注册，StudyC 与 PlanPlan 的注册入口均指向主站；两个产品保留各自登录/重置流程和 host-only Cookie。当前 Study 静态产物为 `8e77afb69baebb995287145bb625d7e6b4dc7f6e9dec69c18ee573fe22350371`；Clyna/PlanPlan 静态 UI 为 `0dbe9865a46c472edea6ece13598417004624e0c95b3db5a69219e15ed4358ee`，独立目录 `/opt/planplan-web-ui/current/web`。后端仍为原 `/opt/planplan-web/current` 的 `9f763547…`，数据库和运行配置未变。统一激活返回 `activated-and-probed`，备份 `/var/backups/clyna-central-registration/20261120T030319Z-e9c28888`。真实生产注册和邮件投递未在本次执行；本地模拟注册验证通过。
+状态：**统一注册首页已激活。** `https://clyna.ai/` 承载 Clyna 注册，StudyC 与 PlanPlan 的注册入口均指向主站；两个产品保留各自登录/重置流程和 host-only Cookie。当前 Study 静态产物为 `8e77afb69baebb995287145bb625d7e6b4dc7f6e9dec69c18ee573fe22350371`；Clyna/PlanPlan 静态 UI 为 `0dbe9865a46c472edea6ece13598417004624e0c95b3db5a69219e15ed4358ee`，独立目录 `/opt/planplan-web-ui/current/web`。统一注册发布时的后端为 `9f763547…`；当前账户服务为兼容包 `4692cb11…`，StudyC 业务为独立服务，详见上述 11 月 21 日记录。统一激活返回 `activated-and-probed`，备份 `/var/backups/clyna-central-registration/20261120T030319Z-e9c28888`。真实生产注册和邮件投递未在本次执行；本地模拟注册验证通过。
 
 本次只把注册变更应用到核对过的线上 PlanPlan 源快照，未部署本地 main 中其他尚未上线的功能。保留 58 个原公开哈希资源，供已打开页面继续加载。新增 `activate-central-registration.py` 用于本次双前端切换，默认只检查，显式 `--apply` 才修改；包含三配置摘要/旧链接守卫、备份、语法检查、严格 TLS 探针与失败回滚。首次迁移专用脚本不能原样重跑（当前根目录已迁移）。后续仅更新 Study 时，先用下面的新静态根重新渲染配置，再核对当前配置摘要，不能复用历史候选。
 
@@ -17,7 +17,7 @@
 | 主机 | `8.211.187.188`，既有服务器 |
 | StudyC | `study.clyna.ai`，静态目录 `/opt/clyna-study/releases/<静态产物SHA256>/web`，`/opt/clyna-study/current` 软链接 |
 | PlanPlan 新别名 | `planplan.clyna.ai`，静态使用 `/opt/planplan-web-ui/current/web`，API 沿用 `127.0.0.1:8789` |
-| 主站 | `clyna.ai` 首页统一注册；`www.clyna.ai` 继续跳转主域。旧 PlanPlan 应用路由继续可用，静态根改为上述 UI 目录；API 后端 `9f763547…` 保持 |
+| 主站 | `clyna.ai` 首页统一注册；`www.clyna.ai` 继续跳转主域。旧 PlanPlan 应用路由继续可用，静态根改为上述 UI 目录；当前账户 API 后端为兼容包 `4692cb11…` |
 | 注册服务与数据库 | 复用现有 PlanPlan 网页 API 及 `planplan_web`；不使用旧 8787/PGlite，也不新建或迁移库 |
 | Nginx 配置目录 | `/etc/nginx/conf.d` |
 | 两个新域名证书 | `/etc/letsencrypt/live/clyna-products/fullchain.pem` 与 `privkey.pem`；覆盖两个新域名，有效期至 2027-02-17 |
@@ -33,7 +33,7 @@
 - `activate-release.py`：默认校验。显式 `--apply` 后才备份两个目标配置、安装配置、执行 `nginx -t`、原子切换 StudyC `current` 并 reload Nginx。仅做匿名 GET 探针，失败自动恢复两个目标配置与原 StudyC 软链接。不会修改 PlanPlan 代码、运行配置或数据库。
 - `tests/test_deploy.py`：离线合成数据测试，包括篡改/路径/符号链接拒绝、origin 合并、认证边界和激活失败回滚；不构建真实 StudyC，也不访问服务器。
 
-StudyC 只同源转发以下接口，保留 `Host`、`Origin`、Cookie、`X-CSRF-Token`、`X-PlanPlan-Expected-User`，不重写 Cookie Domain，不添加 CORS，不自动重试写请求。响应为 `no-store, private`。其余 `/v1` 返回 404，允许路径上的其他方法返回 405。
+下表列出 StudyC 的账号接口，另有下节列出的八个学习业务接口；这些接口同源转发，保留 `Host`、`Origin`、Cookie、`X-CSRF-Token`、`X-PlanPlan-Expected-User`，不重写 Cookie Domain，不添加 CORS，不自动重试写请求。响应为 `no-store, private`。其余 `/v1` 返回 404，允许路径上的其他方法返回 405。
 
 | 方法 | 路径 |
 | --- | --- |
@@ -48,6 +48,27 @@ StudyC 只同源转发以下接口，保留 `Host`、`Origin`、Cookie、`X-CSRF
 PlanPlan 新别名沿用原站 `/v1`、`/legal`、`/healthz`、`/readyz` 的 API 转发规则；这个较宽的规则**不用于 StudyC**。StudyC 条款链接使用 `https://clyna.ai/legal/terms` 和 `https://clyna.ai/legal/privacy`。
 
 两站共用注册账户，但 `__Host-planplan-session` 是各自 host 的 Cookie，所以默认分别登录，不宣称跨子域免登。退出或重置密码的跨站失效语义由现有 PlanPlan 服务控制。现有注册白名单等规则继续生效，不在部署脚本中扩大权限。
+
+## StudyC 独立后端模板（待安装）
+
+`backend/studyc.service` 是 StudyC 仓库内独立后端的 systemd 模板；模板本身不执行安装；本次实际安装及启用结果见独立后端发布记录。学习业务代码、迁移和运行版本由 StudyC 管理。`render-config.py --enable-study-api` 将四组路径的八个学习接口转发至 `127.0.0.1:8790`；上述七个账号接口继续转发至 `127.0.0.1:8789`，PlanPlan 配置不变。严格 UUID 路径、方法白名单、16 KiB 默认请求上限、材料接口 2 MiB 上限以及禁止缓存、禁止上游重试的设置保持一致。未启用开关时不开放学习接口。
+
+模板使用独立系统用户和组 `studyc`，工作目录 `/opt/studyc-api/current/server`，Node 24 可执行文件 `/usr/bin/node-24`。`ExecStartPre` 执行 `dist/main.js check`，只检查数据库迁移状态；正式进程运行 `dist/main.js`，代码固定监听 `127.0.0.1`。服务的内存硬上限为 512 MiB，384 MiB 开始回收压力，不使用交换空间；最多 64 个任务，禁止 core dump。发布文件及软链接应由 root 持有，不能被 `studyc` 写入。
+
+`/etc/studyc/runtime.env` 由 root 持有、权限 `0600`，只配置以下非秘密值；`RELEASE_ID` 必须填写此次实际发布版本，端口必须与 Nginx 的 8790 一致：
+
+```dotenv
+STUDYC_SECRETS_FILE=/etc/studyc/secrets.json
+PG_CA_FILE=/etc/studyc/pg-ca.pem
+PORT=8790
+RELEASE_ID=git:实际提交SHA
+```
+
+`secrets.json` 精确包含 `DATABASE_URL` 与 `RATE_LIMIT_SECRET` 两项，不得包含 PlanPlan 的 JWT、Cookie 签名或其他认证秘密。文件可设为 `root:studyc 0640`，父目录 `/etc/studyc` 为 `root:studyc 0750`；权限仅允许 root 与服务读取。数据库 URL 只放在该私有文件中，禁止写入 unit、命令参数、Git 或日志，也不通过 URL 参数关闭 TLS。`pg-ca.pem` 是独立复制到 StudyC 目录的可信数据库 CA；连接固定验证证书。限流密钥需符合应用配置的至少 32 字节要求，并按共享写入预算契约配置；它不是账号签名密钥。
+
+认证上游由代码固定为 `http://127.0.0.1:8789/v1/auth/web/session`，不从环境读取可变 URL。StudyC 通过该只读接口确认会话；模板禁止进程读取 `/etc/planplan-web`。不得把 PlanPlan 的整份 `runtime.env`、秘密文件或用户凭据复制进 StudyC。
+
+安装前由发布流程核对独立服务账号、目录权限、TLS CA、数据库权限及迁移验收，使用迁移专用的私有 owner 配置单独执行 `dist/main.js migrate`；运行服务只使用日常业务权限，启动前检查不会自动迁移。安装 unit 后需在目标 Linux 主机执行 `systemd-analyze verify`，再由发布流程安装并启用 `studyc.service`、验证本地 `http://127.0.0.1:8790/readyz` 的 `service: "studyc"` 和准确版本，最后审核 Study 专属 Nginx 候选、执行 `nginx -t` 后再开放路由。既有静态发布脚本不负责安装此服务或执行业务迁移。
 
 ## 1. 认证完成后构建与打包
 

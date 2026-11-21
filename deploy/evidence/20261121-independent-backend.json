@@ -1,0 +1,489 @@
+{
+  "date": "2026-11-21",
+  "deployedCommit": "9ee739a51473293a500efdc471c0bc4f5b4c70a5",
+  "sourceArchiveSha256": "f6fed90a47be1ce9d3b1585b9736d3c98eef6da765980166ec6e290cfcad7311",
+  "localTests": {
+    "passed": 134,
+    "deployTestsPassed": 23
+  },
+  "postgres": {
+    "passed": 26,
+    "skippedPGliteOnly": 1,
+    "success": true
+  },
+  "activation": {
+    "release": "9ee739a51473293a500efdc471c0bc4f5b4c70a5",
+    "startedAt": 1795229063.152514,
+    "success": true,
+    "phase": "complete",
+    "planplanPid": "306993",
+    "nginxBefore": "3322731cd6af683182987b44ec68609154030663925c71e7b56e1bca35433ab7",
+    "nginxAfter": "384d5bcdb932b6f9d1cff785a13d01c0dd3c2b302323e3fb424254f60ece6f70"
+  },
+  "online": {
+    "success": true,
+    "completedAt": "2026-11-21T02:46:55.922Z",
+    "assertionsPassed": 112,
+    "assertions": [
+      {
+        "name": "canonical-identity-release-directory",
+        "passed": true
+      },
+      {
+        "name": "activated-identity-release-matches",
+        "passed": true
+      },
+      {
+        "name": "canonical-study-release-directory",
+        "passed": true
+      },
+      {
+        "name": "activated-study-release-matches",
+        "passed": true
+      },
+      {
+        "name": "report-path-normalized",
+        "passed": true
+      },
+      {
+        "name": "private-report-directory",
+        "passed": true
+      },
+      {
+        "name": "source-release-identity",
+        "passed": true
+      },
+      {
+        "name": "runtime-release-identity",
+        "passed": true
+      },
+      {
+        "name": "clyna-baseline-readiness",
+        "passed": true
+      },
+      {
+        "name": "planplan-baseline-readiness",
+        "passed": true
+      },
+      {
+        "name": "independent-study-readiness",
+        "passed": true
+      },
+      {
+        "name": "production-mode-and-no-dev-login",
+        "passed": true
+      },
+      {
+        "name": "secure-cookie-origins",
+        "passed": true
+      },
+      {
+        "name": "expected-existing-database-and-app-role",
+        "passed": true
+      },
+      {
+        "name": "fixture-a-name-unused",
+        "passed": true
+      },
+      {
+        "name": "fixture-b-name-unused",
+        "passed": true
+      },
+      {
+        "name": "create-study-set",
+        "passed": true
+      },
+      {
+        "name": "create-study-set:private-no-store",
+        "passed": true
+      },
+      {
+        "name": "study-set-id-and-version",
+        "passed": true
+      },
+      {
+        "name": "retry-study-set",
+        "passed": true
+      },
+      {
+        "name": "retry-study-set:private-no-store",
+        "passed": true
+      },
+      {
+        "name": "retry-keeps-set-id",
+        "passed": true
+      },
+      {
+        "name": "changed-create-intent-conflict",
+        "passed": true
+      },
+      {
+        "name": "changed-create-intent-conflict:private-no-store",
+        "passed": true
+      },
+      {
+        "name": "same-title-independent-set",
+        "passed": true
+      },
+      {
+        "name": "same-title-independent-set:private-no-store",
+        "passed": true
+      },
+      {
+        "name": "distinct-set-id",
+        "passed": true
+      },
+      {
+        "name": "other-account-independent-create",
+        "passed": true
+      },
+      {
+        "name": "other-account-independent-create:private-no-store",
+        "passed": true
+      },
+      {
+        "name": "other-account-distinct-id",
+        "passed": true
+      },
+      {
+        "name": "list-own-study-sets",
+        "passed": true
+      },
+      {
+        "name": "list-own-study-sets:private-no-store",
+        "passed": true
+      },
+      {
+        "name": "alice-list-isolated",
+        "passed": true
+      },
+      {
+        "name": "list-second-account",
+        "passed": true
+      },
+      {
+        "name": "list-second-account:private-no-store",
+        "passed": true
+      },
+      {
+        "name": "bob-list-isolated",
+        "passed": true
+      },
+      {
+        "name": "get-study-set",
+        "passed": true
+      },
+      {
+        "name": "get-study-set:private-no-store",
+        "passed": true
+      },
+      {
+        "name": "rename-study-set",
+        "passed": true
+      },
+      {
+        "name": "rename-study-set:private-no-store",
+        "passed": true
+      },
+      {
+        "name": "rename-advances-version",
+        "passed": true
+      },
+      {
+        "name": "stale-set-version",
+        "passed": true
+      },
+      {
+        "name": "stale-set-version:private-no-store",
+        "passed": true
+      },
+      {
+        "name": "create-text-material",
+        "passed": true
+      },
+      {
+        "name": "create-text-material:private-no-store",
+        "passed": true
+      },
+      {
+        "name": "plain-text-preserved",
+        "passed": true
+      },
+      {
+        "name": "retry-material",
+        "passed": true
+      },
+      {
+        "name": "retry-material:private-no-store",
+        "passed": true
+      },
+      {
+        "name": "retry-keeps-material-id",
+        "passed": true
+      },
+      {
+        "name": "material-create-intent-conflict",
+        "passed": true
+      },
+      {
+        "name": "material-create-intent-conflict:private-no-store",
+        "passed": true
+      },
+      {
+        "name": "blank-note",
+        "passed": true
+      },
+      {
+        "name": "blank-note:private-no-store",
+        "passed": true
+      },
+      {
+        "name": "blank-body-preserved",
+        "passed": true
+      },
+      {
+        "name": "list-materials",
+        "passed": true
+      },
+      {
+        "name": "list-materials:private-no-store",
+        "passed": true
+      },
+      {
+        "name": "material-list-has-no-body",
+        "passed": true
+      },
+      {
+        "name": "read-material",
+        "passed": true
+      },
+      {
+        "name": "read-material:private-no-store",
+        "passed": true
+      },
+      {
+        "name": "read-text-exact",
+        "passed": true
+      },
+      {
+        "name": "update-material",
+        "passed": true
+      },
+      {
+        "name": "update-material:private-no-store",
+        "passed": true
+      },
+      {
+        "name": "update-version-and-text",
+        "passed": true
+      },
+      {
+        "name": "stale-material-version",
+        "passed": true
+      },
+      {
+        "name": "stale-material-version:private-no-store",
+        "passed": true
+      },
+      {
+        "name": "cross-account-set-read-denied",
+        "passed": true
+      },
+      {
+        "name": "cross-account-set-read-denied:private-no-store",
+        "passed": true
+      },
+      {
+        "name": "cross-account-material-list-denied",
+        "passed": true
+      },
+      {
+        "name": "cross-account-material-list-denied:private-no-store",
+        "passed": true
+      },
+      {
+        "name": "cross-account-material-read-denied",
+        "passed": true
+      },
+      {
+        "name": "cross-account-material-read-denied:private-no-store",
+        "passed": true
+      },
+      {
+        "name": "cross-account-material-write-denied",
+        "passed": true
+      },
+      {
+        "name": "cross-account-material-write-denied:private-no-store",
+        "passed": true
+      },
+      {
+        "name": "wrong-parent-denied",
+        "passed": true
+      },
+      {
+        "name": "wrong-parent-denied:private-no-store",
+        "passed": true
+      },
+      {
+        "name": "anonymous-denied",
+        "passed": true
+      },
+      {
+        "name": "anonymous-denied:private-no-store",
+        "passed": true
+      },
+      {
+        "name": "account-binding-denied",
+        "passed": true
+      },
+      {
+        "name": "account-binding-denied:private-no-store",
+        "passed": true
+      },
+      {
+        "name": "csrf-denied",
+        "passed": true
+      },
+      {
+        "name": "csrf-denied:private-no-store",
+        "passed": true
+      },
+      {
+        "name": "origin-denied",
+        "passed": true
+      },
+      {
+        "name": "origin-denied:private-no-store",
+        "passed": true
+      },
+      {
+        "name": "wrong-method-denied",
+        "passed": true
+      },
+      {
+        "name": "wrong-method-denied:private-no-store",
+        "passed": true
+      },
+      {
+        "name": "unexposed-planplan-api-denied",
+        "passed": true
+      },
+      {
+        "name": "unexposed-planplan-api-denied:private-no-store",
+        "passed": true
+      },
+      {
+        "name": "malformed-study-path-denied",
+        "passed": true
+      },
+      {
+        "name": "malformed-study-path-denied:private-no-store",
+        "passed": true
+      },
+      {
+        "name": "large-decoded-text-denied",
+        "passed": true
+      },
+      {
+        "name": "large-decoded-text-denied:private-no-store",
+        "passed": true
+      },
+      {
+        "name": "nginx-large-request-denied",
+        "passed": true
+      },
+      {
+        "name": "nginx-large-request-denied:private-no-store",
+        "passed": true
+      },
+      {
+        "name": "existing-session-bootstrap",
+        "passed": true
+      },
+      {
+        "name": "existing-session-bootstrap:private-no-store",
+        "passed": true
+      },
+      {
+        "name": "session-keeps-account",
+        "passed": true
+      },
+      {
+        "name": "restart_readiness_matches_release",
+        "passed": true
+      },
+      {
+        "name": "study-restart-keeps-planplan-main-pid",
+        "passed": true
+      },
+      {
+        "name": "same-session-read-after-service-restart",
+        "passed": true
+      },
+      {
+        "name": "same-session-read-after-service-restart:private-no-store",
+        "passed": true
+      },
+      {
+        "name": "restart-preserves-material",
+        "passed": true
+      },
+      {
+        "name": "set-read-after-service-restart",
+        "passed": true
+      },
+      {
+        "name": "set-read-after-service-restart:private-no-store",
+        "passed": true
+      },
+      {
+        "name": "restart-preserves-set",
+        "passed": true
+      },
+      {
+        "name": "clyna-readiness",
+        "passed": true
+      },
+      {
+        "name": "clyna-anonymous-session-still-protected",
+        "passed": true
+      },
+      {
+        "name": "clyna-synthetic-account-plan-api",
+        "passed": true
+      },
+      {
+        "name": "planplan-readiness",
+        "passed": true
+      },
+      {
+        "name": "planplan-anonymous-session-still-protected",
+        "passed": true
+      },
+      {
+        "name": "planplan-synthetic-account-plan-api",
+        "passed": true
+      },
+      {
+        "name": "independent-study-final-readiness",
+        "passed": true
+      },
+      {
+        "name": "planplan-process-and-release-unchanged",
+        "passed": true
+      }
+    ],
+    "cleanupStatus": "verified",
+    "cleanedAccounts": 2,
+    "restartVerified": true,
+    "planPlanMainPidBefore": 306993,
+    "planPlanMainPidAfter": 306993
+  },
+  "staticAssetsUnchanged": true,
+  "publicHosts": [
+    "study.clyna.ai",
+    "planplan.clyna.ai",
+    "clyna.ai"
+  ]
+}

@@ -48,6 +48,10 @@ PROXY_DIRECTIVES = '''        proxy_pass http://127.0.0.1:8789;
         proxy_cache_bypass 1;
         proxy_next_upstream off;
         proxy_hide_header Cache-Control;'''
+# Authentication remains with the existing account service. StudyC business
+# routes use the independent process, with the same request/cache safeguards.
+STUDY_PROXY_DIRECTIVES = PROXY_DIRECTIVES.replace(
+    'proxy_pass http://127.0.0.1:8789;', 'proxy_pass http://127.0.0.1:8790;', 1)
 
 
 def study_api_locations() -> str:
@@ -63,7 +67,7 @@ def study_api_locations() -> str:
                       f'{space}    if ($request_method !~ ^({"|".join(methods)})$) {{ return 405; }}']
         if material:
             directives.append(f'{space}    client_max_body_size 2m;')
-        directives.extend(space + '    ' + line.strip() for line in PROXY_DIRECTIVES.splitlines())
+        directives.extend(space + '    ' + line.strip() for line in STUDY_PROXY_DIRECTIVES.splitlines())
         directives.append(space + '}')
         return '\n'.join(directives)
 
@@ -141,7 +145,9 @@ def main() -> None:
         (args.output / name).write_text(text)
         (args.output / name).chmod(0o600)
     review = {'status': 'rendered-not-installed', 'domains': ['study.clyna.ai', 'planplan.clyna.ai'], 'upstream': '127.0.0.1:8789', 'studyAuthRoutes': AUTH_METHODS, 'files': {name: hashlib.sha256(text.encode()).hexdigest() for name, text in outputs.items()}, 'certificateFilesChecked': False, 'nginxSyntaxChecked': False, 'existingClynaConfigurationModified': False, 'proxyMode': 'audited-host-include' if args.trusted_proxy_include else 'direct-origin'}
-    review.update({'studyApiEnabled': args.enable_study_api,
+    review.update({'authUpstream': '127.0.0.1:8789',
+                   'studyApiUpstream': '127.0.0.1:8790' if args.enable_study_api else None,
+                   'studyApiEnabled': args.enable_study_api,
                    'studyApiRoutes': STUDY_API_ROUTES if args.enable_study_api else {},
                    'studyApiBodyLimits': {'defaultBytes': 16 * 1024, 'materialLocationBytes': 2 * 1024 * 1024} if args.enable_study_api else {}})
     (args.output / 'review.json').write_text(json.dumps(review, indent=2) + '\n')

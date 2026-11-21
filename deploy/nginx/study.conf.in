@@ -21,9 +21,11 @@ server {
 @SECURITY_HEADERS@
     add_header Cache-Control "no-store, private" always;
 
+    # Shared account service: loopback 8789, only the explicit auth allowlist.
 @AUTH_LOCATIONS@
+    # Independent StudyC API: loopback 8790, opt-in path and method allowlist.
 @STUDY_API_LOCATIONS@
-    # Only explicit auth and optionally StudyC data routes may reach the backend.
+    # Every other API path is denied before the static-site fallback.
     location ^~ /v1 { return 404; }
     location ^~ /assets/ {
         try_files $uri =404;
