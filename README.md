@@ -17,7 +17,7 @@ npm install
 npm run dev -- --host 127.0.0.1 --port 5178
 ```
 
-开发服务器和 `vite preview` 的 `/v1` 仅代理到本机验收 API `http://127.0.0.1:8786`，需自行启动受控的本地 API；它不是生产后端地址。本仓库不启动 PlanPlan 服务。生产静态页使用 Nginx 同源代理，不需要在前端填写服务器密钥或数据库连接串。
+开发服务器和 `vite preview` 将 `/v1/study/` 转发到本机独立 StudyC 8790，其他 `/v1` 转发到现有账户服务 8789；需自行启动受控联调服务。代理不会放宽 Cookie、Origin 或 CSRF。本仓库不启动 PlanPlan 服务。生产静态页使用 Nginx 同源代理，不需要在前端填写服务器密钥或数据库连接串。
 
 仅查看本地界面时，可以在开发模式显式进入预览，或运行：
 
@@ -58,13 +58,13 @@ StudyC 的学习资料与练习记录仍保存在当前浏览器的 localStorage
 
 ## 未接入的服务
 
-AI 对话、自动从资料生成卡片/试题/游戏、作业 AI 批改、语音辅导、录音转写、视频生成、支付、第三方集成、推送和学习资料云同步尚未接入。PDF/Word 解析与图片 OCR 也未实现。相关流程使用本地示例或说明当前限制，不应将原版功能名称理解为服务已经上线。
+AI 对话、自动从资料生成卡片/试题/游戏、作业 AI 批改、语音辅导、录音转写、视频生成、支付、第三方集成、推送和学习资料自动导入尚未接入。PDF/Word 解析与图片 OCR 也未实现。相关流程使用本地示例或说明当前限制，不应将原版功能名称理解为服务已经上线。
 
 题库是有限的基础学科示例，不是完整课程题库，也没有原版护理题库的专家审核或题量承诺。学习工具与互动练习展示本地功能，不包含真实社区作者、点赞数据或 3D 游戏服务。会员价格仅用于还原参考页面，选择方案不会创建订单或扣款。
 
 ## 参考与验证范围
 
-[实施路线与分期](docs/implementation-roadmap.md) 定义开发顺序；[PR-001](docs/pr-001-study-data-api.md) 的独立后端在本仓库 `server/`，见 [StudyC PR #1](https://github.com/is-spectator/StudyC/pull/1)。八个资料 API 已部署并通过 112 项公网检查；使用现有 Clyna 账户、数据库和服务器，独立服务监听 8790。前端编辑与云端保存接入仍待 PR-002，当前页面并未完成云同步。后端运行与测试见 [server/README.md](server/README.md)。
+[实施路线与分期](docs/implementation-roadmap.md) 定义开发顺序；[PR-001](docs/pr-001-study-data-api.md) 的独立后端在本仓库 `server/`，见 [StudyC PR #1](https://github.com/is-spectator/StudyC/pull/1)。八个资料 API 已部署并通过 112 项公网检查；使用现有 Clyna 账户、数据库和服务器，独立服务监听 8790。[PR-002](docs/pr-002-cloud-workspace.md) 已实现云端学习集、文本资料编辑、保存/冲突状态和本机旧数据导出，发布结果以 PR 描述为准。后端运行与测试见 [server/README.md](server/README.md)。
 
 [功能研究与开发索引](reference/STUDYFETCH_AUDIT.md) 汇总原站功能登记、实测证据、回归用例和 StudyC 实现缺口。后续功能开发先从此处读取，区分官方说明、实际操作结果和本地已实现能力。
 

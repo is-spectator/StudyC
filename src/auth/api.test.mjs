@@ -60,3 +60,25 @@ test('a mismatched /me response cannot activate another account storage scope', 
   assert.equal(parseUser({ id: userId }, userId).id, userId);
   assert.throws(() => parseUser({ id: secondId }, userId), error => error.code === 'account_mismatch');
 });
+
+test('user cancellation remains AbortError during fetch and response decoding', async () => {
+  const abort = new DOMException('synthetic cancellation', 'AbortError');
+  await assert.rejects(authApi('/v1/study/sets', {}, async () => { throw abort; }), error => error === abort);
+  await assert.rejects(authApi('/v1/study/sets', {}, async () => ({ status: 200, ok: true, json: async () => { throw abort; } })), error => error === abort);
+});
+
+test('an aborted signal prevents sending and rejects late responses from an uncancellable transport', async () => {
+  const controller = new AbortController();
+  controller.abort();
+  await assert.rejects(authApi('/v1/study/sets', { signal: controller.signal }, async () => assert.fail('must not send')), error => error.name === 'AbortError');
+  const late = new AbortController();
+  await assert.rejects(authApi('/v1/study/sets', { signal: late.signal }, async () => {
+    late.abort('navigation');
+    return json({ items: [], nextCursor: null });
+  }), error => error.name === 'AbortError' && !error.message.includes('navigation'));
+});
+
+test('timeouts and malformed business responses are explicit service errors, without transport details', async () => {
+  await assert.rejects(authApi('/v1/study/sets', {}, async () => { throw new DOMException('private detail', 'TimeoutError'); }), error => error instanceof AuthApiError && error.code === 'connection_lost' && error.message.includes('学习服务') && !error.message.includes('private detail'));
+  await assert.rejects(authApi('/v1/study/sets', {}, async () => new Response('<html>upstream failure</html>', { status: 502 })), error => error instanceof AuthApiError && error.code === 'invalid_response' && error.status === 502 && error.message.includes('学习服务'));
+});
