@@ -8,7 +8,7 @@
 
 不接入 AI、OCR、Word 或图片。扫描件、加密件、损坏文件、超过 30 页或提取文字超过 1 MiB 时，只保存失败状态，不创建正文，也不把空字符串当成解析成功。解析超时不落库，可用同一个 `clientRequestId` 重试。同一请求改了文件内容返回 `idempotency_conflict`。
 
-单文件上限 8 MiB。Nginx 只给 `POST /v1/study/sets/{id}/files` 提高到 8m，文本资料仍是 2m。
+单文件上限 8 MiB。`pageCount` 是 PDF 的总页数，空白页也计入；正文和页码区间只包含提取到文字的页。Nginx 只给 `POST /v1/study/sets/{id}/files` 放宽到 8256 KiB，用来容纳 8 MiB 文件和 64 KiB 的 multipart 开销。文本资料仍是 2m。服务进程每分钟核对磁盘：账户已经删除时立即删除该用户目录；没有对应记录的文件要过 15 分钟才删除，避免清掉尚未提交的上传。
 
 ## 迁移
 

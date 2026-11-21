@@ -1,5 +1,5 @@
 import { createHash, randomUUID } from 'node:crypto';
-import { lstat, mkdir, open, readFile, rm } from 'node:fs/promises';
+import { lstat, mkdir, open, readdir, readFile, rm } from 'node:fs/promises';
 import { isAbsolute, join, resolve, sep } from 'node:path';
 import type { Db } from '../db/db.js';
 import { DomainError } from './errors.js';
@@ -8,6 +8,10 @@ import { extractPdfText, PdfTimeoutError, type PdfFailureCode } from './pdf-text
 import { StudyError, StudyInputError } from './study-data.js';
 
 export const PDF_FILE_MAX_BYTES = 8 * 1024 * 1024;
+/** Multipart boundaries, headers, and the request id. The file itself stays within PDF_FILE_MAX_BYTES. */
+export const PDF_MULTIPART_OVERHEAD_BYTES = 64 * 1024;
+/** A crash between writing bytes and committing the row must not delete an in-flight upload. */
+export const FILE_ORPHAN_GRACE_MS = 15 * 60 * 1000;
 const uuidPattern = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
 
 export class StudyFileError extends Error {
@@ -73,11 +77,19 @@ function materialTitle(name: string): string {
   return title || 'PDF 文本';
 }
 
-function storagePath(root: string, userId: string, fileId: string): string {
-  if (!uuidPattern.test(userId) || !uuidPattern.test(fileId)) throw new Error('Invalid storage key');
+function userDirectory(root: string, userId: string): string {
+  if (!uuidPattern.test(userId)) throw new Error('Invalid storage key');
   const base = resolve(root);
-  const path = resolve(base, userId, fileId);
-  if (path !== base && !path.startsWith(base + sep)) throw new Error('Invalid storage path');
+  const path = resolve(base, userId);
+  if (!path.startsWith(base + sep)) throw new Error('Invalid storage path');
+  return path;
+}
+
+function storagePath(root: string, userId: string, fileId: string): string {
+  if (!uuidPattern.test(fileId)) throw new Error('Invalid storage key');
+  const path = resolve(userDirectory(root, userId), fileId);
+  const base = resolve(root);
+  if (!path.startsWith(base + sep)) throw new Error('Invalid storage path');
   return path;
 }
 
@@ -157,7 +169,7 @@ export async function uploadPdf(db: Db, root: string, userId: string, setId: str
         ON CONFLICT (user_id, client_request_id) DO NOTHING
         RETURNING id, study_set_id, material_id, display_name, byte_size, status, page_count, content_sha256, creation_digest, created_at, updated_at`,
       [fileId, userId, setId, materialId, requestId, digest, contentSha, displayName, archived.byteLength,
-        extracted.ok ? 'ready' : extracted.code, extracted.ok ? extracted.value.pages.length : 0]);
+        extracted.ok ? 'ready' : extracted.code, extracted.ok ? extracted.value.pageCount : 0]);
       if (row && extracted.ok) {
         for (const range of extracted.value.ranges) {
           await q.query(`INSERT INTO study_source_pages (source_file_id, user_id, page_number, char_start, char_end)
@@ -205,4 +217,35 @@ export async function readSourceFile(db: Db, root: string, userId: string, setId
     throw new DomainError('internal', '原文件暂时无法读取，请稍后重试。');
   }
   return { name: row.display_name, bytes };
+}
+
+/** Remove PDFs whose account is gone, and files left behind after a row disappeared. */
+export async function reconcileStoredFiles(db: Db, root: string, graceMs = FILE_ORPHAN_GRACE_MS): Promise<void> {
+  const base = resolveFileRoot(root);
+  const entries = await readdir(base, { withFileTypes: true }).catch((error: NodeJS.ErrnoException) => {
+    if (error.code === 'ENOENT') return [];
+    throw error;
+  });
+  for (const entry of entries) {
+    if (!uuidPattern.test(entry.name)) continue;
+    const userDir = userDirectory(base, entry.name);
+    const info = await lstat(userDir).catch(() => null);
+    if (!info) continue;
+    if (info.isSymbolicLink()) { await rm(userDir, { force: true }); continue; }
+    if (!info.isDirectory()) continue;
+    const [user] = await db.query('SELECT id FROM users WHERE id = $1 AND deleted_at IS NULL', [entry.name]);
+    if (!user) { await rm(userDir, { recursive: true, force: true }); continue; }
+    const children = await readdir(userDir, { withFileTypes: true });
+    for (const child of children) {
+      if (!uuidPattern.test(child.name)) continue;
+      const path = storagePath(base, entry.name, child.name);
+      const fileInfo = await lstat(path).catch(() => null);
+      if (!fileInfo) continue;
+      if (fileInfo.isSymbolicLink()) { await rm(path, { force: true }); continue; }
+      if (!fileInfo.isFile()) continue;
+      const [row] = await db.query('SELECT id FROM study_source_files WHERE user_id = $1 AND id = $2', [entry.name, child.name]);
+      if (row || Date.now() - fileInfo.mtimeMs < graceMs) continue;
+      await rm(path, { force: true });
+    }
+  }
 }

@@ -53,7 +53,7 @@ PlanPlan 新别名沿用原站 `/v1`、`/legal`、`/healthz`、`/readyz` 的 API
 
 ## StudyC 独立后端模板与已安装服务
 
-`backend/studyc.service` 是 StudyC 仓库内独立后端的 systemd 模板；模板本身不执行安装；本次实际安装及启用结果见独立后端发布记录。学习业务代码、迁移和运行版本由 StudyC 管理。`render-config.py --enable-study-api` 将学习集、文本资料和 PDF 文件接口转发至 `127.0.0.1:8790`；账号接口继续转发至 `127.0.0.1:8789`，PlanPlan 配置不变。严格 UUID 路径、方法白名单、16 KiB 默认请求上限、材料接口 2 MiB 上限、PDF 上传 8 MiB 上限，以及禁止缓存、禁止上游重试的设置保持一致。未启用开关时不开放学习接口。
+`backend/studyc.service` 是 StudyC 仓库内独立后端的 systemd 模板；模板本身不执行安装；本次实际安装及启用结果见独立后端发布记录。学习业务代码、迁移和运行版本由 StudyC 管理。`render-config.py --enable-study-api` 将学习集、文本资料和 PDF 文件接口转发至 `127.0.0.1:8790`；账号接口继续转发至 `127.0.0.1:8789`，PlanPlan 配置不变。严格 UUID 路径、方法白名单、16 KiB 默认请求上限、材料接口 2 MiB 上限、PDF 上传 8256 KiB 代理上限（8 MiB 文件加 64 KiB multipart 开销），以及禁止缓存、禁止上游重试的设置保持一致。未启用开关时不开放学习接口。
 
 模板使用独立系统用户和组 `studyc`，工作目录 `/opt/studyc-api/current/server`，Node 24 可执行文件 `/usr/bin/node-24`。`ExecStartPre` 执行 `dist/main.js check`，只检查数据库迁移状态；正式进程运行 `dist/main.js`，代码固定监听 `127.0.0.1`。`StateDirectory=studyc` 让进程只能把 PDF 原文件写到 `/var/lib/studyc`。服务的内存硬上限为 512 MiB，384 MiB 开始回收压力，不使用交换空间；最多 64 个任务，禁止 core dump。发布文件及软链接应由 root 持有，不能被 `studyc` 写入。
 

@@ -14,7 +14,7 @@ Node 24、pnpm 10.33.2：在本目录运行 `pnpm install --frozen-lockfile`，�
 
 共用 PostgreSQL 的 `users`、`request_rate_limits` 和已有生命周期触发器；维护 `study_sets`、`study_materials`、`study_source_files`、`study_source_pages` 和 `studyc_schema_migrations`。事务沿用账户 advisory lock，删除账户可级联清理学习资料和上传记录。共用 RATE_LIMIT_SECRET 使两个进程共享每账户写入预算，该密钥独立于 JWT 密钥。
 
-PDF 原文件只放在 `STUDYC_FILE_ROOT` 下的 `{userId}/{fileId}`，不使用用户提供的路径。单文件不超过 8 MiB、30 页，提取正文不超过 1 MiB。扫描件、加密件和损坏文件只记录失败状态，不写入空的成功正文。解析超时不落库，可用同一次 `clientRequestId` 重试。
+PDF 原文件只放在 `STUDYC_FILE_ROOT` 下的 `{userId}/{fileId}`，不使用用户提供的路径。单文件不超过 8 MiB、30 页，提取正文不超过 1 MiB。`page_count` 记录 PDF 总页数，正文只保留有文字的页。扫描件、加密件和损坏文件只记录失败状态，不写入空的成功正文。解析超时不落库，可用同一次 `clientRequestId` 重试。服务运行后每分钟清理磁盘：账户删除后移除该用户目录；没有数据库记录的文件保留 15 分钟，避免删掉尚未提交的上传。
 
 `migrate` 在现有身份数据库契约上创建 StudyC 表，或逐项校验既有列、默认值、约束、索引和触发器后登记接管。结构缺损、部分表存在、历史/指纹漂移均拒绝继续；不自动修补未知 schema，不执行 PlanPlan 迁移。
 

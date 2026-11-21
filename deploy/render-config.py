@@ -76,10 +76,11 @@ def study_api_locations() -> str:
     routes = [STUDY_API_BEGIN,
               proxy_location('= /v1/study/sets', ['GET', 'POST'], 4),
               '    location ^~ /v1/study/ {']
+    # 8256 KiB is an 8 MiB PDF plus the 64 KiB multipart overhead the service allows.
     for suffix, methods, body in [('', ['GET', 'PATCH'], ''),
                                    ('/materials', ['GET', 'POST'], '2m'),
                                    (f'/materials/{UUID_PATTERN}', ['GET', 'PATCH'], '2m'),
-                                   ('/files', ['GET', 'POST'], '8m'),
+                                   ('/files', ['GET', 'POST'], '8256k'),
                                    (f'/files/{UUID_PATTERN}/content', ['GET'], '')]:
         pattern = f'^/v1/study/sets/{UUID_PATTERN}{suffix}$'
         # Quoting keeps the repetition braces part of the regex, not Nginx blocks.

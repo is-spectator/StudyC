@@ -17,6 +17,8 @@ export class PdfTimeoutError extends Error {
 export type PdfFailureCode = 'encrypted_pdf' | 'invalid_pdf' | 'no_extractable_text' | 'too_many_pages' | 'text_too_large';
 export interface PdfPageText { number: number; text: string }
 export interface PdfExtracted {
+  /** Pages in the PDF, including pages that contributed no text. */
+  pageCount: number;
   pages: PdfPageText[];
   body: string;
   ranges: { page: number; start: number; end: number }[];
@@ -64,7 +66,7 @@ function assemble(pages: PdfPageText[]): PdfExtractResult {
     ranges.push({ page: page.number, start, end: body.length });
   }
   if (Buffer.byteLength(body, 'utf8') > PDF_TEXT_MAX_BYTES) return { ok: false, code: 'text_too_large' };
-  return { ok: true, value: { pages: readable, body, ranges } };
+  return { ok: true, value: { pageCount: pages.length, pages: readable, body, ranges } };
 }
 
 /** Text operators only. A scanned or image-only PDF is a failure, not an empty success. */

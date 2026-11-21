@@ -1,9 +1,10 @@
-import { mkdtemp, rm } from 'node:fs/promises';
+import { lstat, mkdtemp, rm, utimes, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { randomUUID } from 'node:crypto';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import { createApp } from '../src/api/app.js';
+import { reconcileStoredFiles } from '../src/services/study-files.js';
 import { openTestDb } from './database.js';
 import type { Db } from '../src/db/db.js';
 
@@ -184,5 +185,48 @@ describe('PDF upload, text extraction, and private download', () => {
     expect(hidden.status).toBe(404);
     expect(await db.query('SELECT count(*)::int AS n FROM study_materials WHERE user_id=$1', [owner])).toEqual([{ n: 0 }]);
     expect(await db.query('SELECT count(*)::int AS n FROM study_source_files WHERE user_id=$1', [owner])).toEqual([{ n: 4 }]);
+  });
+
+  it('keeps the document page count when an earlier page has no text', async () => {
+    const owner = await user();
+    const setId = await set(owner);
+    const response = await app.request(`/v1/study/sets/${setId}/files`, { method: 'POST', headers: headersFor(owner),
+      body: form(textPdf(['', 'Only second']), randomUUID(), 'mixed.pdf') });
+    expect(response.status).toBe(201);
+    const file = (await response.json()).file;
+    expect(file.pageCount).toBe(2);
+    expect(file.pages.map((page: { page: number }) => page.page)).toEqual([2]);
+    const material = await app.request(`/v1/study/sets/${setId}/materials/${file.materialId}`, { headers: headersFor(owner) });
+    const text = (await material.json()).material.body as string;
+    expect(text).toContain('[第 2 页]');
+    expect(text).toContain('Only second');
+    expect(text).not.toContain('[第 1 页]');
+  });
+
+  it('removes a deleted account directory and only aged files that have no row', async () => {
+    const owner = await user();
+    const setId = await set(owner);
+    const created = await app.request(`/v1/study/sets/${setId}/files`, { method: 'POST', headers: headersFor(owner),
+      body: form(textPdf(['Keep me']), randomUUID(), 'keep.pdf') });
+    expect(created.status).toBe(201);
+    const file = (await created.json()).file;
+    const stored = join(directory, owner, file.id);
+    expect((await lstat(stored)).isFile()).toBe(true);
+    const orphan = join(directory, owner, randomUUID());
+    await writeFile(orphan, Buffer.from('%PDF-1.4 orphan'));
+    await reconcileStoredFiles(db, directory);
+    expect((await lstat(orphan)).isFile()).toBe(true);
+    expect((await lstat(stored)).isFile()).toBe(true);
+    const old = new Date(Date.now() - 60 * 60 * 1000);
+    await utimes(orphan, old, old);
+    await reconcileStoredFiles(db, directory);
+    await expect(lstat(orphan)).rejects.toMatchObject({ code: 'ENOENT' });
+    expect((await lstat(stored)).isFile()).toBe(true);
+    await db.tx(async query => {
+      await query.query('UPDATE users SET deleted_at = now() WHERE id = $1', [owner]);
+      await query.query('DELETE FROM users WHERE id = $1', [owner]);
+    }, owner);
+    await reconcileStoredFiles(db, directory);
+    await expect(lstat(join(directory, owner))).rejects.toMatchObject({ code: 'ENOENT' });
   });
 });

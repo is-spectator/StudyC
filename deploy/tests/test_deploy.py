@@ -126,7 +126,7 @@ class ReleaseChecks(unittest.TestCase):
                 self.assertEqual(text.count('proxy_pass http://127.0.0.1:8790;'), 6 if enabled else 0)
                 if enabled:
                     self.assertEqual(text.count('client_max_body_size 2m;'), 2)
-                    self.assertEqual(text.count('client_max_body_size 8m;'), 1)
+                    self.assertEqual(text.count('client_max_body_size 8256k;'), 1)
                     self.assertEqual(sum(len(methods) for methods in review['studyApiRoutes'].values()), 11)
                 planplan = (output / 'clyna-planplan-alias.conf').read_bytes()
                 self.assertIn(b'proxy_pass http://127.0.0.1:8789;', planplan)
@@ -158,7 +158,7 @@ class ReleaseChecks(unittest.TestCase):
         self.assertEqual(locations.count('if ($request_method !~ ^(GET|PATCH)$) { return 405; }'), 2)
         self.assertEqual(locations.count('if ($request_method !~ ^(GET)$) { return 405; }'), 1)
         self.assertEqual(locations.count('proxy_pass http://127.0.0.1:8790;'), 6)
-        self.assertEqual(locations.count('client_max_body_size 8m;'), 1)
+        self.assertEqual(locations.count('client_max_body_size 8256k;'), 1)
         self.assertNotIn('127.0.0.1:8789', locations)
         for directive in ['proxy_set_header Host $http_host;', 'proxy_set_header Origin $http_origin;',
                           'proxy_set_header X-CSRF-Token $http_x_csrf_token;',

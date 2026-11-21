@@ -5,12 +5,11 @@ import type { Db } from '../db/db.js';
 import type { SharedRateLimiter } from '../runtime/rate-limit.js';
 import { StudyInputError } from '../services/study-data.js';
 import {
-  PDF_FILE_MAX_BYTES, listSourceFiles, readSourceFile, sourceFailureMessage, uploadPdf, type SourceFileRecord,
+  PDF_FILE_MAX_BYTES, PDF_MULTIPART_OVERHEAD_BYTES, listSourceFiles, readSourceFile, sourceFailureMessage, uploadPdf, type SourceFileRecord,
 } from '../services/study-files.js';
 
 type Env = { Variables: { userId: string } };
 const uuid = z.uuid().transform(value => value.toLowerCase());
-const overhead = 64 * 1024;
 
 function disposition(name: string): string {
   const ascii = name.replace(/[^\x20-\x7E]/g, '_').replace(/["\\]/g, '_');
@@ -28,7 +27,7 @@ export function registerFileRoutes(app: Hono<Env>, db: Db, limits: SharedRateLim
   const setId = (c: Context<Env>) => uuid.parse(c.req.param('setId'));
   const fileId = (c: Context<Env>) => uuid.parse(c.req.param('fileId'));
   const limit = bodyLimit({
-    maxSize: PDF_FILE_MAX_BYTES + overhead,
+    maxSize: PDF_FILE_MAX_BYTES + PDF_MULTIPART_OVERHEAD_BYTES,
     onError: c => c.json({ error: { code: 'payload_too_large', message: 'PDF 不能超过 8 MiB，这次没有保存。' } }, 413),
   });
 
