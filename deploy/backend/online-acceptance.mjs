@@ -110,6 +110,16 @@ async function planPlanMainPid() {
   if (!/^[1-9]\d*$/.test(value) || !Number.isSafeInteger(Number(value))) throw new AcceptanceFailure('planplan-main-process-running');
   return Number(value);
 }
+async function studyReadiness() {
+  if (interrupted) throw new AcceptanceFailure('operator_interrupted');
+  // Readiness is private; the StudyC public proxy exposes business/auth paths only.
+  const response = await fetch('http://127.0.0.1:8790/readyz', {
+    redirect: 'error', signal: AbortSignal.any([abort.signal, AbortSignal.timeout(5000)]),
+  });
+  let data;
+  try { data = await response.json(); } catch { /* A non-JSON probe response fails the readiness assertion. */ }
+  return { status: response.status, data };
+}
 async function waitReady(expected) {
   const deadline = Date.now() + 20_000;
   while (Date.now() < deadline) {
@@ -156,7 +166,7 @@ try {
     check(`${label}-baseline-readiness`, ready.status === 200 && ready.data?.ok === true && ready.data.release === manifest.releaseId);
     report.identityPublicReleasesBefore[label] = ready.data.release;
   }
-  const studyReady = await request(studyOrigin, '/readyz');
+  const studyReady = await studyReadiness();
   check('independent-study-readiness', studyReady.status === 200 && studyReady.data?.ok === true
     && studyReady.data.service === 'studyc' && studyReady.data.release === report.studyReleaseId);
   await saveReport();
@@ -296,7 +306,7 @@ try {
     const plans = await request(origin, '/v1/plans', alice);
     check(`${label}-synthetic-account-plan-api`, plans.status === 200 && noStore(plans.cache));
   }
-  const finalStudyReady = await request(studyOrigin, '/readyz');
+  const finalStudyReady = await studyReadiness();
   check('independent-study-final-readiness', finalStudyReady.status === 200 && finalStudyReady.data?.ok === true
     && finalStudyReady.data.service === 'studyc' && finalStudyReady.data.release === report.studyReleaseId);
 } catch (error) {

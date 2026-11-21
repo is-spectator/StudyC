@@ -1,5 +1,7 @@
 # PR-001：StudyC 独立后端与文本资料 API
 
+状态：独立后端已部署并通过 112 项公网验收，见 [StudyC PR #1](https://github.com/is-spectator/StudyC/pull/1) 和[发布记录](../deploy/release-20261121-independent-backend.md)。
+
 2026-11-21 用户确认：StudyC 业务代码、迁移、测试、部署工具及 PR 全部归 `is-spectator/StudyC`。分支 `codex/studyc-independent-backend`，基于 StudyC `248ccf9`。原 PlanPlan PR #40 的业务实现由本仓库接替，不再按共享业务进程方案发布。
 
 ## 1. 交付结果
