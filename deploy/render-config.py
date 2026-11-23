@@ -22,6 +22,11 @@ STUDY_API_ROUTES = {
     '/v1/study/sets/{setId}/materials/{materialId}': ['GET', 'PATCH'],
     '/v1/study/sets/{setId}/files': ['GET', 'POST'],
     '/v1/study/sets/{setId}/files/{fileId}/content': ['GET'],
+    '/v1/study/sets/{setId}/generations': ['GET', 'POST'],
+    '/v1/study/sets/{setId}/generations/{jobId}': ['GET'],
+    '/v1/study/sets/{setId}/generations/{jobId}/cancel': ['POST'],
+    '/v1/study/sets/{setId}/generations/{jobId}/retry': ['POST'],
+    '/v1/study/generation-usage': ['GET'],
 }
 UUID_PATTERN = r'[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[1-8][0-9A-Fa-f]{3}-[89ABab][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}'
 STUDY_API_BEGIN = '    # BEGIN StudyC authenticated data API'
@@ -75,13 +80,18 @@ def study_api_locations() -> str:
 
     routes = [STUDY_API_BEGIN,
               proxy_location('= /v1/study/sets', ['GET', 'POST'], 4),
+              proxy_location('= /v1/study/generation-usage', ['GET'], 4),
               '    location ^~ /v1/study/ {']
     # 8256 KiB is an 8 MiB PDF plus the 64 KiB multipart overhead the service allows.
     for suffix, methods, body in [('', ['GET', 'PATCH'], ''),
                                    ('/materials', ['GET', 'POST'], '2m'),
                                    (f'/materials/{UUID_PATTERN}', ['GET', 'PATCH'], '2m'),
                                    ('/files', ['GET', 'POST'], '8256k'),
-                                   (f'/files/{UUID_PATTERN}/content', ['GET'], '')]:
+                                   (f'/files/{UUID_PATTERN}/content', ['GET'], ''),
+                                   ('/generations', ['GET', 'POST'], ''),
+                                   (f'/generations/{UUID_PATTERN}', ['GET'], ''),
+                                   (f'/generations/{UUID_PATTERN}/cancel', ['POST'], ''),
+                                   (f'/generations/{UUID_PATTERN}/retry', ['POST'], '')]:
         pattern = f'^/v1/study/sets/{UUID_PATTERN}{suffix}$'
         # Quoting keeps the repetition braces part of the regex, not Nginx blocks.
         routes.append(proxy_location(f'~ "{pattern}"', methods, 8, body))
@@ -126,7 +136,7 @@ def main() -> None:
         parser.add_argument('--' + name, required=True, type=safe_path)
     parser.add_argument('--acme-webroot', type=safe_path, help='Optional, only after confirming the real renewal webroot')
     parser.add_argument('--trusted-proxy-include', type=safe_path, help='Optional audited host-scoped Cloudflare real-IP snippet; never a global include')
-    parser.add_argument('--enable-study-api', action='store_true', help='Explicitly expose the eight authenticated StudyC data API methods')
+    parser.add_argument('--enable-study-api', action='store_true', help='Explicitly expose the authenticated StudyC data, PDF, and generation routes')
     parser.add_argument('--output', required=True, type=Path)
     args = parser.parse_args()
     if args.output.exists():

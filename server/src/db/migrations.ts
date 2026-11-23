@@ -2,11 +2,14 @@ import { createHash } from 'node:crypto';
 import type { Db, Queryable, Transaction } from './db.js';
 import { STUDY_FILES_SQL } from './study-files-schema.js';
 import { STUDY_SCHEMA_SQL } from './study-schema.js';
+import { GENERATION_IMMUTABLE_BODY, GENERATION_SCHEMA_SQL } from './generation-schema.js';
 
 const name = 'studyc_sets_and_text_materials';
 const checksum = createHash('sha256').update(`${name}\n${STUDY_SCHEMA_SQL}`).digest('hex');
 const fileName = 'studyc_source_files';
 const fileChecksum = createHash('sha256').update(`${fileName}\n${STUDY_FILES_SQL}`).digest('hex');
+const generationName = 'studyc_generation_tasks';
+const generationChecksum = createHash('sha256').update(`${generationName}\n${GENERATION_SCHEMA_SQL}`).digest('hex');
 const registrySql = `CREATE TABLE IF NOT EXISTS studyc_schema_migrations (
   version integer PRIMARY KEY,
   name text NOT NULL,
@@ -155,6 +158,44 @@ async function verifyFileSchema(q: Transaction): Promise<string> {
   return hash(actual);
 }
 
+async function generationShape(q: Queryable) {
+  const [fn] = await q.query<{ body: string; security_definer: boolean; language: string; result: string }>(`SELECT p.prosrc AS body,
+    p.prosecdef AS security_definer,l.lanname AS language,p.prorettype::regtype::text AS result
+    FROM pg_proc p JOIN pg_language l ON l.oid=p.prolang WHERE p.oid=to_regprocedure('studyc_generation_immutable()')`);
+  if (!fn || fn.security_definer || fn.language !== 'plpgsql' || fn.result !== 'trigger'
+    || whitespace(fn.body) !== whitespace(GENERATION_IMMUTABLE_BODY)) throw new Error('StudyC generation immutable function drift');
+  return { jobs: await tableShape(q, 'study_generation_jobs'), attempts: await tableShape(q, 'study_generation_attempts'),
+    budget: await tableShape(q, 'study_generation_daily_budget'), immutable: { ...fn, body: whitespace(fn.body) } };
+}
+
+async function verifyGenerationSchema(q: Transaction): Promise<string> {
+  await q.exec(`CREATE TEMP TABLE studyc_expected_users (id uuid PRIMARY KEY);
+    CREATE TEMP TABLE studyc_expected_sets (id uuid NOT NULL,user_id uuid NOT NULL,PRIMARY KEY(id),UNIQUE(id,user_id));`);
+  const temporary = GENERATION_SCHEMA_SQL.slice(GENERATION_SCHEMA_SQL.indexOf('CREATE TABLE study_generation_jobs'))
+    .replace(/\bstudy_generation_jobs\b/g, 'studyc_expected_generation_jobs')
+    .replace(/\bstudy_generation_attempts\b/g, 'studyc_expected_generation_attempts')
+    .replace(/\bstudy_generation_daily_budget\b/g, 'studyc_expected_generation_budget')
+    .replace(/\busers\(id\)/g, 'studyc_expected_users(id)')
+    .replace(/\bstudy_sets\(id,user_id\)/g, 'studyc_expected_sets(id,user_id)')
+    .replace(/CREATE TABLE/g, 'CREATE TEMP TABLE')
+    .replace(/study_generation_jobs_owner_set_created/g, 'studyc_expected_generation_created')
+    .replace(/study_generation_attempts_queue/g, 'studyc_expected_generation_queue')
+    .replace(/study_generation_attempts_budget/g, 'studyc_expected_generation_usage');
+  await q.exec(temporary);
+  const actual = await generationShape(q);
+  const expected = { jobs: await tableShape(q, 'studyc_expected_generation_jobs'), attempts: await tableShape(q, 'studyc_expected_generation_attempts'),
+    budget: await tableShape(q, 'studyc_expected_generation_budget'), immutable: actual.immutable };
+  const normalize = (value: unknown) => JSON.parse(JSON.stringify(value)
+    .replace(/(?:pg_temp_\d+\.)?studyc_expected_generation_jobs/g, 'study_generation_jobs')
+    .replace(/(?:pg_temp_\d+\.)?studyc_expected_generation_attempts/g, 'study_generation_attempts')
+    .replace(/(?:pg_temp_\d+\.)?studyc_expected_generation_budget/g, 'study_generation_daily_budget')
+    .replace(/(?:pg_temp_\d+\.)?studyc_expected_users/g, 'users')
+    .replace(/(?:pg_temp_\d+\.)?studyc_expected_sets/g, 'study_sets'));
+  if (stable(normalize(actual)) !== stable(normalize(expected))) throw new Error('Existing StudyC generation tables do not exactly match the approved schema');
+  await q.exec('DROP TABLE studyc_expected_generation_attempts; DROP TABLE studyc_expected_generation_jobs; DROP TABLE studyc_expected_generation_budget; DROP TABLE studyc_expected_sets; DROP TABLE studyc_expected_users;');
+  return hash(actual);
+}
+
 /** Never executes or edits PlanPlan schema_migrations, including its legacy migration 18. */
 export async function migrate(db: Db): Promise<void> {
   await db.tx(async q => {
@@ -181,10 +222,22 @@ export async function migrate(db: Db): Promise<void> {
       const fingerprint = await verifyFileSchema(q);
       await q.query('INSERT INTO studyc_schema_migrations(version,name,checksum,schema_fingerprint,adopted) VALUES(2,$1,$2,$3,$4)',
         [fileName, fileChecksum, fingerprint, hasFiles]);
-      return;
+      history = await readHistory(q);
     }
     const files = requireVersion(history[1], 2, fileName, fileChecksum);
-    if (history.length !== 2 || hash(await fileShape(q)) !== files.schema_fingerprint) throw new Error('StudyC migration history mismatch');
+    if (hash(await fileShape(q)) !== files.schema_fingerprint) throw new Error('StudyC migration history mismatch');
+    if (history.length === 2) {
+      const present: boolean[] = [];
+      for (const table of ['study_generation_jobs','study_generation_attempts','study_generation_daily_budget']) present.push(await exists(q, table));
+      if (present.some(Boolean) && !present.every(Boolean)) throw new Error('Partial StudyC generation schema');
+      if (!present[0]) await q.exec(GENERATION_SCHEMA_SQL);
+      const fingerprint = await verifyGenerationSchema(q);
+      await q.query('INSERT INTO studyc_schema_migrations(version,name,checksum,schema_fingerprint,adopted) VALUES(3,$1,$2,$3,$4)',
+        [generationName, generationChecksum, fingerprint, present[0]]);
+      return;
+    }
+    const generations = requireVersion(history[2], 3, generationName, generationChecksum);
+    if (history.length !== 3 || hash(await generationShape(q)) !== generations.schema_fingerprint) throw new Error('StudyC generation schema drift detected');
   }, 'studyc:schema-migrations');
 }
 
@@ -194,8 +247,10 @@ export async function checkMigrations(db: Db): Promise<void> {
   const history = await readHistory(db);
   const saved = requireVersion(history[0], 1, name, checksum);
   const files = requireVersion(history[1], 2, fileName, fileChecksum);
-  if (history.length !== 2) throw new Error('StudyC migration history mismatch');
-  if (hash(await actualShape(db)) !== saved.schema_fingerprint || hash(await fileShape(db)) !== files.schema_fingerprint) {
+  const generations = requireVersion(history[2], 3, generationName, generationChecksum);
+  if (history.length !== 3) throw new Error('StudyC migration history mismatch');
+  if (hash(await actualShape(db)) !== saved.schema_fingerprint || hash(await fileShape(db)) !== files.schema_fingerprint
+    || hash(await generationShape(db)) !== generations.schema_fingerprint) {
     throw new Error('StudyC schema drift detected');
   }
 }
