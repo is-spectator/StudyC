@@ -65,17 +65,23 @@ describe('independent StudyC migration registry', () => {
     try { await expect(migrate(empty)).rejects.toThrow(/identity/); } finally { await empty.close(); }
   });
 
-  it('fails closed for partial tables, altered lifecycle function and registry checksum', async () => {
+  it('fails closed for partial tables', async () => {
     const partial = await openTestDb({ migrate: false });
     try {
       await partial.exec(STUDY_SCHEMA_SQL); await partial.exec('DROP TABLE study_materials');
       await expect(migrate(partial)).rejects.toThrow(/Partial/);
     } finally { await partial.close(); }
+  });
+
+  it('fails closed for an altered lifecycle function', async () => {
     const db = await openTestDb();
     try {
       await db.exec("CREATE OR REPLACE FUNCTION planplan_active_user_write() RETURNS trigger AS $$ BEGIN RETURN NEW; END; $$ LANGUAGE plpgsql;");
       await expect(checkMigrations(db)).rejects.toThrow(/deletion trigger/);
     } finally { await db.close(); }
+  });
+
+  it('fails closed for an altered registry checksum', async () => {
     const changed = await openTestDb();
     try {
       await changed.query("UPDATE studyc_schema_migrations SET checksum=repeat('b',64)");
