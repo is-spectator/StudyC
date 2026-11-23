@@ -41,6 +41,12 @@ STUDY_API_ROUTES = {
     '/v1/study/sets/{setId}/flashcard-decks/{deckId}/sessions': ['POST'],
     '/v1/study/sets/{setId}/flashcard-decks/{deckId}/sessions/{sessionId}': ['GET'],
     '/v1/study/sets/{setId}/flashcard-decks/{deckId}/sessions/{sessionId}/reviews': ['POST'],
+    '/v1/study/sets/{setId}/quizzes': ['GET', 'POST'],
+    '/v1/study/sets/{setId}/quizzes/{quizId}': ['GET'],
+    '/v1/study/sets/{setId}/quizzes/{quizId}/attempts': ['GET', 'POST'],
+    '/v1/study/sets/{setId}/quizzes/{quizId}/attempts/{attemptId}': ['GET'],
+    '/v1/study/sets/{setId}/quizzes/{quizId}/attempts/{attemptId}/answers': ['POST'],
+    '/v1/study/sets/{setId}/quizzes/{quizId}/attempts/{attemptId}/submit': ['POST'],
 }
 UUID_PATTERN = r'[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[1-8][0-9A-Fa-f]{3}-[89ABab][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}'
 STUDY_API_BEGIN = '    # BEGIN StudyC authenticated data API'
@@ -119,7 +125,13 @@ def study_api_locations() -> str:
                                    (f'/flashcard-decks/{UUID_PATTERN}/cards/{UUID_PATTERN}', ['PATCH'], '32k'),
                                    (f'/flashcard-decks/{UUID_PATTERN}/sessions', ['POST'], '32k'),
                                    (f'/flashcard-decks/{UUID_PATTERN}/sessions/{UUID_PATTERN}', ['GET'], '32k'),
-                                   (f'/flashcard-decks/{UUID_PATTERN}/sessions/{UUID_PATTERN}/reviews', ['POST'], '32k')]:
+                                   (f'/flashcard-decks/{UUID_PATTERN}/sessions/{UUID_PATTERN}/reviews', ['POST'], '32k'),
+                                   ('/quizzes', ['GET', 'POST'], ''),
+                                   (f'/quizzes/{UUID_PATTERN}', ['GET'], ''),
+                                   (f'/quizzes/{UUID_PATTERN}/attempts', ['GET', 'POST'], ''),
+                                   (f'/quizzes/{UUID_PATTERN}/attempts/{UUID_PATTERN}', ['GET'], ''),
+                                   (f'/quizzes/{UUID_PATTERN}/attempts/{UUID_PATTERN}/answers', ['POST'], ''),
+                                   (f'/quizzes/{UUID_PATTERN}/attempts/{UUID_PATTERN}/submit', ['POST'], '')]:
         pattern = f'^/v1/study/sets/{UUID_PATTERN}{suffix}$'
         # Quoting keeps the repetition braces part of the regex, not Nginx blocks.
         routes.append(proxy_location(f'~ "{pattern}"', methods, 8, body))
@@ -164,7 +176,7 @@ def main() -> None:
         parser.add_argument('--' + name, required=True, type=safe_path)
     parser.add_argument('--acme-webroot', type=safe_path, help='Optional, only after confirming the real renewal webroot')
     parser.add_argument('--trusted-proxy-include', type=safe_path, help='Optional audited host-scoped Cloudflare real-IP snippet; never a global include')
-    parser.add_argument('--enable-study-api', action='store_true', help='Explicitly expose the authenticated StudyC data, PDF, generation, chat and flashcard routes')
+    parser.add_argument('--enable-study-api', action='store_true', help='Explicitly expose the authenticated StudyC data, PDF, generation, chat, flashcard and quiz routes')
     parser.add_argument('--output', required=True, type=Path)
     args = parser.parse_args()
     if args.output.exists():

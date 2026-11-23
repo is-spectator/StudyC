@@ -8,7 +8,7 @@
     "build": "tsc -b && vite build",
     "preview": "vite preview --host 127.0.0.1 --port 4178",
     "local:acceptance": "node scripts/local-acceptance.mjs",
-    "test": "node --test src/auth/*.test.mjs src/study/*.test.mjs tests/*.test.mjs"
+    "test": "node --test src/auth/*.test.mjs src/study/*.test.mjs src/study/quizzes/*.test.mjs tests/*.test.mjs"
   },
   "dependencies": {
     "react": "^19.2.0",
