@@ -203,7 +203,8 @@ export function createOpenRouterGenerationProvider(options: { config: Generation
             if (choice.delta.tool_calls || choice.delta.function_call || choice.delta.refusal) throw new SafeFailure('output_refused');
             if (choice.finish_reason && choice.finish_reason !== 'stop') throw new SafeFailure(choice.finish_reason === 'length' ? 'output_truncated' : 'output_refused');
             if (typeof choice.delta.content === 'string') {
-              if (finished) throw new SafeFailure('invalid_response');
+              // OpenRouter's final usage frame repeats stop with an empty content delta.
+              if (finished && choice.delta.content.length > 0) throw new SafeFailure('invalid_response');
               content += choice.delta.content;
               const answer = partialChatAnswer(content);
               if (answer !== null && answer.length > 8000) throw new SafeFailure('response_too_large');
