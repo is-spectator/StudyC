@@ -74,7 +74,8 @@ export function registerChatRoutes(app: Hono<StudyEnv>, db: Db, store: Generatio
         }
         const version = JSON.stringify([current.job.status, current.job.updatedAt, current.job.attempts.map(item => [item.status, item.usage.state])]);
         if (state !== version) { await stream.writeSSE({ event: 'job', data: JSON.stringify({ job: current.job }) }); state = version; }
-        if (!['queued', 'running'].includes(current.job.status)) {
+        if (!['queued', 'running'].includes(current.job.status)
+          && !current.job.attempts.some(attempt => ['queued', 'running'].includes(attempt.status))) {
           await stream.writeSSE({ event: 'done', data: JSON.stringify({ jobId: current.jobId }) }); return;
         }
         await stream.sleep(250);

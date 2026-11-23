@@ -16,7 +16,8 @@ type Job = {
 };
 type Thread = { id: string; studySetId: string; title: string; createdAt: string; updatedAt: string };
 type Turn = { id: string; threadId: string; sequence: number; question: string; jobId: string; createdAt: string; job: Job };
-const active = (job: Job) => job.status === 'queued' || job.status === 'running';
+const active = (job: Job) => job.status === 'queued' || job.status === 'running'
+  || job.attempts.some(attempt => attempt.status === 'queued' || attempt.status === 'running');
 const errorMessage = (error: unknown) => error instanceof Error ? error.message : '请求未完成，请重试。';
 const rejectedWrite = (error: unknown) => error instanceof AuthApiError && [400, 401, 403, 404, 409, 413, 422, 429].includes(error.status);
 const failures: Record<string, string> = {
@@ -185,7 +186,7 @@ export default function ChatPanel({ studySetId, threadId, materials, onNavigate 
                   const snapshot = turn.job.inputSnapshot?.sources.find(item => item.sourceId === citation.sourceId);
                   const title = snapshot?.title ?? turn.job.sources.find(item => item.sourceId === citation.sourceId)?.title ?? '引用资料';
                   return <button key={`${citation.sourceId}:${citation.start}`} onClick={() => setSource({ citation, snapshot, title })}><FileText size={12} />{index + 1}. {title}{citation.page ? ` · 第 ${citation.page} 页` : ''} · v{citation.version}</button>;
-                })}</div></> : active(turn.job) ? <><p className="chat-answer-text">{draft?.turnId === turn.id && draft.text ? draft.text : turn.job.status === 'queued' ? '正在排队…' : '正在阅读资料…'}</p><small>生成中 · 引用核验完成后保存回答</small><button className="chat-text-button" disabled={busy} onClick={() => void act(turn, 'stop')}><Square size={12} />停止生成</button></> : <><p>{turn.job.status === 'cancelled' ? '这次生成已停止。' : turn.job.status === 'interrupted' ? '上一次生成中断，可以明确重试。' : failures[turn.job.errorCode ?? ''] ?? '这次回答未能完成，请稍后重试。'}</p>{turn.job.attemptCount < 3 && turns.at(-1)?.id === turn.id ? <button className="chat-text-button" disabled={busy || !!running} onClick={() => void act(turn, 'retry')}><RefreshCw size={13} />重新生成</button> : <small>{turn.job.attemptCount >= 3 ? '已达到重试次数，请重新提问。' : '可在下方继续提问。'}</small>}</>}
+                })}</div></> : active(turn.job) ? turn.job.status === 'cancelled' ? <p role="status">正在停止生成，完成后可以重新生成…</p> : <><p className="chat-answer-text">{draft?.turnId === turn.id && draft.text ? draft.text : turn.job.status === 'queued' ? '正在排队…' : '正在阅读资料…'}</p><small>生成中 · 引用核验完成后保存回答</small><button className="chat-text-button" disabled={busy} onClick={() => void act(turn, 'stop')}><Square size={12} />停止生成</button></> : <><p>{turn.job.status === 'cancelled' ? '这次生成已停止。' : turn.job.status === 'interrupted' ? '上一次生成中断，可以明确重试。' : failures[turn.job.errorCode ?? ''] ?? '这次回答未能完成，请稍后重试。'}</p>{turn.job.attemptCount < 3 && turns.at(-1)?.id === turn.id ? <button className="chat-text-button" disabled={busy || !!running} onClick={() => void act(turn, 'retry')}><RefreshCw size={13} />重新生成</button> : <small>{turn.job.attemptCount >= 3 ? '已达到重试次数，请重新提问。' : '可在下方继续提问。'}</small>}</>}
                 <small className="chat-source-meta">使用 {turn.job.sources.map(item => `${item.title} v${item.version}`).join('、')}</small>
               </div></div>
             </article>)}<div ref={bottom} />
