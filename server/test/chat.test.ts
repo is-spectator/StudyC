@@ -59,7 +59,30 @@ describe('persistent grounded chat and protected progress', () => {
     await chat.stop(user, set, thread, sent.turn.id);
     await expect(chat.send(user, set, thread, input())).rejects.toMatchObject({ code: 'job_conflict' });
     await expect(chat.retry(user, set, thread, sent.turn.id, { clientRequestId: randomUUID() })).rejects.toMatchObject({ code: 'job_conflict' });
-    await store.settle(claim, success(claim));
+    const app = createApp(db, { releaseId: 'chat-stop-test', rateLimitSecret: new TextEncoder().encode('chat-test-rate-limit-key-at-least-32'), generationStore: store,
+      sessionFetch: async () => Response.json({ userId: user, csrfToken: 'c'.repeat(43) }) });
+    const response = await app.request(`/v1/study/sets/${set}/chat/threads/${thread}/messages/${sent.turn.id}/events`, {
+      headers: { cookie: `__Host-planplan-session=${user}`, 'X-PlanPlan-Expected-User': user },
+    });
+    expect(response.status).toBe(200);
+    const reader = response.body!.getReader(), decoder = new TextDecoder();
+    try {
+      const first = decoder.decode((await reader.read()).value);
+      expect(first).toContain('event: job'); expect(first).not.toContain('event: done');
+      expect(JSON.parse(first.split('data: ')[1]!).job).toMatchObject({ status: 'cancelled', attempts: [{ status: 'running' }] });
+      // A terminal job must keep streaming while its cancelled upstream attempt
+      // still owns the lease. Previously this read immediately received `done`.
+      const next = reader.read();
+      expect(await Promise.race([next.then(() => 'closed-too-soon'), new Promise(resolve => setTimeout(() => resolve('waiting-for-settlement'), 300))])).toBe('waiting-for-settlement');
+      await store.settle(claim, success(claim));
+      const settled = decoder.decode((await next).value);
+      expect(settled).toContain('event: job');
+      expect(JSON.parse(settled.split('data: ')[1]!).job).toMatchObject({ status: 'cancelled', result: null,
+        attempts: [{ status: 'cancelled', usage: { state: 'reported', totalTokens: 20 } }] });
+      let remaining = '';
+      for (;;) { const chunk = await reader.read(); if (chunk.done) break; remaining += decoder.decode(chunk.value); }
+      expect(remaining).toContain('event: done');
+    } finally { await reader.cancel(); }
     expect((await chat.turn(user, set, thread, sent.turn.id)).job.status).toBe('cancelled');
     await updateTextMaterial(db, user, set, material, { version: 1, body: '已修改原始资料。' });
     const retryId = randomUUID(), retry = await chat.retry(user, set, thread, sent.turn.id, { clientRequestId: retryId });
