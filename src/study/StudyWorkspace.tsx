@@ -5,6 +5,7 @@ import { appStorage, captureStorageSession } from '../lib/account-storage';
 import { createStudyApi, validateStudyTitle, type MaterialSummary, type StudySet, type TextMaterial } from './api';
 import MaterialEditor from './MaterialEditor';
 import PdfUpload from './PdfUpload';
+import ChatPanel from './chat/ChatPanel';
 import { confirmStudyLeave, useStudyNavigation } from './navigation';
 import { materialPath, parseStudyRoute, studySetPath } from './routes';
 import '../app.css';
@@ -155,11 +156,11 @@ export default function StudyWorkspace() {
         { suffix: 'chat/new', title: '资料问答', Icon: MessageCircle },
         { suffix: 'flashcards', title: '闪卡', Icon: Layers },
         { suffix: 'study-plan', title: '学习计划', Icon: Route },
-      ].map(({ suffix, title, Icon }) => <button key={title} className="side-link" onClick={() => setId ? go(`${studySetPath(setId)}/${suffix}`) : setNotice(`${title}尚未开放。现在可以创建学习集和保存文本资料。`)}><Icon size={16} /><span>{title}</span><small>未开放</small></button>)}</div>
+      ].map(({ suffix, title, Icon }) => <button key={title} className="side-link" onClick={() => setId ? go(`${studySetPath(setId)}/${suffix}`) : setNotice('请先选择一个学习集。')}><Icon size={16} /><span>{title}</span>{suffix === 'chat/new' ? null : <small>未开放</small>}</button>)}</div>
       <a className="cloud-local-link" href="/platform/local-data" onClick={event => followLink(event, go, '/platform/local-data')}><Archive size={15} />本机旧数据</a>
     </aside>
     <div className="main-area cloud-main">
-      <header className="topbar cloud-topbar"><div className="breadcrumb"><button className="icon-button cloud-mobile-menu" aria-label="打开导航" onClick={() => setMobile(true)}><Menu /></button><a href="/platform/studysets" onClick={event => followLink(event, go, '/platform/studysets')}>我的学习集</a>{setId ? <><ChevronRight size={14} /><a href={studySetPath(setId)} onClick={event => followLink(event, go, studySetPath(setId))}>{currentSet.data?.title ?? '学习集'}</a></> : null}{route.kind === 'material' ? <><ChevronRight size={14} /><span>文本资料</span></> : null}</div><span className="cloud-space-label"><Cloud size={15} />云端学习空间</span></header>
+      <header className="topbar cloud-topbar"><div className="breadcrumb"><button className="icon-button cloud-mobile-menu" aria-label="打开导航" onClick={() => setMobile(true)}><Menu /></button><a href="/platform/studysets" onClick={event => followLink(event, go, '/platform/studysets')}>我的学习集</a>{setId ? <><ChevronRight size={14} /><a href={studySetPath(setId)} onClick={event => followLink(event, go, studySetPath(setId))}>{currentSet.data?.title ?? '学习集'}</a></> : null}{route.kind === 'material' ? <><ChevronRight size={14} /><span>文本资料</span></> : null}</div><span className="cloud-space-label"><Cloud size={15} />{import.meta.env.DEV && import.meta.env.VITE_LOCAL_ACCEPTANCE === '1' ? '本地验收空间' : '云端学习空间'}</span></header>
       <main className="main-scroll cloud-main-scroll">
         {route.kind === 'sets' ? <div className="cloud-page">
           <div className="cloud-page-heading"><div><span className="cloud-eyebrow">YOUR STUDY SPACE</span><h1>我的学习集</h1><p>把资料收在一起，慢慢积累自己的知识。</p></div>{createButton}</div>
@@ -183,9 +184,11 @@ export default function StudyWorkspace() {
             {materials.nextCursor ? <div className="cloud-load-more"><button className="btn" disabled={materials.loadingMore} onClick={() => void materials.loadMore()}>{materials.loadingMore ? '正在加载…' : '加载更多资料'}</button></div> : null}
             <PdfUpload api={api} studySetId={route.studySetId} onExtracted={materials.reload} />
           </section>
-          <section className="cloud-tools-preview"><div><MessageCircle /><span>资料问答<small>尚未开放</small></span></div><div><Layers /><span>闪卡与练习<small>尚未开放</small></span></div><div><Route /><span>学习计划<small>尚未开放</small></span></div></section>
+          <section className="cloud-tools-preview"><button className="btn" onClick={() => go(`${studySetPath(route.studySetId)}/chat/new`)}><MessageCircle /><span>资料问答<small>依据资料，与小C对话</small></span></button><div><Layers /><span>闪卡与练习<small>尚未开放</small></span></div><div><Route /><span>学习计划<small>尚未开放</small></span></div></section>
         </div> : null}
         {route.kind === 'material' && currentSet.data ? <MaterialEditor key={`${auth.user?.id}:${route.studySetId}:${route.materialId ?? 'new'}`} studySetId={route.studySetId} materialId={route.materialId} onNavigate={go} onSaved={savedMaterial} /> : null}
+        {route.kind === 'chat' && currentSet.data && (materials.loading || materials.error || materials.nextCursor) ? <div className="cloud-page cloud-source-status">{materials.loading ? <Loading text="正在读取可选资料…" /> : null}{materials.error ? <ErrorState text={materials.error} onRetry={materials.reload} /> : null}{materials.nextCursor ? <button className="btn" disabled={materials.loadingMore} onClick={() => void materials.loadMore()}>{materials.loadingMore ? '正在加载…' : '加载更多可选资料'}</button> : null}</div> : null}
+        {route.kind === 'chat' && currentSet.data ? <ChatPanel key={`${auth.user?.id}:${route.studySetId}`} studySetId={route.studySetId} threadId={route.threadId} materials={materials.items} onNavigate={go} /> : null}
         {route.kind === 'local-data' ? <LocalData accountId={auth.user?.id ?? ''} /> : null}
         {route.kind === 'unavailable' && (!setId || currentSet.data) ? <div className="cloud-page cloud-unavailable"><span className="cloud-empty-mark"><BookOpen size={30} /></span><h1>{route.title}尚未开放</h1><p>现在可以创建学习集、整理和编辑文本资料。<br />这项学习工具还在准备中。</p><button className="btn btn-black" onClick={() => go(setId ? studySetPath(setId) : '/platform/studysets')}>返回我的资料<ArrowRight size={16} /></button></div> : null}
         {route.kind === 'not-found' ? <div className="cloud-page cloud-unavailable"><h1>没有找到这个页面</h1><p>请从学习集列表重新打开资料。</p><button className="btn btn-black" onClick={() => go('/platform/studysets')}>返回学习集列表</button></div> : null}

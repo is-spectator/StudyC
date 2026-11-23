@@ -1,4 +1,4 @@
-node_modules/
+node_modules
 dist/
 .env*
 !.env.example
@@ -9,6 +9,7 @@ reference/*.html
 *.tsbuildinfo
 __pycache__/
 *.pyc
+/.local/
 
 # Generated deployment bundles and private operational material.
 deploy/artifacts/

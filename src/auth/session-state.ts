@@ -25,7 +25,14 @@ export async function requestWithSession<T>(path: string, options: RequestOption
   try {
     const headers = new Headers(options.headers);
     for (const [name, value] of Object.entries(sessionHeaders(current))) headers.set(name, value);
-    const result = await transport<T>(path, { ...options, headers: Object.fromEntries(headers.entries()) });
+    const onEvent: RequestOptions['onEvent'] = options.onEvent ? event => {
+      throwIfAborted(options.signal);
+      if (!state.mounted.current || state.epoch.current !== started || state.session.current?.userId !== current.userId) {
+        throw new AuthApiError('account_mismatch', '账户已切换，请重新核对。', 409);
+      }
+      options.onEvent!(event);
+    } : undefined;
+    const result = await transport<T>(path, { ...options, onEvent, headers: Object.fromEntries(headers.entries()) });
     throwIfAborted(options.signal);
     if (!state.mounted.current || state.epoch.current !== started || state.session.current?.userId !== current.userId) {
       throw new AuthApiError('account_mismatch', '账户已切换，请重新核对。', 409);

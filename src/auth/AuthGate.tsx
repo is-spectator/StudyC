@@ -63,6 +63,13 @@ function LoginForm() {
   const [now, setNow] = useState(Date.now);
   const cooldown = Math.max(0, Math.ceil((cooldownUntil - now) / 1000));
   const normalizedEmail = email.trim().toLowerCase();
+  async function enterLocal(account: 'a' | 'b') {
+    if (busy) return;
+    setBusy(true); setError(false); setFeedback('');
+    try { await auth.authenticate({ email: `learner-${account}@studyc.local`, password: 'local-acceptance' }); }
+    catch (reason) { setError(true); setFeedback(reason instanceof Error ? reason.message : '本地账户未能打开。'); }
+    finally { setBusy(false); }
+  }
   useEffect(() => {
     if (!cooldownUntil) return;
     const timer = window.setInterval(() => setNow(Date.now()), 1000);
@@ -112,7 +119,8 @@ function LoginForm() {
       <button className="btn btn-black study-auth-submit" disabled={busy || mode !== 'login' && !challengeId}>{busy ? <><LoaderCircle size={17} className="study-auth-spinner" />正在处理…</> : mode === 'login' ? '登录' : '重置密码'}{!busy && <ArrowRight size={17} />}</button>
     </form>
     {mode === 'login' && <div className="study-auth-links"><a href="https://clyna.ai/?auth=register&product=studyc" referrerPolicy="no-referrer" aria-disabled={busy || undefined} tabIndex={busy ? -1 : undefined} onClick={event => { if (busy) event.preventDefault(); }}>前往 Clyna 注册</a><button disabled={busy} onClick={() => changeMode('reset')}>忘记密码？</button></div>}
-    <p className="study-auth-footnote">学习资料按账户保存在此浏览器中。</p>
+    <p className="study-auth-footnote">学习资料由 StudyC 按账户保存。</p>
+    {import.meta.env.DEV && import.meta.env.VITE_LOCAL_ACCEPTANCE === '1' ? <div className="study-local-entry"><p>本地验收 · 使用独立测试数据</p><button className="btn" disabled={busy} onClick={() => void enterLocal('a')}>进入验收账户 A</button><button className="btn" disabled={busy} onClick={() => void enterLocal('b')}>进入验收账户 B</button></div> : null}
     {previewAvailable && <button className="study-auth-preview-link" disabled={busy} onClick={auth.enterPreview}>仅预览本地界面（不登录）</button>}
   </section>;
 }

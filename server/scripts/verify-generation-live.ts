@@ -118,6 +118,7 @@ try {
   report.status = job.status;
   report.errorCode = job.errorCode;
   assert.equal(job.status, 'succeeded');
+  assert.ok(job.result && 'points' in job.result);
   assert.equal(job.result?.points.length, 2);
   assert.equal(job.attempts[0]?.usage.state, 'reported');
   assert.ok(job.result?.points.every(point => point.citations.length > 0 && point.citations.every(citation =>

@@ -7,4 +7,6 @@ const proxy = {
   '/v1/study/': { target: 'http://127.0.0.1:8790', changeOrigin: false },
   '/v1': { target: 'http://127.0.0.1:8789', changeOrigin: false },
 };
-export default defineConfig({plugins:[react()], server:{proxy, strictPort:true}, preview:{proxy, strictPort:true}});
+const localProxy = process.env.STUDYC_LOCAL_ACCEPTANCE === '1'
+  ? { '/v1': { target: 'http://127.0.0.1:18790', changeOrigin: false } } : proxy;
+export default defineConfig({plugins:[react()], server:{proxy: localProxy, strictPort:true}, preview:{proxy, strictPort:true}});

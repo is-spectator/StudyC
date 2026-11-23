@@ -3,6 +3,7 @@ import type { Db, Queryable, Transaction } from './db.js';
 import { STUDY_FILES_SQL } from './study-files-schema.js';
 import { STUDY_SCHEMA_SQL } from './study-schema.js';
 import { GENERATION_IMMUTABLE_BODY, GENERATION_SCHEMA_SQL } from './generation-schema.js';
+import { CHAT_IMMUTABLE_BODY, CHAT_SCHEMA_SQL, CHAT_TABLES } from './chat-schema.js';
 
 const name = 'studyc_sets_and_text_materials';
 const checksum = createHash('sha256').update(`${name}\n${STUDY_SCHEMA_SQL}`).digest('hex');
@@ -158,13 +159,19 @@ async function verifyFileSchema(q: Transaction): Promise<string> {
   return hash(actual);
 }
 
-async function generationShape(q: Queryable) {
+async function generationShape(q: Queryable, legacy = false) {
   const [fn] = await q.query<{ body: string; security_definer: boolean; language: string; result: string }>(`SELECT p.prosrc AS body,
     p.prosecdef AS security_definer,l.lanname AS language,p.prorettype::regtype::text AS result
     FROM pg_proc p JOIN pg_language l ON l.oid=p.prolang WHERE p.oid=to_regprocedure('studyc_generation_immutable()')`);
   if (!fn || fn.security_definer || fn.language !== 'plpgsql' || fn.result !== 'trigger'
     || whitespace(fn.body) !== whitespace(GENERATION_IMMUTABLE_BODY)) throw new Error('StudyC generation immutable function drift');
-  return { jobs: await tableShape(q, 'study_generation_jobs'), attempts: await tableShape(q, 'study_generation_attempts'),
+  const jobs = await tableShape(q, 'study_generation_jobs');
+  // v4 only widens the kind constraint. Historical v3 fingerprints remain unchanged;
+  // v4 separately fingerprints the full current definition, so this projection cannot hide drift.
+  if (legacy) for (const item of jobs.constraints) {
+    if (item.contype === 'c' && /\bkind\b/.test(item.definition)) item.definition = "CHECK (kind = 'study_outline'::text)";
+  }
+  return { jobs, attempts: await tableShape(q, 'study_generation_attempts'),
     budget: await tableShape(q, 'study_generation_daily_budget'), immutable: { ...fn, body: whitespace(fn.body) } };
 }
 
@@ -194,6 +201,36 @@ async function verifyGenerationSchema(q: Transaction): Promise<string> {
   if (stable(normalize(actual)) !== stable(normalize(expected))) throw new Error('Existing StudyC generation tables do not exactly match the approved schema');
   await q.exec('DROP TABLE studyc_expected_generation_attempts; DROP TABLE studyc_expected_generation_jobs; DROP TABLE studyc_expected_generation_budget; DROP TABLE studyc_expected_sets; DROP TABLE studyc_expected_users;');
   return hash(actual);
+}
+
+export const LEARNING_MIGRATIONS = [
+  { version: 4, name: 'studyc_chat_and_learning_generations', sql: CHAT_SCHEMA_SQL, tables: CHAT_TABLES },
+];
+const additionChecksum = (migration: typeof LEARNING_MIGRATIONS[number]) => createHash('sha256').update(`${migration.name}\n${migration.sql}`).digest('hex');
+async function additionShape(q: Queryable, migration: typeof LEARNING_MIGRATIONS[number]) {
+  const tables: Record<string, unknown> = {};
+  for (const table of migration.tables) tables[table] = await tableShape(q, table);
+  if (migration.version !== 4) return { tables };
+  const [fn] = await q.query<{ body: string; security_definer: boolean; language: string; result: string }>(`SELECT p.prosrc AS body,
+    p.prosecdef AS security_definer,l.lanname AS language,p.prorettype::regtype::text AS result
+    FROM pg_proc p JOIN pg_language l ON l.oid=p.prolang WHERE p.oid=to_regprocedure('studyc_chat_turn_immutable()')`);
+  if (!fn || fn.security_definer || fn.language !== 'plpgsql' || fn.result !== 'trigger'
+    || whitespace(fn.body) !== whitespace(CHAT_IMMUTABLE_BODY)) throw new Error('StudyC chat immutable function drift');
+  return { tables, generations: await generationShape(q), immutable: { ...fn, body: whitespace(fn.body) } };
+}
+async function migrateAdditions(q: Transaction, history: MigrationRow[]) {
+  if (history.length > LEARNING_MIGRATIONS.at(-1)!.version) throw new Error('StudyC migration history mismatch');
+  for (const migration of LEARNING_MIGRATIONS) {
+    if (history.length < migration.version) {
+      for (const table of migration.tables) if (await exists(q, table)) throw new Error('Partial or unregistered StudyC learning schema');
+      await q.exec(migration.sql);
+      await q.query('INSERT INTO studyc_schema_migrations(version,name,checksum,schema_fingerprint,adopted) VALUES($1,$2,$3,$4,false)',
+        [migration.version, migration.name, additionChecksum(migration), hash(await additionShape(q, migration))]);
+      history = await readHistory(q);
+    }
+    const row = requireVersion(history[migration.version - 1], migration.version, migration.name, additionChecksum(migration));
+    if (hash(await additionShape(q, migration)) !== row.schema_fingerprint) throw new Error('StudyC learning schema drift detected');
+  }
 }
 
 /** Never executes or edits PlanPlan schema_migrations, including its legacy migration 18. */
@@ -234,10 +271,11 @@ export async function migrate(db: Db): Promise<void> {
       const fingerprint = await verifyGenerationSchema(q);
       await q.query('INSERT INTO studyc_schema_migrations(version,name,checksum,schema_fingerprint,adopted) VALUES(3,$1,$2,$3,$4)',
         [generationName, generationChecksum, fingerprint, present[0]]);
-      return;
+      history = await readHistory(q);
     }
     const generations = requireVersion(history[2], 3, generationName, generationChecksum);
-    if (history.length !== 3 || hash(await generationShape(q)) !== generations.schema_fingerprint) throw new Error('StudyC generation schema drift detected');
+    if (hash(await generationShape(q, history.length >= 4)) !== generations.schema_fingerprint) throw new Error('StudyC generation schema drift detected');
+    await migrateAdditions(q, history);
   }, 'studyc:schema-migrations');
 }
 
@@ -248,9 +286,13 @@ export async function checkMigrations(db: Db): Promise<void> {
   const saved = requireVersion(history[0], 1, name, checksum);
   const files = requireVersion(history[1], 2, fileName, fileChecksum);
   const generations = requireVersion(history[2], 3, generationName, generationChecksum);
-  if (history.length !== 3) throw new Error('StudyC migration history mismatch');
+  if (history.length !== LEARNING_MIGRATIONS.at(-1)!.version) throw new Error('StudyC migration history mismatch');
   if (hash(await actualShape(db)) !== saved.schema_fingerprint || hash(await fileShape(db)) !== files.schema_fingerprint
-    || hash(await generationShape(db)) !== generations.schema_fingerprint) {
+    || hash(await generationShape(db, true)) !== generations.schema_fingerprint) {
     throw new Error('StudyC schema drift detected');
+  }
+  for (const migration of LEARNING_MIGRATIONS) {
+    const row = requireVersion(history[migration.version - 1], migration.version, migration.name, additionChecksum(migration));
+    if (hash(await additionShape(db, migration)) !== row.schema_fingerprint) throw new Error('StudyC learning schema drift detected');
   }
 }
