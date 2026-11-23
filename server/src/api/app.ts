@@ -10,6 +10,8 @@ import { registerFileRoutes } from './files.js';
 import { registerStudyRoutes } from './study.js';
 import { registerGenerationRoutes, type GenerationHttpStore } from './generations.js';
 import { GenerationError } from '../generation/types.js';
+import { GenerationStore } from '../generation/store.js';
+import { registerChatRoutes } from './chat.js';
 
 export interface AppOptions {
   releaseId: string;
@@ -95,15 +97,20 @@ export function createApp(db: Db, options: AppOptions) {
     const generationDetail = /^\/v1\/study\/sets\/[^/]+\/generations\/[^/]+$/.test(path);
     const generationAction = /^\/v1\/study\/sets\/[^/]+\/generations\/[^/]+\/(?:cancel|retry)$/.test(path);
     const generationUsage = path === '/v1/study/generation-usage';
+    const chatCollection = /^\/v1\/study\/sets\/[^/]+\/chat\/threads$/.test(path);
+    const chatRead = /^\/v1\/study\/sets\/[^/]+\/chat\/threads\/[^/]+(?:\/messages\/[^/]+\/events)?$/.test(path);
+    const chatWrite = /^\/v1\/study\/sets\/[^/]+\/chat\/threads\/[^/]+\/messages(?:\/[^/]+\/(?:stop|retry))?$/.test(path);
     if ((collection && !['GET', 'POST'].includes(c.req.method)) || ((detail || setDetail) && !['GET', 'PATCH'].includes(c.req.method)) || (fileRead && c.req.method !== 'GET')
       || (generationCollection && !['GET', 'POST'].includes(c.req.method)) || ((generationDetail || generationUsage) && c.req.method !== 'GET')
-      || (generationAction && c.req.method !== 'POST')) {
+      || (generationAction && c.req.method !== 'POST') || (chatCollection && !['GET','POST'].includes(c.req.method))
+      || (chatRead && c.req.method !== 'GET') || (chatWrite && c.req.method !== 'POST')) {
       return c.json({ error: { code: 'method_not_allowed', message: '此接口不支持该请求方法。' } }, 405);
     }
     await next();
   });
   registerStudyRoutes(app, db, limits);
   registerGenerationRoutes(app, options.generationStore, limits);
+  registerChatRoutes(app, db, options.generationStore instanceof GenerationStore ? options.generationStore : undefined, limits);
   if (options.fileRoot) registerFileRoutes(app, db, limits, options.fileRoot);
   // No PlanPlan or account-management routes are mounted.
   app.notFound(c => c.json({ error: { code: 'not_found', message: '没有找到该接口。' } }, 404));

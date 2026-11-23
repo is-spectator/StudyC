@@ -27,6 +27,12 @@ STUDY_API_ROUTES = {
     '/v1/study/sets/{setId}/generations/{jobId}/cancel': ['POST'],
     '/v1/study/sets/{setId}/generations/{jobId}/retry': ['POST'],
     '/v1/study/generation-usage': ['GET'],
+    '/v1/study/sets/{setId}/chat/threads': ['GET', 'POST'],
+    '/v1/study/sets/{setId}/chat/threads/{threadId}': ['GET'],
+    '/v1/study/sets/{setId}/chat/threads/{threadId}/messages': ['POST'],
+    '/v1/study/sets/{setId}/chat/threads/{threadId}/messages/{turnId}/stop': ['POST'],
+    '/v1/study/sets/{setId}/chat/threads/{threadId}/messages/{turnId}/retry': ['POST'],
+    '/v1/study/sets/{setId}/chat/threads/{threadId}/messages/{turnId}/events': ['GET'],
 }
 UUID_PATTERN = r'[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[1-8][0-9A-Fa-f]{3}-[89ABab][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}'
 STUDY_API_BEGIN = '    # BEGIN StudyC authenticated data API'
@@ -91,7 +97,13 @@ def study_api_locations() -> str:
                                    ('/generations', ['GET', 'POST'], ''),
                                    (f'/generations/{UUID_PATTERN}', ['GET'], ''),
                                    (f'/generations/{UUID_PATTERN}/cancel', ['POST'], ''),
-                                   (f'/generations/{UUID_PATTERN}/retry', ['POST'], '')]:
+                                   (f'/generations/{UUID_PATTERN}/retry', ['POST'], ''),
+                                   ('/chat/threads', ['GET', 'POST'], ''),
+                                   (f'/chat/threads/{UUID_PATTERN}', ['GET'], ''),
+                                   (f'/chat/threads/{UUID_PATTERN}/messages', ['POST'], '32k'),
+                                   (f'/chat/threads/{UUID_PATTERN}/messages/{UUID_PATTERN}/stop', ['POST'], ''),
+                                   (f'/chat/threads/{UUID_PATTERN}/messages/{UUID_PATTERN}/retry', ['POST'], ''),
+                                   (f'/chat/threads/{UUID_PATTERN}/messages/{UUID_PATTERN}/events', ['GET'], '')]:
         pattern = f'^/v1/study/sets/{UUID_PATTERN}{suffix}$'
         # Quoting keeps the repetition braces part of the regex, not Nginx blocks.
         routes.append(proxy_location(f'~ "{pattern}"', methods, 8, body))

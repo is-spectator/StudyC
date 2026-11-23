@@ -1,10 +1,11 @@
 import { createHash, randomUUID } from 'node:crypto';
-import type { Db, Queryable } from '../db/db.js';
+import type { Db, Queryable, Transaction } from '../db/db.js';
 import { requireActiveUser } from '../services/identity.js';
 import { validateProviderConfig } from './provider.js';
+import { normalizeConfig, PROMPTS } from './kinds.js';
 import { GenerationError, MAX_SOURCES, MAX_SOURCE_BYTES, NOT_SENT_USAGE, UNKNOWN_USAGE,
   type ClaimedGeneration, type GenerationInput, type GenerationOutcome, type GenerationPolicy,
-  type GenerationProviderConfig, type GenerationSnapshot, type GenerationStatus, type GenerationUsage, type OutlineResult } from './types.js';
+  type GenerationProviderConfig, type GenerationSnapshot, type GenerationStatus, type GenerationUsage, type GenerationKind, type GenerationResult } from './types.js';
 
 const lock = 'studyc:generations';
 const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
@@ -18,9 +19,9 @@ const conflict = () => new GenerationError('job_conflict', '当前任务状态�
 const quota = () => new GenerationError('quota_exceeded', '生成额度或同时处理的任务已达上限，请稍后重试。');
 
 interface JobRow {
-  id: string; user_id: string; study_set_id: string; kind: 'study_outline'; client_request_id: string;
+  id: string; user_id: string; study_set_id: string; kind: GenerationKind; client_request_id: string;
   request_digest: string; input_snapshot: GenerationSnapshot; provider_config: GenerationProviderConfig;
-  status: GenerationStatus; result: OutlineResult | null; error_code: string | null; current_attempt_id: string | null;
+  status: GenerationStatus; result: GenerationResult | null; error_code: string | null; current_attempt_id: string | null;
   created_at: Date; updated_at: Date; cursor_time?: string;
 }
 interface AttemptRow {
@@ -35,10 +36,10 @@ export interface GenerationAttempt {
   errorCode: string | null; createdAt: string; startedAt: string | null; finishedAt: string | null;
 }
 export interface GenerationJob {
-  id: string; studySetId: string; kind: 'study_outline'; status: GenerationStatus;
+  id: string; studySetId: string; kind: GenerationKind; status: GenerationStatus;
   config: GenerationInput['config']; promptVersion: GenerationSnapshot['promptVersion']; providerConfig: GenerationProviderConfig;
   inputSnapshot?: GenerationSnapshot; sources: Omit<GenerationSnapshot['sources'][number], 'body'>[];
-  result: OutlineResult | null; errorCode: string | null; attemptCount: number;
+  result: GenerationResult | null; errorCode: string | null; attemptCount: number;
   createdAt: string; updatedAt: string; attempts: GenerationAttempt[];
 }
 export interface GenerationDailyUsage {
@@ -47,17 +48,15 @@ export interface GenerationDailyUsage {
 }
 
 function normalized(input: GenerationInput): GenerationInput {
-  if (!input || typeof input.clientRequestId !== 'string' || !uuid.test(input.clientRequestId) || input.kind !== 'study_outline'
-    || !Array.isArray(input.sources) || input.sources.length < 1 || input.sources.length > MAX_SOURCES
-    || !input.config || !['zh-CN', 'en'].includes(input.config.language)
-    || !Number.isInteger(input.config.pointCount) || input.config.pointCount < 1 || input.config.pointCount > 8) throw invalid();
+  if (!input || typeof input.clientRequestId !== 'string' || !uuid.test(input.clientRequestId) || !Object.hasOwn(PROMPTS, input.kind)
+    || !Array.isArray(input.sources) || input.sources.length < 1 || input.sources.length > MAX_SOURCES) throw invalid();
   const sources = input.sources.map(source => {
     if (!source || typeof source.materialId !== 'string' || !uuid.test(source.materialId) || !Number.isSafeInteger(source.version) || source.version < 1 || source.version > 2147483647) throw invalid();
     return { materialId: source.materialId.toLowerCase(), version: source.version };
   }).sort((a, b) => a.materialId.localeCompare(b.materialId));
   if (new Set(sources.map(source => source.materialId)).size !== sources.length) throw invalid();
   return { clientRequestId: input.clientRequestId.toLowerCase(), kind: input.kind, sources,
-    config: { language: input.config.language, pointCount: input.config.pointCount } };
+    config: normalizeConfig(input.kind, input.config) };
 }
 
 function usageOf(row: AttemptRow): GenerationUsage {
@@ -141,7 +140,7 @@ export class GenerationStore {
         body: material.body, bodySha256: digest(material.body), sourceFileId: file?.id ?? null, pages,
         pageProvenance: file ? material.version === 1 ? 'original_pdf' : 'edited_material' : 'plain_text' });
     }
-    return { schemaVersion: 1, promptVersion: 'study-outline-v1', sources, config: input.config };
+    return { schemaVersion: 1, promptVersion: PROMPTS[input.kind], sources, config: input.config };
   }
 
   private reservation(snapshot: GenerationSnapshot, config: GenerationProviderConfig): number {
@@ -181,31 +180,39 @@ export class GenerationStore {
   }
 
   async create(user: string, set: string, raw: GenerationInput): Promise<{ job: GenerationJob; replayed: boolean }> {
+    return this.db.tx(q => this.createInTransaction(q, user, set, raw), lock);
+  }
+
+  /** Caller must hold the studyc:generations transaction lock; used for atomic chat turns. */
+  async createInTransaction(q: Transaction, user: string, set: string, raw: GenerationInput): Promise<{ job: GenerationJob; replayed: boolean }> {
     const input = normalized(raw);
     const payloadHash = digest(JSON.stringify({ studySetId: set.toLowerCase(), kind: input.kind, sources: input.sources, config: input.config }));
-    return this.db.tx(async q => {
-      await this.scope(q, user, set);
-      const [existing] = await q.query<JobRow>('SELECT * FROM study_generation_jobs WHERE user_id=$1 AND client_request_id=$2', [user, input.clientRequestId]);
-      if (existing) {
-        if (existing.request_digest !== payloadHash) throw new GenerationError('idempotency_conflict', '同一次生成请求的配置已变化，请重新发起。');
-        return { job: await this.present(q, existing), replayed: true };
-      }
-      if (!this.providerConfig) throw unavailable();
-      if ((await q.query('SELECT id FROM study_generation_attempts WHERE user_id=$1 AND client_request_id=$2', [user, input.clientRequestId])).length) {
-        throw new GenerationError('idempotency_conflict', '该请求标识已用于其他生成操作。');
-      }
-      const snapshot = await this.snapshot(q, user, set, input), now = this.now();
-      const [job] = await q.query<JobRow>(`INSERT INTO study_generation_jobs
-        (user_id,study_set_id,kind,client_request_id,request_digest,input_snapshot,provider_config,status,created_at,updated_at)
-        VALUES($1,$2,$3,$4,$5,$6::jsonb,$7::jsonb,'queued',$8,$8) RETURNING *`,
-      [user, set, input.kind, input.clientRequestId, payloadHash, JSON.stringify(snapshot), JSON.stringify(this.providerConfig), now.toISOString()]);
-      await this.newAttempt(q, job!, input.clientRequestId, 'create', 1, now);
-      return { job: await this.present(q, await this.row(q, user, set, job!.id)), replayed: false };
-    }, lock);
+    await this.scope(q, user, set);
+    const [existing] = await q.query<JobRow>('SELECT * FROM study_generation_jobs WHERE user_id=$1 AND client_request_id=$2', [user, input.clientRequestId]);
+    if (existing) {
+      if (existing.request_digest !== payloadHash) throw new GenerationError('idempotency_conflict', '同一次生成请求的配置已变化，请重新发起。');
+      return { job: await this.present(q, existing), replayed: true };
+    }
+    if (!this.providerConfig) throw unavailable();
+    if ((await q.query('SELECT id FROM study_generation_attempts WHERE user_id=$1 AND client_request_id=$2', [user, input.clientRequestId])).length) {
+      throw new GenerationError('idempotency_conflict', '该请求标识已用于其他生成操作。');
+    }
+    const snapshot = await this.snapshot(q, user, set, input), now = this.now();
+    const [job] = await q.query<JobRow>(`INSERT INTO study_generation_jobs
+      (user_id,study_set_id,kind,client_request_id,request_digest,input_snapshot,provider_config,status,created_at,updated_at)
+      VALUES($1,$2,$3,$4,$5,$6::jsonb,$7::jsonb,'queued',$8,$8) RETURNING *`,
+    [user, set, input.kind, input.clientRequestId, payloadHash, JSON.stringify(snapshot), JSON.stringify(this.providerConfig), now.toISOString()]);
+    await this.newAttempt(q, job!, input.clientRequestId, 'create', 1, now);
+    return { job: await this.present(q, await this.row(q, user, set, job!.id)), replayed: false };
   }
 
   async get(user: string, set: string, jobId: string): Promise<GenerationJob> {
-    return this.db.tx(async q => { await this.scope(q, user, set); return this.present(q, await this.row(q, user, set, jobId)); }, lock);
+    return this.db.tx(q => this.getInTransaction(q, user, set, jobId), lock);
+  }
+
+  async getInTransaction(q: Transaction, user: string, set: string, jobId: string): Promise<GenerationJob> {
+    await this.scope(q, user, set);
+    return this.present(q, await this.row(q, user, set, jobId));
   }
 
   async list(user: string, set: string, options: { limit: number; cursor?: string }): Promise<{ items: GenerationJob[]; nextCursor: string | null }> {
@@ -237,22 +244,25 @@ export class GenerationStore {
   }
 
   async retry(user: string, set: string, jobId: string, input: { clientRequestId: string }): Promise<{ job: GenerationJob; replayed: boolean }> {
+    return this.db.tx(q => this.retryInTransaction(q, user, set, jobId, input), lock);
+  }
+
+  /** Caller holds the same global lock as createInTransaction. */
+  async retryInTransaction(q: Transaction, user: string, set: string, jobId: string, input: { clientRequestId: string }): Promise<{ job: GenerationJob; replayed: boolean }> {
     if (!input || typeof input.clientRequestId !== 'string' || !uuid.test(input.clientRequestId)) throw invalid();
-    return this.db.tx(async q => {
-      await this.scope(q, user, set);
-      const job = await this.row(q, user, set, jobId);
-      const [existing] = await q.query<AttemptRow>('SELECT *,budget_day::text AS budget_day FROM study_generation_attempts WHERE user_id=$1 AND client_request_id=$2', [user, input.clientRequestId]);
-      if (existing) {
-        if (existing.job_id !== job.id || existing.request_kind !== 'retry') throw new GenerationError('idempotency_conflict', '该请求标识已用于其他生成操作。');
-        return { job: await this.present(q, job), replayed: true };
-      }
-      if (!this.providerConfig) throw unavailable();
-      const attempts = await q.query<AttemptRow>('SELECT *,budget_day::text AS budget_day FROM study_generation_attempts WHERE job_id=$1 ORDER BY number', [job.id]);
-      if (!['failed', 'cancelled', 'interrupted'].includes(job.status) || attempts.some(attempt => ['queued', 'running'].includes(attempt.status))
-        || attempts.length >= this.policy.maxAttempts) throw conflict();
-      await this.newAttempt(q, job, input.clientRequestId.toLowerCase(), 'retry', attempts.length + 1, this.now());
-      return { job: await this.present(q, await this.row(q, user, set, job.id)), replayed: false };
-    }, lock);
+    await this.scope(q, user, set);
+    const job = await this.row(q, user, set, jobId);
+    const [existing] = await q.query<AttemptRow>('SELECT *,budget_day::text AS budget_day FROM study_generation_attempts WHERE user_id=$1 AND client_request_id=$2', [user, input.clientRequestId]);
+    if (existing) {
+      if (existing.job_id !== job.id || existing.request_kind !== 'retry') throw new GenerationError('idempotency_conflict', '该请求标识已用于其他生成操作。');
+      return { job: await this.present(q, job), replayed: true };
+    }
+    if (!this.providerConfig) throw unavailable();
+    const attempts = await q.query<AttemptRow>('SELECT *,budget_day::text AS budget_day FROM study_generation_attempts WHERE job_id=$1 ORDER BY number', [job.id]);
+    if (!['failed', 'cancelled', 'interrupted'].includes(job.status) || attempts.some(attempt => ['queued', 'running'].includes(attempt.status))
+      || attempts.length >= this.policy.maxAttempts) throw conflict();
+    await this.newAttempt(q, job, input.clientRequestId.toLowerCase(), 'retry', attempts.length + 1, this.now());
+    return { job: await this.present(q, await this.row(q, user, set, job.id)), replayed: false };
   }
 
   private async applyUsage(q: Queryable, attempt: AttemptRow, usage: GenerationUsage) {
@@ -361,6 +371,40 @@ export class GenerationStore {
     }, lock);
   }
 
+  private matchesResult(job: JobRow, result: GenerationResult | null): boolean {
+    if (!result || result.schemaVersion !== 1) return false;
+    const config = job.input_snapshot.config;
+    if (job.kind === 'study_outline') return 'points' in result && 'pointCount' in config && result.points.length === config.pointCount;
+    if (job.kind === 'flashcards') return 'cards' in result && 'cardCount' in config && result.cards.length === config.cardCount;
+    if (job.kind === 'quiz') return 'questions' in result && 'singleChoiceCount' in config && result.questions.length === config.singleChoiceCount + config.trueFalseCount;
+    return job.kind === 'chat_answer' && 'answer' in result && typeof result.answer === 'string' && typeof result.insufficientEvidence === 'boolean';
+  }
+
+  async recordProgress(claim: ClaimedGeneration, text: string): Promise<void> {
+    if (typeof text !== 'string' || text.length > 8000 || /[\u0000\uD800-\uDFFF]/u.test(text)) throw invalid();
+    await this.db.tx(async q => {
+      const [current] = await q.query<{ text: string }>(`SELECT p.text FROM study_generation_progress p WHERE p.attempt_id=$1`, [claim.attemptId]);
+      if (current && !text.startsWith(current.text)) throw invalid();
+      await q.query(`INSERT INTO study_generation_progress(attempt_id,job_id,user_id,sequence,text)
+        SELECT a.id,a.job_id,a.user_id,1,$5 FROM study_generation_attempts a JOIN study_generation_jobs j ON j.id=a.job_id
+        JOIN users u ON u.id=a.user_id WHERE a.id=$1 AND a.job_id=$2 AND a.user_id=$3 AND a.lease_token=$4
+        AND a.status='running' AND a.lease_expires_at>$6 AND j.status='running' AND j.current_attempt_id=a.id AND u.deleted_at IS NULL
+        ON CONFLICT(attempt_id) DO UPDATE SET text=excluded.text,sequence=study_generation_progress.sequence+1
+        WHERE study_generation_progress.text IS DISTINCT FROM excluded.text`,
+      [claim.attemptId, claim.jobId, claim.userId, claim.leaseToken, text, this.now().toISOString()]);
+    }, lock);
+  }
+
+  async progress(user: string, set: string, jobId: string): Promise<{ attemptId: string; seq: number; text: string } | null> {
+    return this.db.tx(async q => {
+      await this.scope(q, user, set);
+      const job = await this.row(q, user, set, jobId);
+      const [progress] = await q.query<{ attemptId: string; seq: number; text: string }>(
+        'SELECT attempt_id AS "attemptId",sequence AS seq,text FROM study_generation_progress WHERE attempt_id=$1 AND user_id=$2', [job.current_attempt_id, user]);
+      return progress ?? null;
+    }, lock);
+  }
+
   async shouldCancel(claim: ClaimedGeneration): Promise<boolean> {
     const [row] = await this.db.query<{ status: GenerationStatus; lease_token: string | null; lease_expires_at: Date | null; job_status: GenerationStatus; current_attempt_id: string; deleted_at: Date | null }>(
       `SELECT a.status,a.lease_token,a.lease_expires_at,j.status AS job_status,j.current_attempt_id,u.deleted_at
@@ -388,8 +432,7 @@ export class GenerationStore {
       let status: GenerationStatus = job.status === 'cancelled' || !user || user.deleted_at ? 'cancelled' : expired ? 'interrupted' : outcome.status;
       let errorCode = status === 'cancelled' ? 'cancelled' : expired ? 'lease_expired' : outcome.errorCode;
       if (!['succeeded', 'failed', 'cancelled', 'interrupted'].includes(status)) { status = 'failed'; errorCode = 'invalid_outcome'; }
-      if (status === 'succeeded' && (!outcome.result || outcome.result.schemaVersion !== 1
-        || !Array.isArray(outcome.result.points) || outcome.result.points.length !== job.input_snapshot.config.pointCount)) { status = 'failed'; errorCode = 'invalid_output'; }
+      if (status === 'succeeded' && !this.matchesResult(job, outcome.result)) { status = 'failed'; errorCode = 'invalid_output'; }
       const safeCode = typeof errorCode === 'string' && /^[a-z][a-z0-9_]{0,79}$/.test(errorCode) ? errorCode : null;
       await this.applyUsage(q, attempt, usage);
       await q.query('UPDATE study_generation_attempts SET status=$2,error_code=$3,finished_at=$4 WHERE id=$1', [attempt.id, status, safeCode, now.toISOString()]);

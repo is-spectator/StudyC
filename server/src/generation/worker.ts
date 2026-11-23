@@ -4,7 +4,7 @@ import {
   UNKNOWN_USAGE, NOT_SENT_USAGE,
 } from './types.js';
 
-export type GenerationWorkerStore = Pick<GenerationStore, 'recoverExpired' | 'claim' | 'shouldCancel' | 'settle'>;
+export type GenerationWorkerStore = Pick<GenerationStore, 'recoverExpired' | 'claim' | 'shouldCancel' | 'settle'> & Partial<Pick<GenerationStore, 'recordProgress'>>;
 export interface GenerationWorkerOptions {
   pollMs?: number;
   cancelPollMs?: number;
@@ -75,7 +75,7 @@ export function startGenerationWorker(store: GenerationWorkerStore, provider: Ge
           }, cancelPollMs);
           watchdog = setTimeout(() => abort('provider_timeout'), Math.max(1, claim.providerConfig.timeoutMs) + 250);
           dispatched = true;
-          const generation = Promise.resolve().then(() => provider.generate(claim, controller.signal)).catch((): GenerationOutcome => {
+          const generation = Promise.resolve().then(() => provider.generate(claim, controller.signal, store.recordProgress ? text => store.recordProgress!(claim, text) : undefined)).catch((): GenerationOutcome => {
             report('generation_provider_failed');
             return { status: 'failed', result: null, errorCode: 'provider_unavailable', usage: { ...UNKNOWN_USAGE } };
           });

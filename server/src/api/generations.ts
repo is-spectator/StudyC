@@ -1,6 +1,6 @@
 import type { Context, Hono } from 'hono';
 import { z } from 'zod';
-import type { GenerationStore } from '../generation/store.js';
+import type { GenerationJob, GenerationStore } from '../generation/store.js';
 import { GenerationError, MAX_SOURCES } from '../generation/types.js';
 import type { SharedRateLimiter } from '../runtime/rate-limit.js';
 import type { StudyEnv } from './auth.js';
@@ -10,10 +10,14 @@ export type GenerationHttpStore = Pick<GenerationStore, 'create' | 'list' | 'get
 const uuid = z.uuid().transform(value => value.toLowerCase());
 const input = z.object({
   clientRequestId: uuid,
-  kind: z.literal('study_outline'),
+  kind: z.enum(['study_outline','flashcards','quiz']),
   sources: z.array(z.object({ materialId: uuid, version: z.number().int().min(1).max(2147483647) }).strict())
     .min(1).max(MAX_SOURCES).refine(sources => new Set(sources.map(source => source.materialId)).size === sources.length),
-  config: z.object({ language: z.enum(['zh-CN', 'en']), pointCount: z.number().int().min(1).max(8) }).strict(),
+  config: z.union([
+    z.object({ language: z.enum(['zh-CN', 'en']), pointCount: z.number().int().min(1).max(8) }).strict(),
+    z.object({ language: z.enum(['zh-CN', 'en']), cardCount: z.number().int().min(1).max(20) }).strict(),
+    z.object({ language: z.enum(['zh-CN', 'en']), singleChoiceCount: z.number().int().min(0).max(10), trueFalseCount: z.number().int().min(0).max(10) }).strict(),
+  ]),
 }).strict();
 const retryInput = z.object({ clientRequestId: uuid }).strict();
 const cancelInput = z.object({}).strict();
@@ -21,6 +25,8 @@ const pagination = z.object({
   limit: z.string().regex(/^[1-9]\d{0,2}$/).transform(Number).pipe(z.number().max(100)).optional().default(50),
   cursor: z.string().min(1).max(2048).optional(),
 }).strict();
+
+const publicJob = (job: GenerationJob): GenerationJob => job.kind === 'quiz' ? { ...job, result: null } : job;
 
 function listOptions(c: Context<StudyEnv>) {
   if (Object.values(c.req.queries()).some(values => values.length !== 1)) {
@@ -44,29 +50,31 @@ export function registerGenerationRoutes(app: Hono<StudyEnv>, store: GenerationH
     await limits.consume('write', id.userId, 120);
     const body = input.parse(await readJson(c, 16 * 1024));
     const result = await available().create(id.userId, id.setId, body);
-    return c.json({ job: result.job }, result.replayed ? 200 : 202);
+    return c.json({ job: publicJob(result.job) }, result.replayed ? 200 : 202);
   });
   app.get(collection, async c => {
     const id = ids(c);
-    return c.json(await available().list(id.userId, id.setId, listOptions(c)));
+    const page = await available().list(id.userId, id.setId, listOptions(c));
+    return c.json({ ...page, items: page.items.map(publicJob) });
   });
   app.get(`${collection}/:jobId`, async c => {
     const id = ids(c);
-    return c.json({ job: await available().get(id.userId, id.setId, jobId(c)) });
+    return c.json({ job: publicJob(await available().get(id.userId, id.setId, jobId(c))) });
   });
   app.post(`${collection}/:jobId/cancel`, async c => {
     const id = ids(c), job = jobId(c);
     await limits.consume('write', id.userId, 120);
     // No request body is needed; if one is supplied it must be an empty JSON object.
     if (c.req.raw.body) cancelInput.parse(await readJson(c, 16 * 1024));
-    return c.json({ job: await available().cancel(id.userId, id.setId, job) });
+    return c.json({ job: publicJob(await available().cancel(id.userId, id.setId, job)) });
   });
   app.post(`${collection}/:jobId/retry`, async c => {
     const id = ids(c), job = jobId(c);
     await limits.consume('write', id.userId, 120);
     const body = retryInput.parse(await readJson(c, 16 * 1024));
+    if ((await available().get(id.userId, id.setId, job)).kind === 'chat_answer') throw new GenerationError('job_conflict', '请从原对话重试回答。');
     const result = await available().retry(id.userId, id.setId, job, body);
-    return c.json({ job: result.job }, result.replayed ? 200 : 202);
+    return c.json({ job: publicJob(result.job) }, result.replayed ? 200 : 202);
   });
   app.get('/v1/study/generation-usage', async c => c.json(await available().usage(c.get('userId'))));
 }

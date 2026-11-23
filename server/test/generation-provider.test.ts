@@ -2,13 +2,13 @@ import { createHash } from 'node:crypto';
 import { describe, expect, it, vi } from 'vitest';
 import { createOpenRouterGenerationProvider, MAX_PROVIDER_RESPONSE_BYTES } from '../src/generation/provider.js';
 import { generationProviderConfig } from '../src/runtime/generation-config.js';
-import type { ClaimedGeneration, GenerationProviderConfig } from '../src/generation/types.js';
+import type { ClaimedGeneration, GenerationProviderConfig, GenerationSnapshot, OutlineConfig, GenerationResult, OutlineResult } from '../src/generation/types.js';
 
 const key = 'fixture-only-openrouter-key-never-live';
 const quote = '绿色植物通过光合作用将光能转化为化学能。';
 const quoteTwo = '叶绿体中的色素吸收光能，为光合作用提供能量。';
 const sha = (body: string) => createHash('sha256').update(body, 'utf8').digest('hex');
-function claim(config = generationProviderConfig({})): ClaimedGeneration {
+function claim(config = generationProviderConfig({})): ClaimedGeneration & { snapshot: GenerationSnapshot & { config: OutlineConfig } } {
   const body = `导言😀\n${quote}\n第二页\n${quoteTwo}`;
   return { jobId: 'job-private', attemptId: 'attempt-private', userId: 'user-private-never-send', studySetId: 'set-private', attemptNumber: 1, leaseToken: 'lease-private', leaseExpiresAt: '2030-01-01T00:00:00Z', providerConfig: config,
     snapshot: { schemaVersion: 1, promptVersion: 'study-outline-v1', config: { language: 'zh-CN', pointCount: 2 }, sources: [{ sourceId: 's1', materialId: '11111111-1111-4111-8111-111111111111', version: 7, title: '植物笔记', body, bodySha256: sha(body), sourceFileId: 'file-private', pageProvenance: 'original_pdf', pages: [{ page: 3, start: 0, end: body.indexOf('第二页') }, { page: 4, start: body.indexOf('第二页'), end: body.length }] }] } };
@@ -23,6 +23,11 @@ function fixture(response: () => Response | Promise<Response> = () => Response.j
   const transport = vi.fn<typeof fetch>(async () => response());
   const provider = createOpenRouterGenerationProvider({ config, apiKey: key, fetch: transport });
   return { transport, provider, run: (value = claim(config), signal = new AbortController().signal) => provider.generate(value, signal) };
+}
+
+function outline(value: GenerationResult | null): OutlineResult {
+  if (!value || !('points' in value)) throw new Error('Expected validated outline result');
+  return value;
 }
 
 describe('single-attempt OpenRouter generation provider', () => {
@@ -46,16 +51,16 @@ describe('single-attempt OpenRouter generation provider', () => {
   it('derives immutable source version and UTF-16 offsets/page from the saved snapshot', async () => {
     const task = claim(); const { run } = fixture(); const result = await run(task);
     const source = task.snapshot.sources[0]!;
-    expect(result.result?.points[0]?.citations[0]).toEqual({ sourceId: 's1', materialId: source.materialId, version: 7, quote, start: source.body.indexOf(quote), end: source.body.indexOf(quote) + quote.length, page: 3 });
-    expect(result.result?.points[1]?.citations[0]?.page).toBe(4);
+    expect(outline(result.result).points[0]?.citations[0]).toEqual({ sourceId: 's1', materialId: source.materialId, version: 7, quote, start: source.body.indexOf(quote), end: source.body.indexOf(quote) + quote.length, page: 3 });
+    expect(outline(result.result).points[1]?.citations[0]?.page).toBe(4);
     expect(result.usage).toEqual({ state: 'reported', inputTokens: 81, outputTokens: 19, totalTokens: 100, costCredits: '0.000123', providerRequestId: 'gen-fixture-123' });
   });
 
   it('does not invent a page for edited/plain-text material or a quotation spanning pages', async () => {
     const task = claim(); task.snapshot.sources[0]!.pages = []; task.snapshot.sources[0]!.pageProvenance = 'edited_material';
-    const result = await fixture().run(task); expect(result.result?.points.flatMap(point => point.citations).every(c => c.page === null)).toBe(true);
+    const result = await fixture().run(task); expect(outline(result.result).points.flatMap(point => point.citations).every(c => c.page === null)).toBe(true);
     const across = claim(); const start = across.snapshot.sources[0]!.body.indexOf(quote); across.snapshot.sources[0]!.pages = [{ page: 1, start: 0, end: start + 5 }, { page: 2, start: start + 5, end: across.snapshot.sources[0]!.body.length }];
-    expect((await fixture().run(across)).result?.points[0]?.citations[0]?.page).toBeNull();
+    expect(outline((await fixture().run(across)).result).points[0]?.citations[0]?.page).toBeNull();
   });
 
   it('sends the exact requested strict JSON schema and point count when configured', async () => {

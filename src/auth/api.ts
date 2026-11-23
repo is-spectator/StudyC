@@ -5,6 +5,8 @@ export interface RequestOptions {
   formData?: FormData;
   /** Return the response body as a Blob instead of JSON. Errors remain JSON. */
   binary?: boolean;
+  /** Authenticated SSE. Events are delivered only while the account stays current. */
+  onEvent?: (event: { event: string; data: unknown; id?: string }) => void;
   headers?: Record<string, string>;
   signal?: AbortSignal;
 }
@@ -59,12 +61,12 @@ export async function authApi<T>(path: string, options: RequestOptions = {}, fet
   if (options.formData !== undefined && options.body !== undefined) throw new AuthApiError('invalid_request', '请求格式不正确。');
   const headers = new Headers(options.headers);
   if (headers.has('Authorization') || headers.has('Cookie')) throw new AuthApiError('credential_conflict', '请使用浏览器账户会话。');
-  headers.set('Accept', options.binary ? 'application/pdf, application/json' : 'application/json');
+  headers.set('Accept', options.onEvent ? 'text/event-stream' : options.binary ? 'application/pdf, application/json' : 'application/json');
   if (options.formData === undefined && options.body !== undefined) headers.set('Content-Type', 'application/json');
   const service = path.startsWith('/v1/study/') ? '学习服务' : '账户服务';
   let response: Response;
   try {
-    const timeout = AbortSignal.timeout(20_000);
+    const timeout = AbortSignal.timeout(options.onEvent ? 90_000 : 20_000);
     response = await fetcher(path, {
       method: options.method ?? 'GET', credentials: 'same-origin', cache: 'no-store', redirect: 'error', headers,
       body: options.formData ?? (options.body === undefined ? undefined : JSON.stringify(options.body)),
@@ -76,6 +78,47 @@ export async function authApi<T>(path: string, options: RequestOptions = {}, fet
     throw new AuthApiError('connection_lost', `暂时无法连接${service}，请检查网络后重试。`);
   }
   throwIfAborted(options.signal);
+  if (options.onEvent && response.ok) {
+    if (!response.headers.get('content-type')?.startsWith('text/event-stream') || !response.body) {
+      void response.body?.cancel();
+      throw new AuthApiError('invalid_response', '回答连接没有返回有效的数据流。');
+    }
+    const reader = response.body.getReader();
+    const decoder = new TextDecoder('utf-8', { fatal: true });
+    let buffer = '', bytes = 0;
+    try {
+      while (true) {
+        throwIfAborted(options.signal);
+        const part = await reader.read();
+        throwIfAborted(options.signal);
+        if (part.done) break;
+        bytes += part.value.byteLength;
+        if (bytes > 8 * 1024 * 1024) throw new AuthApiError('invalid_response', '回答数据流超过大小限制。');
+        buffer += decoder.decode(part.value, { stream: true });
+        buffer = buffer.replace(/\r\n/g, '\n');
+        let end: number;
+        while ((end = buffer.indexOf('\n\n')) >= 0) {
+          const frame = buffer.slice(0, end); buffer = buffer.slice(end + 2);
+          let event = 'message', id: string | undefined;
+          const data: string[] = [];
+          for (const line of frame.split('\n')) {
+            if (line.startsWith('event:')) event = line.slice(6).trim();
+            if (line.startsWith('id:')) id = line.slice(3).trim();
+            if (line.startsWith('data:')) data.push(line.slice(5).replace(/^ /, ''));
+          }
+          if (!data.length) continue;
+          if (frame.length > 256 * 1024 || event.length > 80 || (id?.length ?? 0) > 100) throw new AuthApiError('invalid_response', '回答数据流格式不正确。');
+          let value: unknown;
+          try { value = JSON.parse(data.join('\n')); } catch { throw new AuthApiError('invalid_response', '回答数据流格式不正确。'); }
+          options.onEvent({ event, data: value, ...(id === undefined ? {} : { id }) });
+          if (event === 'done') return undefined as T;
+        }
+        if (buffer.length > 256 * 1024) throw new AuthApiError('invalid_response', '回答数据流格式不正确。');
+      }
+      decoder.decode();
+      throw new AuthApiError('connection_lost', '回答连接已断开，已保存的任务可以重新连接查看。');
+    } finally { await reader.cancel().catch(() => undefined); reader.releaseLock(); }
+  }
   if (options.binary && response.ok) {
     const blob = await response.blob();
     throwIfAborted(options.signal);

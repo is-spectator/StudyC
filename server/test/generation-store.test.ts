@@ -20,7 +20,7 @@ describe('durable generation tasks, reservations and fencing', () => {
   const input = (overrides: Partial<GenerationInput> = {}): GenerationInput => ({ clientRequestId: randomUUID(), kind: 'study_outline',
     sources: [{ materialId: material, version: 1 }], config: { language: 'zh-CN', pointCount: 2 }, ...overrides });
   const success = (claim: ClaimedGeneration) => ({ status: 'succeeded' as const, errorCode: null, usage: reported,
-    result: { schemaVersion: 1 as const, title: '合成提纲', points: Array.from({ length: claim.snapshot.config.pointCount }, (_, index) => ({
+    result: { schemaVersion: 1 as const, title: '合成提纲', points: Array.from({ length: ('pointCount' in claim.snapshot.config ? claim.snapshot.config.pointCount : 0) }, (_, index) => ({
       text: `要点${index + 1}`, citations: [{ sourceId: 's1', materialId: claim.snapshot.sources[0]!.materialId,
         version: 1, quote: claim.snapshot.sources[0]!.body, start: 0, end: claim.snapshot.sources[0]!.body.length, page: null }],
     })) } });
