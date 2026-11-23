@@ -4,6 +4,7 @@ import { STUDY_FILES_SQL } from './study-files-schema.js';
 import { STUDY_SCHEMA_SQL } from './study-schema.js';
 import { GENERATION_IMMUTABLE_BODY, GENERATION_SCHEMA_SQL } from './generation-schema.js';
 import { CHAT_IMMUTABLE_BODY, CHAT_SCHEMA_SQL, CHAT_TABLES } from './chat-schema.js';
+import { FLASHCARDS_SCHEMA_SQL, FLASHCARD_TABLES } from './flashcards-schema.js';
 
 const name = 'studyc_sets_and_text_materials';
 const checksum = createHash('sha256').update(`${name}\n${STUDY_SCHEMA_SQL}`).digest('hex');
@@ -205,6 +206,7 @@ async function verifyGenerationSchema(q: Transaction): Promise<string> {
 
 export const LEARNING_MIGRATIONS = [
   { version: 4, name: 'studyc_chat_and_learning_generations', sql: CHAT_SCHEMA_SQL, tables: CHAT_TABLES },
+  { version: 5, name: 'studyc_flashcards', sql: FLASHCARDS_SCHEMA_SQL, tables: FLASHCARD_TABLES },
 ];
 const additionChecksum = (migration: typeof LEARNING_MIGRATIONS[number]) => createHash('sha256').update(`${migration.name}\n${migration.sql}`).digest('hex');
 async function additionShape(q: Queryable, migration: typeof LEARNING_MIGRATIONS[number]) {

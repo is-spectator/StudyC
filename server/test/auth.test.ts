@@ -193,6 +193,28 @@ describe('standalone StudyC app boundary', () => {
     expect(head.headers.get('cache-control')).toBe('private, no-store');
   });
 
+  it('guards every flashcard path shape and rejects unsupported methods before database access', async () => {
+    const { app, db } = fixture();
+    const root = `/v1/study/sets/${userId}/flashcard-decks`;
+    const paths: [string, string[]][] = [
+      [root, ['GET', 'POST']], [`${root}/${otherId}`, ['GET', 'PATCH']],
+      [`${root}/materialize`, ['POST']], [`${root}/${otherId}/cards`, ['POST']],
+      [`${root}/${otherId}/cards/${userId}`, ['PATCH']], [`${root}/${otherId}/sessions`, ['POST']],
+      [`${root}/${otherId}/sessions/${userId}`, ['GET']], [`${root}/${otherId}/sessions/${userId}/reviews`, ['POST']],
+    ];
+    for (const [path, allowed] of paths) {
+      for (const method of ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS', 'HEAD']) {
+        if (allowed.includes(method)) continue;
+        const response = await app.request(path, { method, headers: writeCredentials() });
+        expect(response.status, `${method} ${path}`).toBe(405);
+        expect(response.headers.get('cache-control')).toBe('private, no-store');
+      }
+    }
+    expect(db.query).not.toHaveBeenCalled();
+    expect(db.tx).not.toHaveBeenCalled();
+    await failure(await app.request(`${root}/${otherId}/sessions/${userId}/unknown`, { headers: credentials() }), 404, 'not_found');
+  });
+
   it.each([
     [new DomainError('not_found', 'missing'), 404, 'not_found'],
     [new DomainError('version_conflict', 'conflict'), 409, 'version_conflict'],
