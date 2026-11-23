@@ -30,7 +30,7 @@ const page = z.object({
 }).strict();
 
 /** Always count actual streamed bytes, even with an absent or misleading Content-Length. */
-async function readJson(c: Context<Env>, maxBytes: number): Promise<unknown> {
+export async function readJson(c: Context<Env>, maxBytes: number): Promise<unknown> {
   if (!/^application\/json(?:\s*;|\s*$)/i.test(c.req.header('content-type') ?? '')) {
     throw new StudyInputError('请使用 application/json 提交。');
   }

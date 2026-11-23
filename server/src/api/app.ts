@@ -8,6 +8,8 @@ import { StudyFileError } from '../services/study-files.js';
 import { requireStudySession, SessionError, type StudyEnv } from './auth.js';
 import { registerFileRoutes } from './files.js';
 import { registerStudyRoutes } from './study.js';
+import { registerGenerationRoutes, type GenerationHttpStore } from './generations.js';
+import { GenerationError } from '../generation/types.js';
 
 export interface AppOptions {
   releaseId: string;
@@ -16,6 +18,8 @@ export interface AppOptions {
   fileRoot?: string;
   /** Test transport injection only; the destination remains a fixed loopback URL. */
   sessionFetch?: typeof fetch;
+  /** Always provide the store, even with generation disabled, to retain history/cancellation. */
+  generationStore?: GenerationHttpStore;
 }
 
 const statuses = {
@@ -57,6 +61,11 @@ export function createApp(db: Db, options: AppOptions) {
     c.header('Cache-Control', 'private, no-store');
   });
   app.onError((error, c) => {
+    if (error instanceof GenerationError) {
+      const code = { invalid_input: 400, not_found: 404, version_conflict: 409, idempotency_conflict: 409,
+        job_conflict: 409, quota_exceeded: 429, service_unavailable: 503 } as const;
+      return c.json({ error: { code: error.code, message: error.message } }, code[error.code]);
+    }
     if (error instanceof StudyInputError) return c.json({ error: { code: 'invalid_input', message: error.message } }, 400);
     if (error instanceof StudyFileError) {
       const status = error.code === 'parse_timeout' ? 503 : error.code === 'text_too_large' ? 413 : 422;
@@ -82,12 +91,19 @@ export function createApp(db: Db, options: AppOptions) {
     const detail = /^\/v1\/study\/sets\/[^/]+\/materials\/[^/]+$/.test(path);
     const setDetail = /^\/v1\/study\/sets\/[^/]+$/.test(path);
     const fileRead = /^\/v1\/study\/sets\/[^/]+\/files\/[^/]+\/content$/.test(path);
-    if ((collection && !['GET', 'POST'].includes(c.req.method)) || ((detail || setDetail) && !['GET', 'PATCH'].includes(c.req.method)) || (fileRead && c.req.method !== 'GET')) {
+    const generationCollection = /^\/v1\/study\/sets\/[^/]+\/generations$/.test(path);
+    const generationDetail = /^\/v1\/study\/sets\/[^/]+\/generations\/[^/]+$/.test(path);
+    const generationAction = /^\/v1\/study\/sets\/[^/]+\/generations\/[^/]+\/(?:cancel|retry)$/.test(path);
+    const generationUsage = path === '/v1/study/generation-usage';
+    if ((collection && !['GET', 'POST'].includes(c.req.method)) || ((detail || setDetail) && !['GET', 'PATCH'].includes(c.req.method)) || (fileRead && c.req.method !== 'GET')
+      || (generationCollection && !['GET', 'POST'].includes(c.req.method)) || ((generationDetail || generationUsage) && c.req.method !== 'GET')
+      || (generationAction && c.req.method !== 'POST')) {
       return c.json({ error: { code: 'method_not_allowed', message: '此接口不支持该请求方法。' } }, 405);
     }
     await next();
   });
   registerStudyRoutes(app, db, limits);
+  registerGenerationRoutes(app, options.generationStore, limits);
   if (options.fileRoot) registerFileRoutes(app, db, limits, options.fileRoot);
   // No PlanPlan or account-management routes are mounted.
   app.notFound(c => c.json({ error: { code: 'not_found', message: '没有找到该接口。' } }, 404));

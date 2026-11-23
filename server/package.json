@@ -13,7 +13,8 @@
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "vitest run --exclude \"dist/**\" --maxWorkers=1 --no-file-parallelism",
     "db:migrate": "tsx src/main.ts migrate",
-    "start": "node dist/main.js"
+    "start": "node dist/main.js",
+    "verify:generation:live": "tsx scripts/verify-generation-live.ts"
   },
   "dependencies": {
     "@electric-sql/pglite": "^0.5.11",
