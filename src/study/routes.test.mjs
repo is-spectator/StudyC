@@ -20,7 +20,7 @@ test('actual entity IDs survive direct links, trailing slashes and query strings
   assert.deepEqual(parseStudyRoute(`/platform/studyset/${a}/material/${b}?x=1`), { kind: 'material', studySetId: a, materialId: b.toLowerCase() });
 });
 test('unsupported cloud tools have explicit unavailable routes and retain their set scope', () => {
-  assert.deepEqual(parseStudyRoute(`/platform/studyset/${a}/flashcards/create`), { kind: 'unavailable', title: '闪卡', studySetId: a });
+  assert.deepEqual(parseStudyRoute(`/platform/studyset/${a}/practice`), { kind: 'unavailable', title: '测验与考试', studySetId: a });
   assert.deepEqual(parseStudyRoute('/platform/calendar'), { kind: 'unavailable', title: '日历' });
   assert.deepEqual(parseStudyRoute('/platform/local-data'), { kind: 'local-data' });
 });
@@ -35,4 +35,11 @@ test('path builders use validated IDs, including distinct same-title entities', 
   assert.equal(materialPath(a, b), `/platform/studyset/${a}/material/${b.toLowerCase()}`);
   assert.throws(() => studySetPath('main'), TypeError);
   assert.throws(() => materialPath(a, '../other'), TypeError);
+});
+
+test('flashcards open in the selected set and accept resumable query links only at the supported path', () => {
+  assert.deepEqual(parseStudyRoute(`/platform/studyset/${b}/flashcards/?flashcardDeck=${a}&flashcardSession=${a}`), { kind: 'flashcards', studySetId: b.toLowerCase() });
+  for (const suffix of ['/create', '/new', `/${a}`, '/extra/path']) {
+    assert.deepEqual(parseStudyRoute(`/platform/studyset/${a}/flashcards${suffix}`), { kind: 'not-found' });
+  }
 });

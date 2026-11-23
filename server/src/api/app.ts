@@ -12,6 +12,7 @@ import { registerGenerationRoutes, type GenerationHttpStore } from './generation
 import { GenerationError } from '../generation/types.js';
 import { GenerationStore } from '../generation/store.js';
 import { registerChatRoutes } from './chat.js';
+import { registerFlashcardRoutes } from './flashcards.js';
 
 export interface AppOptions {
   releaseId: string;
@@ -100,10 +101,18 @@ export function createApp(db: Db, options: AppOptions) {
     const chatCollection = /^\/v1\/study\/sets\/[^/]+\/chat\/threads$/.test(path);
     const chatRead = /^\/v1\/study\/sets\/[^/]+\/chat\/threads\/[^/]+(?:\/messages\/[^/]+\/events)?$/.test(path);
     const chatWrite = /^\/v1\/study\/sets\/[^/]+\/chat\/threads\/[^/]+\/messages(?:\/[^/]+\/(?:stop|retry))?$/.test(path);
+    const flashcardCollection = /^\/v1\/study\/sets\/[^/]+\/flashcard-decks$/.test(path);
+    const flashcardMaterialize = /^\/v1\/study\/sets\/[^/]+\/flashcard-decks\/materialize$/.test(path);
+    const flashcardDetail = !flashcardMaterialize && /^\/v1\/study\/sets\/[^/]+\/flashcard-decks\/[^/]+$/.test(path);
+    const flashcardWrite = flashcardMaterialize || /^\/v1\/study\/sets\/[^/]+\/flashcard-decks\/[^/]+\/(?:cards|sessions(?:\/[^/]+\/reviews)?)$/.test(path);
+    const flashcardEdit = /^\/v1\/study\/sets\/[^/]+\/flashcard-decks\/[^/]+\/cards\/[^/]+$/.test(path);
+    const flashcardSession = /^\/v1\/study\/sets\/[^/]+\/flashcard-decks\/[^/]+\/sessions\/[^/]+$/.test(path);
     if ((collection && !['GET', 'POST'].includes(c.req.method)) || ((detail || setDetail) && !['GET', 'PATCH'].includes(c.req.method)) || (fileRead && c.req.method !== 'GET')
       || (generationCollection && !['GET', 'POST'].includes(c.req.method)) || ((generationDetail || generationUsage) && c.req.method !== 'GET')
       || (generationAction && c.req.method !== 'POST') || (chatCollection && !['GET','POST'].includes(c.req.method))
-      || (chatRead && c.req.method !== 'GET') || (chatWrite && c.req.method !== 'POST')) {
+      || (chatRead && c.req.method !== 'GET') || (chatWrite && c.req.method !== 'POST')
+      || (flashcardCollection && !['GET', 'POST'].includes(c.req.method)) || (flashcardDetail && !['GET', 'PATCH'].includes(c.req.method))
+      || (flashcardWrite && c.req.method !== 'POST') || (flashcardEdit && c.req.method !== 'PATCH') || (flashcardSession && c.req.method !== 'GET')) {
       return c.json({ error: { code: 'method_not_allowed', message: '此接口不支持该请求方法。' } }, 405);
     }
     await next();
@@ -111,6 +120,7 @@ export function createApp(db: Db, options: AppOptions) {
   registerStudyRoutes(app, db, limits);
   registerGenerationRoutes(app, options.generationStore, limits);
   registerChatRoutes(app, db, options.generationStore instanceof GenerationStore ? options.generationStore : undefined, limits);
+  registerFlashcardRoutes(app, db, options.generationStore instanceof GenerationStore ? options.generationStore : undefined, limits);
   if (options.fileRoot) registerFileRoutes(app, db, limits, options.fileRoot);
   // No PlanPlan or account-management routes are mounted.
   app.notFound(c => c.json({ error: { code: 'not_found', message: '没有找到该接口。' } }, 404));

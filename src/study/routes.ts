@@ -3,6 +3,7 @@ export type StudyRoute =
   | { kind: 'set'; studySetId: string }
   | { kind: 'material'; studySetId: string; materialId?: string }
   | { kind: 'chat'; studySetId: string; threadId?: string }
+  | { kind: 'flashcards'; studySetId: string }
   | { kind: 'local-data' }
   | { kind: 'unavailable'; title: string; studySetId?: string }
   | { kind: 'not-found' };
@@ -36,6 +37,7 @@ export function parseStudyRoute(value: string): StudyRoute {
     if (parts.length === 6 && uuid.test(parts[5])) return { kind: 'chat', studySetId, threadId: parts[5].toLowerCase() };
     return { kind: 'not-found' };
   }
+  if (parts[4] === 'flashcards') return parts.length === 5 ? { kind: 'flashcards', studySetId } : { kind: 'not-found' };
   if (Object.hasOwn(tools, parts[4])) return { kind: 'unavailable', title: tools[parts[4]], studySetId };
   return { kind: 'not-found' };
 }

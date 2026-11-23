@@ -33,6 +33,14 @@ STUDY_API_ROUTES = {
     '/v1/study/sets/{setId}/chat/threads/{threadId}/messages/{turnId}/stop': ['POST'],
     '/v1/study/sets/{setId}/chat/threads/{threadId}/messages/{turnId}/retry': ['POST'],
     '/v1/study/sets/{setId}/chat/threads/{threadId}/messages/{turnId}/events': ['GET'],
+    '/v1/study/sets/{setId}/flashcard-decks': ['GET', 'POST'],
+    '/v1/study/sets/{setId}/flashcard-decks/{deckId}': ['GET', 'PATCH'],
+    '/v1/study/sets/{setId}/flashcard-decks/materialize': ['POST'],
+    '/v1/study/sets/{setId}/flashcard-decks/{deckId}/cards': ['POST'],
+    '/v1/study/sets/{setId}/flashcard-decks/{deckId}/cards/{cardId}': ['PATCH'],
+    '/v1/study/sets/{setId}/flashcard-decks/{deckId}/sessions': ['POST'],
+    '/v1/study/sets/{setId}/flashcard-decks/{deckId}/sessions/{sessionId}': ['GET'],
+    '/v1/study/sets/{setId}/flashcard-decks/{deckId}/sessions/{sessionId}/reviews': ['POST'],
 }
 UUID_PATTERN = r'[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[1-8][0-9A-Fa-f]{3}-[89ABab][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}'
 STUDY_API_BEGIN = '    # BEGIN StudyC authenticated data API'
@@ -103,7 +111,15 @@ def study_api_locations() -> str:
                                    (f'/chat/threads/{UUID_PATTERN}/messages', ['POST'], '32k'),
                                    (f'/chat/threads/{UUID_PATTERN}/messages/{UUID_PATTERN}/stop', ['POST'], ''),
                                    (f'/chat/threads/{UUID_PATTERN}/messages/{UUID_PATTERN}/retry', ['POST'], ''),
-                                   (f'/chat/threads/{UUID_PATTERN}/messages/{UUID_PATTERN}/events', ['GET'], '')]:
+                                   (f'/chat/threads/{UUID_PATTERN}/messages/{UUID_PATTERN}/events', ['GET'], ''),
+                                   ('/flashcard-decks', ['GET', 'POST'], '32k'),
+                                   (f'/flashcard-decks/{UUID_PATTERN}', ['GET', 'PATCH'], '32k'),
+                                   ('/flashcard-decks/materialize', ['POST'], '32k'),
+                                   (f'/flashcard-decks/{UUID_PATTERN}/cards', ['POST'], '32k'),
+                                   (f'/flashcard-decks/{UUID_PATTERN}/cards/{UUID_PATTERN}', ['PATCH'], '32k'),
+                                   (f'/flashcard-decks/{UUID_PATTERN}/sessions', ['POST'], '32k'),
+                                   (f'/flashcard-decks/{UUID_PATTERN}/sessions/{UUID_PATTERN}', ['GET'], '32k'),
+                                   (f'/flashcard-decks/{UUID_PATTERN}/sessions/{UUID_PATTERN}/reviews', ['POST'], '32k')]:
         pattern = f'^/v1/study/sets/{UUID_PATTERN}{suffix}$'
         # Quoting keeps the repetition braces part of the regex, not Nginx blocks.
         routes.append(proxy_location(f'~ "{pattern}"', methods, 8, body))
@@ -148,7 +164,7 @@ def main() -> None:
         parser.add_argument('--' + name, required=True, type=safe_path)
     parser.add_argument('--acme-webroot', type=safe_path, help='Optional, only after confirming the real renewal webroot')
     parser.add_argument('--trusted-proxy-include', type=safe_path, help='Optional audited host-scoped Cloudflare real-IP snippet; never a global include')
-    parser.add_argument('--enable-study-api', action='store_true', help='Explicitly expose the authenticated StudyC data, PDF, and generation routes')
+    parser.add_argument('--enable-study-api', action='store_true', help='Explicitly expose the authenticated StudyC data, PDF, generation, chat and flashcard routes')
     parser.add_argument('--output', required=True, type=Path)
     args = parser.parse_args()
     if args.output.exists():
@@ -176,7 +192,7 @@ def main() -> None:
                    'studyApiUpstream': '127.0.0.1:8790' if args.enable_study_api else None,
                    'studyApiEnabled': args.enable_study_api,
                    'studyApiRoutes': STUDY_API_ROUTES if args.enable_study_api else {},
-                   'studyApiBodyLimits': {'defaultBytes': 16 * 1024, 'materialLocationBytes': 2 * 1024 * 1024} if args.enable_study_api else {}})
+                   'studyApiBodyLimits': {'defaultBytes': 16 * 1024, 'materialLocationBytes': 2 * 1024 * 1024, 'flashcardLocationBytes': 32 * 1024} if args.enable_study_api else {}})
     (args.output / 'review.json').write_text(json.dumps(review, indent=2) + '\n')
     (args.output / 'review.json').chmod(0o600)
     print(json.dumps({'reviewDirectory': str(args.output), 'status': review['status'], 'files': list(outputs)}))
