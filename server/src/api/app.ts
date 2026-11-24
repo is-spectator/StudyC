@@ -1,3 +1,4 @@
+import {registerPlanRoutes} from './plans.js';
 import { registerNoteRoutes } from './notes.js';
 import { registerMistakeRoutes } from './mistakes.js';
 import { registerSpacedRoutes } from './spaced-review.js';
@@ -118,6 +119,12 @@ export function createApp(db: Db, options: AppOptions) {
     const mistakeCollection = /^\/v1\/study\/sets\/[^/]+\/mistake-reviews$/.test(path);
     const mistakeWrite = /^\/v1\/study\/sets\/[^/]+\/mistake-reviews\/[^/]+\/(?:answers|submit)$/.test(path);
     if ((mistakeRead && c.req.method !== 'GET') || (mistakeCollection && !['GET','POST'].includes(c.req.method)) || (mistakeWrite && c.req.method !== 'POST')) return c.json({error:{code:'method_not_allowed',message:'请求方法不支持。'}},405);
+    const planCollection=/^\/v1\/study\/sets\/[^/]+\/plans(?:\/[^/]+\/tasks)?$/.test(path);
+    const planDetail=/^\/v1\/study\/sets\/[^/]+\/plans\/[^/]+$/.test(path);
+    const planTask=/^\/v1\/study\/sets\/[^/]+\/plans\/[^/]+\/tasks\/[^/]+$/.test(path);
+    const planEvidence=/^\/v1\/study\/sets\/[^/]+\/plans\/[^/]+\/tasks\/[^/]+\/evidence$/.test(path);
+    const planOptions=/^\/v1\/study\/sets\/[^/]+\/planning-options$/.test(path);
+    if((planCollection&&!['GET','POST'].includes(c.req.method))||(planDetail&&!['GET','PATCH'].includes(c.req.method))||(planTask&&c.req.method!=='PATCH')||(planEvidence&&!['GET','POST'].includes(c.req.method))||(planOptions&&c.req.method!=='GET'))return c.json({error:{code:'method_not_allowed',message:'请求方法不支持。'}},405);
     const noteCollection=/^\/v1\/study\/sets\/[^/]+\/notes$/.test(path),noteDetail=/^\/v1\/study\/sets\/[^/]+\/notes\/[^/]+$/.test(path);
     if((noteCollection&&!['GET','POST'].includes(c.req.method))||(noteDetail&&!['GET','PATCH'].includes(c.req.method)))return c.json({error:{code:'method_not_allowed',message:'请求方法不支持。'}},405);
     const quizCollection = /^\/v1\/study\/sets\/[^/]+\/quizzes(?:\/[^/]+\/attempts)?$/.test(path);
@@ -141,6 +148,7 @@ export function createApp(db: Db, options: AppOptions) {
   registerSpacedRoutes(app, db, limits);
   registerMistakeRoutes(app,db,limits);
   registerNoteRoutes(app,db,limits);
+  registerPlanRoutes(app,db,limits);
   registerQuizRoutes(app, db, options.generationStore, limits);
   if (options.fileRoot) registerFileRoutes(app, db, limits, options.fileRoot);
   // No PlanPlan or account-management routes are mounted.

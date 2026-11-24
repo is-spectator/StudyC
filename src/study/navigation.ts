@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-let guard: (() => boolean) | null = null;
+const guards = new Set<() => boolean>();
 export function registerStudyLeaveGuard(next: () => boolean): () => void {
-  guard = next;
-  return () => { if (guard === next) guard = null; };
+  guards.add(next);
+  return () => { guards.delete(next); };
 }
-export function confirmStudyLeave(): boolean { return guard?.() ?? true; }
+export function confirmStudyLeave(): boolean { return [...guards].every(guard => guard()); }
 const currentPath = () => location.pathname + location.search;
 
 export function useStudyNavigation() {

@@ -1,3 +1,4 @@
+import {dropAdditionsAfter} from './database.js';
 import { MistakeService, backfillMistakes } from '../src/services/mistakes.js';
 import { randomUUID } from 'node:crypto';
 import { beforeEach, afterEach, describe, it, expect } from 'vitest';
@@ -161,6 +162,7 @@ it('v7 upgrade backfills submitted mistakes without changing old data or migrati
         let a = (await startQuizAttempt(db, user, set, quiz.id, { clientRequestId: randomUUID(), mode: 'exam' })).attempt;
         a = (await answerQuiz(db, user, set, quiz.id, a.id, { version: a.version, questionIndex: 0, answerIndex: 1, clientRequestId: randomUUID() })).attempt;
         a = (await submitQuiz(db, user, set, quiz.id, a.id, { version: a.version, clientRequestId: randomUUID() })).attempt;
+    await dropAdditionsAfter(db,9);
     await db.exec(`DROP TABLE study_note_materializations; DROP TABLE study_note_origins; DROP TABLE study_notes; DELETE FROM studyc_schema_migrations WHERE version=9; ALTER TABLE study_generation_jobs DROP CONSTRAINT study_generation_jobs_kind_check; ALTER TABLE study_generation_jobs ADD CONSTRAINT study_generation_jobs_kind_check CHECK(kind IN ('study_outline','chat_answer','flashcards','quiz')); `);
         await db.exec('DROP TABLE study_mistake_review_events; DROP TABLE study_mistake_reviews; DROP TABLE study_mistake_facts; DELETE FROM studyc_schema_migrations WHERE version=8');
         const old = await db.query('SELECT * FROM studyc_schema_migrations ORDER BY version');

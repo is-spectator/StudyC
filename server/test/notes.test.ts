@@ -1,3 +1,4 @@
+import {dropAdditionsAfter} from './database.js';
 import { randomUUID } from "node:crypto";
 import { beforeEach, afterEach, describe, it, expect } from "vitest";
 import type { Db } from "../src/db/db.js";
@@ -445,6 +446,7 @@ it("upgrades a genuine v8 registry without changing prior fingerprints and rejec
         title: "旧学习集",
       })
     ).studySet;
+    await dropAdditionsAfter(db,9);
     await db.exec(
       "DROP TABLE study_note_materializations; DROP TABLE study_note_origins; DROP TABLE study_notes; DELETE FROM studyc_schema_migrations WHERE version=9; ALTER TABLE study_generation_jobs DROP CONSTRAINT study_generation_jobs_kind_check; ALTER TABLE study_generation_jobs ADD CONSTRAINT study_generation_jobs_kind_check CHECK(kind IN ('study_outline','chat_answer','flashcards','quiz')); ",
     );

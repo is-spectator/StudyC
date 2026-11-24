@@ -20,7 +20,7 @@ test('actual entity IDs survive direct links, trailing slashes and query strings
   assert.deepEqual(parseStudyRoute(`/platform/studyset/${a}/material/${b}?x=1`), { kind: 'material', studySetId: a, materialId: b.toLowerCase() });
 });
 test('unsupported cloud tools have explicit unavailable routes and retain their set scope', () => {
-  assert.deepEqual(parseStudyRoute(`/platform/studyset/${a}/study-plan`), { kind: 'unavailable', title: '学习计划', studySetId: a });
+  assert.deepEqual(parseStudyRoute(`/platform/studyset/${a}/study-plan`), { kind: 'plans', studySetId: a });
   assert.deepEqual(parseStudyRoute('/platform/calendar'), { kind: 'unavailable', title: '日历' });
   assert.deepEqual(parseStudyRoute('/platform/local-data'), { kind: 'local-data' });
 });
