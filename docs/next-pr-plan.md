@@ -55,7 +55,7 @@
 
 ## PR-011～013 开工前须固定的契约
 
-PR-011已实现并提交GitHub #12，最新修复CI通过，见[学习计划任务书](pr-011-study-plans.md)。PR-012已提交GitHub #13，时区、冲突和任务关联契约见[学习日历任务书](pr-012-learning-calendar.md)。PR-013搜索已实现并本地验收，见[搜索任务书](pr-013-content-search.md)。
+PR-011已实现并提交GitHub #12，最新修复CI通过，见[学习计划任务书](pr-011-study-plans.md)。PR-012已提交GitHub #13，时区、冲突和任务关联契约见[学习日历任务书](pr-012-learning-calendar.md)。PR-013已提交GitHub #14且CI通过，见[搜索任务书](pr-013-content-search.md)。PR-014一级归类已本地验收，见[文件夹任务书](pr-014-folders.md)。
 
 | 功能包 | 必须写进该包任务书的决定 | 最小验收 |
 | --- | --- | --- |

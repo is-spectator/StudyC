@@ -123,12 +123,12 @@ class ReleaseChecks(unittest.TestCase):
                     self.assertIn('proxy_pass http://127.0.0.1:8789;', auth_location)
                     self.assertNotIn('127.0.0.1:8790', auth_location)
                 self.assertEqual(text.count('proxy_pass http://127.0.0.1:8789;'), len(renderer.AUTH_METHODS))
-                self.assertEqual(text.count('proxy_pass http://127.0.0.1:8790;'), 56 if enabled else 0)
+                self.assertEqual(text.count('proxy_pass http://127.0.0.1:8790;'), 61 if enabled else 0)
                 if enabled:
-                    self.assertEqual(len(review['studyApiRoutes']), 56)
+                    self.assertEqual(len(review['studyApiRoutes']), 61)
                     self.assertEqual(text.count('client_max_body_size 2m;'), 2)
                     self.assertEqual(text.count('client_max_body_size 8256k;'), 1)
-                    self.assertEqual(sum(len(methods) for methods in review['studyApiRoutes'].values()), 77)
+                    self.assertEqual(sum(len(methods) for methods in review['studyApiRoutes'].values()), 85)
                     self.assertEqual(review['studyApiBodyLimits']['flashcardLocationBytes'], 32 * 1024)
                 planplan = (output / 'clyna-planplan-alias.conf').read_bytes()
                 self.assertIn(b'proxy_pass http://127.0.0.1:8789;', planplan)
@@ -142,10 +142,10 @@ class ReleaseChecks(unittest.TestCase):
         self.assertIn('location ^~ /v1/study/ {', locations)
         self.assertIn('location ~ ^/v1/study/ { return 404; }', locations)
         patterns = re.findall(r'location ~ "([^"]+)"', locations)
-        self.assertEqual(len(patterns), 48)
+        self.assertEqual(len(patterns), 52)
         uuid = '3f623e5a-1111-4111-8111-111111111111'
         base = '/v1/study/sets/' + uuid
-        valid = ['/v1/study/calendar/events/' + uuid, base, base + '/materials', base + '/materials/' + uuid.upper(), base + '/files', base + '/files/' + uuid + '/content',
+        valid = ['/v1/study/folders/' + uuid, '/v1/study/folders/' + uuid + '/remove', '/v1/study/folders/' + uuid + '/sets', '/v1/study/folders/unfiled/sets', base + '/folder', '/v1/study/calendar/events/' + uuid, base, base + '/materials', base + '/materials/' + uuid.upper(), base + '/files', base + '/files/' + uuid + '/content',
                  base + '/generations', base + '/generations/' + uuid, base + '/generations/' + uuid + '/cancel', base + '/generations/' + uuid + '/retry',
                  base + '/chat/threads', base + '/chat/threads/' + uuid, base + '/chat/threads/' + uuid + '/messages',
                  base + '/chat/threads/' + uuid + '/messages/' + uuid + '/stop',
@@ -171,8 +171,13 @@ class ReleaseChecks(unittest.TestCase):
                  base + '/quizzes/' + uuid + '/attempts/' + uuid,
                  base + '/quizzes/' + uuid + '/attempts/' + uuid + '/answers',
                  base + '/quizzes/' + uuid + '/attempts/' + uuid + '/submit']
-        for index, path in enumerate(valid):
-            self.assertEqual([i for i, pattern in enumerate(patterns) if re.fullmatch(pattern, path)], [index])
+        matched = set()
+        for path in valid:
+            indices = [i for i, pattern in enumerate(patterns) if re.fullmatch(pattern, path)]
+            self.assertEqual(len(indices), 1, path)
+            matched.update(indices)
+        self.assertEqual(matched, set(range(len(patterns))))
+
         for path in [base + '/', base + '/materials/', base + '/materials/' + uuid + '/extra',
                      '/v1/study/sets/not-a-uuid', '/v1/study/sets/' + uuid[:-1],
                      '/v1/study/sets/' + uuid + 'f', '/v1/study/templates', '/v1/templates',
@@ -193,14 +198,15 @@ class ReleaseChecks(unittest.TestCase):
                      base + '/quizzes/' + uuid + '/attempts/' + uuid + '/submit/extra',
                      base + '/quizzes/' + uuid + '/answers']:
             self.assertFalse(any(re.fullmatch(pattern, path) for pattern in patterns), path)
-        self.assertEqual(locations.count('if ($request_method !~ ^(GET|POST)$) { return 405; }'), 14)
-        self.assertEqual(locations.count('if ($request_method !~ ^(GET|PATCH)$) { return 405; }'), 7)
-        self.assertEqual(locations.count('if ($request_method !~ ^(GET)$) { return 405; }'), 17)
-        self.assertEqual(locations.count('if ($request_method !~ ^(POST)$) { return 405; }'), 16)
+        self.assertEqual(locations.count('if ($request_method !~ ^(GET|POST)$) { return 405; }'), 15)
+        self.assertEqual(locations.count('if ($request_method !~ ^(GET|PATCH)$) { return 405; }'), 9)
+        self.assertEqual(locations.count('if ($request_method !~ ^(GET)$) { return 405; }'), 18)
+        self.assertEqual(locations.count('if ($request_method !~ ^(POST)$) { return 405; }'), 17)
         self.assertEqual(locations.count('if ($request_method !~ ^(PATCH)$) { return 405; }'), 2)
-        self.assertEqual(locations.count('proxy_pass http://127.0.0.1:8790;'), 56)
+        self.assertEqual(locations.count('proxy_pass http://127.0.0.1:8790;'), 61)
         self.assertIn('location = /v1/study/generation-usage {', locations)
         self.assertIn('location = /v1/study/search {', locations)
+        self.assertIn('location = /v1/study/folders {', locations)
         for path in ['settings', 'events', 'time-options', 'task-event', 'conflicts']:
             self.assertIn('location = /v1/study/calendar/' + path + ' {', locations)
         self.assertEqual(locations.count('client_max_body_size 8256k;'), 1)
@@ -213,7 +219,7 @@ class ReleaseChecks(unittest.TestCase):
                           'proxy_set_header X-PlanPlan-Expected-User $http_x_planplan_expected_user;',
                           'proxy_cache off;', 'proxy_no_cache 1;', 'proxy_next_upstream off;',
                           'proxy_hide_header Cache-Control;']:
-            self.assertEqual(locations.count(directive), 56)
+            self.assertEqual(locations.count(directive), 61)
 
     def test_study_api_surgical_insertion_preserves_existing_config_and_guards_duplicates(self):
         original = '''server { server_name study.clyna.ai; }
