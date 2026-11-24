@@ -95,6 +95,6 @@ PR-011已实现并提交GitHub #12，最新修复CI通过，见[学习计划任�
 | 014 文件夹与归类 | [#15](https://github.com/is-spectator/StudyC/pull/15) | [文件夹](pr-014-folders.md) |
 | 015 回收站 | [#16](https://github.com/is-spectator/StudyC/pull/16) | [回收站](pr-015-recycle-bin.md) |
 | 016 独立文本复制 | [#17](https://github.com/is-spectator/StudyC/pull/17) | [复制](pr-016-content-copy.md) |
-| 017 旧本机文本导入 | PR随本任务提交 | [导入](pr-017-local-data-import.md) |
+| 017 旧本机文本导入 | [#18](https://github.com/is-spectator/StudyC/pull/18) | [导入](pr-017-local-data-import.md) |
 
 按栈依赖审查/合并，当前本地集成分支 `codex/studyc-local-import`，包含上述全部功能。正式 `main` 未因此自动更新。本地 http://127.0.0.1:5180 ，使用内置验收账户A/B；最后基线后端477项、前端117项、部署23项及前后端构建/类型检查通过。模型配置保持原 OpenRouter/Baidu 免费模型，本轮确定性流程没有模型调用。
