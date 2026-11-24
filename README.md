@@ -4,7 +4,7 @@
 
 **2026-11-24：PR-001～007 已合并到 `codex/studyc-independent-backend`，005～007 的本地核心流程与原模型补验已通过。** 已实现[资料问答与引用](docs/pr-005-grounded-chat.md)、[多套闪卡与自评](docs/pr-006-flashcards.md)、[测验、考试和作答历史](docs/pr-007-quizzes.md)。问答流式兼容修复 [GitHub #8](https://github.com/is-spectator/StudyC/pull/8) CI 通过、本地已应用，核对时尚未合并；`main` 尚未包含全部后续功能。生产状态仍以各次发布记录为准，005～007 未发布生产。
 
-下一阶段见 [PR-008～013 规划](docs/next-pr-plan.md)；可直接交给开发的首包为 [PR-008：闪卡间隔复习与到期队列](docs/pr-008-spaced-review.md)。这些是待实现任务，功能编号与 GitHub PR 号分开使用。
+下一阶段见 [PR-008～013 规划](docs/next-pr-plan.md)；已实现的下一功能包为 [PR-008：闪卡间隔复习与到期队列](docs/pr-008-spaced-review.md)。PR-008 已提交 [GitHub #9](https://github.com/is-spectator/StudyC/pull/9)，后续仍是待实现任务；功能编号与 GitHub PR 号分开使用。
 
 当前归档 **34 张原站参考截图**，覆盖主要入口、列表空态、创建首步和部分弹窗。它们不代表原站所有页面与状态；本项目也不宣称全站逐页像素级复刻。
 
