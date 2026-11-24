@@ -175,17 +175,16 @@ export default function ImportPanel({
     <section className="organization-panel">
       <header className="cloud-page-heading">
         <div>
-          <span className="cloud-eyebrow">BRING YOUR NOTES WITH YOU</span>
           <h1>导入旧文本资料</h1>
-          <p>
-            先在本机预览，再选择目标学习集并明确上传。不会按旧名称猜测归属。
-          </p>
-          <p>
-            本版支持当前账户旧版「上传资料」的 title/text
-            文本；其他记录与草稿保留在原始备份，不恢复学习成绩或历史。
-          </p>
+          <p>预览旧笔记，选择要导入的内容和学习集。原始记录会保留。</p>
         </div>
       </header>
+      <details className="org-disclosure org-help">
+        <summary>支持哪些旧数据？</summary>
+        <p>
+          支持当前账户旧版「上传资料」中的文本笔记。其他记录和草稿保留在原始备份中；导入不会恢复旧成绩或学习历史。
+        </p>
+      </details>
       <OrganizationStatus
         {...op}
         onRetry={op.retry ? () => void op.run(op.retry!, true) : undefined}

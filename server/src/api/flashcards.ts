@@ -7,13 +7,25 @@ import { FlashcardService } from '../services/flashcards.js';
 import type { StudyEnv } from './auth.js';
 import { StudyInputError } from '../services/study-data.js';
 import { readJson } from './study.js';
+import { GenerationError } from '../generation/types.js';
 const uuid=z.uuid().transform(v=>v.toLowerCase());
 export function registerFlashcardRoutes(app:Hono<StudyEnv>,db:Db,_generationStore:GenerationStore|undefined,limits:SharedRateLimiter):void {
  const service=new FlashcardService(db),root='/v1/study/sets/:setId/flashcard-decks';
  const ids=(c:Context<StudyEnv>)=>[c.get('userId'),uuid.parse(c.req.param('setId'))] as const;
  const deck=(c:Context<StudyEnv>)=>uuid.parse(c.req.param('deckId'));
  const input=async(c:Context<StudyEnv>)=>{await limits.consume('write',c.get('userId'),120);return readJson(c,32*1024);};
- app.get(root,async c=>{const query=z.object({cursor:uuid.optional()}).strict().parse(c.req.query());if(Object.values(c.req.queries()).some(v=>v.length!==1))throw new StudyInputError('分页参数无效。');return c.json(await service.list(...ids(c),query.cursor));});
+ app.get(root,async c=>{
+  if(Object.values(c.req.queries()).some(v=>v.length!==1))throw new StudyInputError('分页参数无效。');
+  if(c.req.query('view')==='generations'){
+   const query=z.object({view:z.literal('generations'),cursor:z.string().min(1).max(2048).optional()}).strict().parse(c.req.query());
+   if(!_generationStore)throw new GenerationError('service_unavailable','生成记录暂时不可用。');
+   const [user,set]=ids(c),page=await _generationStore.list(user,set,{limit:100,cursor:query.cursor}),jobs=page.items.filter(j=>j.kind==='flashcards');
+   const saved=await service.savedGenerationDecks(user,set,jobs.map(j=>j.id));
+   return c.json({...page,items:jobs.map(j=>({...j,savedDeckId:saved[j.id]??null}))});
+  }
+  const query=z.object({cursor:uuid.optional()}).strict().parse(c.req.query());
+  return c.json(await service.list(...ids(c),query.cursor));
+ });
  app.post(root,async c=>{const result=await service.create(...ids(c),await input(c));return c.json(result,result.replayed?200:201);});
  app.post(`${root}/materialize`,async c=>{const result=await service.materialize(...ids(c),await input(c));return c.json(result,result.replayed?200:201);});
  app.get(`${root}/:deckId`,async c=>c.json(await service.get(...ids(c),deck(c))));

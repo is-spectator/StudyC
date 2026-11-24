@@ -46,6 +46,19 @@ export class FlashcardService {
   return this.db.tx(async q=>{await ownedSet(q,user,set);const rows=await q.query<Row>(`SELECT d.*, (SELECT count(*)::int FROM study_flashcards c WHERE c.user_id=d.user_id AND c.study_set_id=d.study_set_id AND c.deck_id=d.id) AS card_count, (SELECT count(*)::int FROM study_flashcards c LEFT JOIN study_flashcard_schedules s ON s.card_id=c.id AND s.user_id=c.user_id WHERE c.deck_id=d.id AND c.user_id=d.user_id AND (s.card_id IS NULL OR s.card_version<>c.version)) AS new_count, (SELECT count(*)::int FROM study_flashcards c JOIN study_flashcard_schedules s ON s.card_id=c.id AND s.user_id=c.user_id WHERE c.deck_id=d.id AND c.user_id=d.user_id AND s.card_version=c.version AND s.due_at<=clock_timestamp()) AS due_count FROM study_flashcard_decks d WHERE d.user_id=$1 AND d.study_set_id=$2 ${cursor?'AND d.id<$3':''} ORDER BY d.id DESC LIMIT 51`,cursor?[user,set,cursor]:[user,set]);
   return {items:rows.slice(0,50).map(r=>({...deck(r),sourceSnapshots:[],cardCount:r.card_count,reviewSummary:{newCount:r.new_count,dueCount:r.due_count}})),nextCursor:rows.length>50?rows[49]!.id:null};});
  }
+ /** Saved output references are independent of deck-list pagination. */
+ async savedGenerationDecks(user:string,set:string,jobIds:readonly string[]):Promise<Record<string,string>> {
+  if(jobIds.length>100)throw new DomainError('invalid_input','生成记录数量过多。');
+  const ids=jobIds.map(id=>uuid.parse(id));
+  return this.db.tx(async q=>{
+   await ownedSet(q,user,set);
+   if(!ids.length)return {};
+   const rows=await q.query<{job_id:string;deck_id:string}>(`SELECT j.id AS job_id,d.id AS deck_id FROM study_flashcard_decks d
+    JOIN study_generation_jobs j ON j.id=d.generation_job_id AND j.user_id=d.user_id AND j.study_set_id=d.study_set_id
+    WHERE d.user_id=$1 AND d.study_set_id=$2 AND j.id=ANY($3::uuid[]) AND j.kind='flashcards' AND j.status='succeeded'`,[user,set,ids]);
+   return Object.fromEntries(rows.map(r=>[r.job_id,r.deck_id]));
+  });
+ }
  async get(user:string,set:string,id:string) {
   return this.db.tx(async q=>{await ownedSet(q,user,set);const d=await ownedDeck(q,user,set,id);
    const cards=await q.query<Row>('SELECT * FROM study_flashcards WHERE user_id=$1 AND study_set_id=$2 AND deck_id=$3 ORDER BY position',[user,set,id]);

@@ -172,3 +172,228 @@
   .cloud-archive-row { padding: 15px 12px; gap: 9px; }
   .cloud-archive-row > small { font-size: 10px; }
 }
+/* Context navigation is only shown inside a selected learning set. */
+.studyc-monogram {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 11px;
+  background: #e4daef;
+  color: #3d334c;
+  font:
+    700 22px/1 Inter,
+    sans-serif;
+}
+.studyc-brand-link {
+  margin-bottom: 20px;
+}
+.cloud-account-menu {
+  position: relative;
+  margin-top: 12px;
+}
+.cloud-account-menu > summary {
+  list-style: none;
+  cursor: pointer;
+}
+.cloud-account-menu > summary::-webkit-details-marker {
+  display: none;
+}
+.cloud-account-menu .cloud-account-dot {
+  margin: 0;
+}
+.cloud-account-menu > div {
+  position: absolute;
+  bottom: 0;
+  left: 46px;
+  background: #fffefa;
+  color: #343730;
+  padding: 7px;
+  border-radius: 12px;
+  border: 1px solid #e1ddd1;
+  box-shadow: 0 8px 30px #0002;
+  width: 190px;
+  z-index: 90;
+}
+.cloud-account-menu a,
+.cloud-account-menu button {
+  display: flex;
+  gap: 9px;
+  align-items: center;
+  width: 100%;
+  padding: 12px 9px;
+  font-size: 13px;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  border-radius: 7px;
+}
+.cloud-account-menu a:hover,
+.cloud-account-menu button:hover {
+  background: #eeece3;
+}
+.cloud-sidebar-brand {
+  padding: 23px 18px 15px;
+  justify-content: space-between;
+}
+.cloud-sidebar-brand > span {
+  font-size: 23px;
+}
+.cloud-back-library {
+  font-size: 12px !important;
+  color: #b9b9b1 !important;
+  margin: 0 10px 11px;
+}
+.cloud-set-switcher {
+  margin: 0 12px 16px;
+  position: relative;
+  color: #f2f1e7;
+}
+.cloud-set-switcher > summary {
+  list-style: none;
+  padding: 11px;
+  background: #343532;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+.cloud-set-switcher > summary::-webkit-details-marker {
+  display: none;
+}
+.cloud-set-switcher > summary > span {
+  font-size: 13px;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.cloud-set-switcher > div {
+  max-height: 260px;
+  overflow: auto;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 43px;
+  z-index: 20;
+  border: 1px solid #51514b;
+  background: #30312e;
+  border-radius: 9px;
+  padding: 5px;
+  box-shadow: 0 6px 22px #0003;
+}
+.cloud-set-switcher a,
+.cloud-set-switcher button {
+  display: block;
+  font-size: 12px;
+  line-height: 1.5;
+  color: #dfdfd5;
+  padding: 10px 8px;
+  width: 100%;
+  text-align: left;
+  overflow-wrap: anywhere;
+  background: transparent;
+  border: 0;
+  border-radius: 5px;
+}
+.cloud-set-switcher a:hover,
+.cloud-set-switcher button:hover {
+  background: #44453f;
+}
+.cloud-context-tools {
+  padding: 0 11px 17px;
+}
+.cloud-context-tools .side-link {
+  min-height: 38px;
+}
+.cloud-sidebar-label {
+  border-top: 1px solid #3d3e39;
+  margin: 0 13px;
+  padding: 14px 5px 6px;
+}
+.cloud-sidebar-sets {
+  padding-top: 3px;
+}
+.cloud-topbar .breadcrumb > span {
+  font-size: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #7c786b;
+}
+.cloud-topbar .breadcrumb > a {
+  white-space: nowrap;
+}
+.cloud-topbar .breadcrumb > svg {
+  flex-shrink: 0;
+}
+.cloud-context-toggle {
+  margin-left: -5px;
+  flex-shrink: 0;
+}
+.cloud-page-heading h1 {
+  margin-bottom: 9px;
+}
+.cloud-eyebrow {
+  display: none;
+}
+.cloud-page-heading p {
+  font-size: 14px;
+}
+.cloud-tools-preview {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+.cloud-tools-preview > button {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 18px;
+  border-radius: 14px;
+  background: #efeee6;
+  text-align: left;
+}
+.cloud-tools-preview > button > svg {
+  width: 23px;
+  height: 23px;
+  stroke-width: 1.5;
+  flex-shrink: 0;
+}
+@media (max-width: 760px) {
+  .cloud-context-toggle {
+    display: none;
+  }
+  .cloud-topbar .breadcrumb > a {
+    max-width: 110px;
+  }
+  .cloud-topbar .breadcrumb > span {
+    max-width: 90px;
+    font-size: 11px;
+  }
+  .cloud-topbar .breadcrumb > a:first-of-type:not(:last-child) {
+    display: none;
+  }
+  .cloud-topbar .breadcrumb > a:first-of-type:not(:last-child) + svg {
+    display: none;
+  }
+  .cloud-page-heading p {
+    font-size: 13px;
+  }
+  .cloud-account-menu > div {
+    left: 40px;
+  }
+  .cloud-sidebar {
+    width: 244px;
+  }
+  .cloud-tools-preview {
+    grid-template-columns: 1fr 1fr;
+  }
+  .cloud-sidebar-brand {
+    padding-top: 27px;
+  }
+  .cloud-space-label {
+    display: none;
+  }
+}

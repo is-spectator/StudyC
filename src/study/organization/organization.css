@@ -2,19 +2,38 @@
   max-width: 1040px;
   margin: auto;
   overflow-wrap: anywhere;
+  color: var(--ink, #252520);
 }
 .org-box {
-  background: #fff;
-  border: 1px solid #e2e4e9;
-  border-radius: 16px;
-  padding: 24px;
-  margin: 18px 0;
+  background: #fffef9;
+  border: 1px solid #e5e2d8;
+  border-radius: 14px;
+  padding: 18px 20px;
+  margin: 14px 0;
   min-width: 0;
+}
+.org-box > h2,
+.org-select h2 {
+  font:
+    600 17px/1.45 Inter,
+    "PingFang SC",
+    sans-serif;
+  margin: 0 0 8px;
 }
 .org-box label {
   display: grid;
   gap: 8px;
   margin: 14px 0;
+}
+.org-box label:has(> input[type="checkbox"]) {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+.org-box input[type="checkbox"] {
+  flex-shrink: 0;
+  margin: 3px 0;
+  accent-color: #292929;
 }
 .org-box fieldset {
   border: 0;
@@ -30,10 +49,14 @@
   font: inherit;
   line-height: 1.7;
 }
+.org-box button {
+  max-width: 100%;
+  white-space: normal;
+}
 .org-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
-  gap: 16px;
+  gap: 12px;
 }
 .org-grid .org-box {
   margin: 0;
@@ -42,20 +65,36 @@
   text-align: left;
   cursor: pointer;
 }
-.org-select h2 {
-  font-size: 20px;
+.org-select:hover {
+  border-color: #bbb5a4;
+  background: #fcfbf6;
+}
+.org-select p {
+  font-size: 13px;
+  line-height: 1.65;
+  color: #716e63;
+  margin: 8px 0 14px;
+}
+.org-select small {
+  font-size: 12px;
+  color: #817c6d;
 }
 .org-heading {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
+  margin-top: 26px;
+}
+.org-heading h2 {
+  font-size: 19px;
+  margin: 0;
 }
 .org-actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
-  margin: 18px 0 0;
+  gap: 8px;
+  margin: 14px 0 0;
 }
 .org-conflict,
 .org-error {
@@ -71,30 +110,119 @@
   max-height: 420px;
   overflow: auto;
 }
+.org-plan-goal {
+  position: relative;
+  padding-right: 190px;
+}
+.org-plan-goal > .btn {
+  position: absolute;
+  right: 20px;
+  top: 18px;
+}
+.org-plan-goal .org-prose {
+  margin: 6px 0 10px;
+  font-size: 14px;
+  line-height: 1.7;
+}
+.org-small {
+  font-size: 12px;
+  color: #797468;
+  line-height: 1.65;
+}
+.org-disclosure {
+  color: #797468;
+  font-size: 13px;
+  line-height: 1.7;
+}
+.org-disclosure > summary {
+  cursor: pointer;
+  width: fit-content;
+  color: #666154;
+  padding: 6px 0;
+}
+.org-disclosure > summary:hover {
+  color: #252520;
+}
+.org-disclosure > p {
+  max-width: 76ch;
+  margin: 7px 0 12px;
+}
+.org-help {
+  margin: -16px 0 20px;
+}
+.org-task {
+  padding: 16px 18px;
+}
+.org-task-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+}
+.org-task-copy {
+  flex: 1;
+  min-width: 0;
+}
 .org-task h3 {
-  font-size: 20px;
-  margin: 0 0 12px;
+  font:
+    600 15px/1.5 Inter,
+    "PingFang SC",
+    sans-serif;
+  margin: 0 0 8px;
 }
 .org-task p {
   line-height: 1.6;
   margin: 10px 0;
 }
-.org-small {
+.org-task-summary > .btn {
+  flex-shrink: 0;
+}
+.org-task-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 7px 12px;
+  color: #807a6b;
+  font-size: 12px;
+}
+.org-task-state {
+  padding: 2px 8px;
+  border-radius: 6px;
+  background: #eeede4;
+  color: #706a56;
+}
+.org-task-state.is-complete {
+  background: #e7efdf;
+  color: #536d3d;
+}
+.org-task-state.is-muted {
+  background: #e9e8e2;
+  color: #858174;
+}
+.org-task-details {
+  margin-top: 9px;
+}
+.org-task-details[open] {
+  border-top: 1px solid #e8e5dc;
+  margin-top: 14px;
+  padding-top: 8px;
+}
+.org-task-details > p {
   font-size: 13px;
-  color: #696777;
 }
 .org-text-link {
   border: 0;
   background: transparent;
   text-decoration: underline;
-  color: #6950a1;
+  text-underline-offset: 3px;
+  color: #5d6b48;
   cursor: pointer;
   font: inherit;
   text-align: left;
 }
 .org-evidence {
-  padding: 16px;
-  background: #f6f4fa;
+  padding: 14px;
+  background: #f0efe4;
   margin-top: 18px;
   border-radius: 10px;
 }
@@ -103,20 +231,32 @@
 }
 .is-cancelled {
   border-style: dashed;
-  background: #f6f6f4;
-}
-.org-box button {
-  max-width: 100%;
-  white-space: normal;
+  background: #f0efe9;
 }
 @media (max-width: 600px) {
   .org-box {
     padding: 16px;
   }
-  .organization-panel .cloud-page-heading {
-    flex-wrap: wrap;
-  }
+  .organization-panel .cloud-page-heading,
   .org-heading {
     flex-wrap: wrap;
+  }
+  .org-plan-goal {
+    padding-right: 16px;
+  }
+  .org-plan-goal > .btn {
+    position: static;
+    margin-top: 6px;
+  }
+  .org-task-summary {
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .org-task-copy {
+    flex-basis: 100%;
+  }
+  .org-help {
+    margin-top: -10px;
   }
 }

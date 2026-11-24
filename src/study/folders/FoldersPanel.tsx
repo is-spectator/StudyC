@@ -112,7 +112,6 @@ export default function FoldersPanel({
     <section className="organization-panel">
       <header className="cloud-page-heading">
         <div>
-          <span className="cloud-eyebrow">ORGANIZE YOUR LEARNING</span>
           <h1>
             {folder?.title ??
               (selected === "unfiled" ? "未分类学习集" : "文件夹")}
@@ -180,7 +179,11 @@ export default function FoldersPanel({
           folders={folders}
           hasMore={!!folderCursor}
           onMore={moreFolders}
-          onFolder={(f) => setFolders(old => old.some(o => o.id === f.id) ? old : [f, ...old])}
+          onFolder={(f) =>
+            setFolders((old) =>
+              old.some((o) => o.id === f.id) ? old : [f, ...old],
+            )
+          }
           onCancel={() => {
             setMoving(null);
             if (moveId) onNavigate(base);
@@ -227,7 +230,7 @@ export default function FoldersPanel({
             </button>
           ) : null}
           <p className="org-small">
-            每个学习集归入一个一级文件夹。移动归类不改变对象ID，不复制或删除学习内容。
+            每个学习集可放入一个文件夹。移动后，资料和学习记录都会保留。
           </p>
         </>
       ) : null}
@@ -484,7 +487,8 @@ function MoveEditor({
     <form className="org-box" onSubmit={submit}>
       <h2>移动学习集：{set.title}</h2>
       <p>
-        当前：{assignment.folderTitle ?? "未分类"}。内容、ID和学习历史会保留。
+        当前：{assignment.folderTitle ?? "未分类"}
+        。移动后，资料和学习记录都会保留。
       </p>
       <label>
         目标文件夹
@@ -544,13 +548,18 @@ function MoveEditor({
             type="button"
             className="btn"
             disabled={op.busy}
-            onClick={() => void op.run(async () => {
-              if (latest.folderId && !folders.some(f => f.id === latest.folderId))
-                onFolder(await api.get(latest.folderId));
-              setDestination(latest.folderId ?? "");
-              setVersion(latest.version);
-              setLatest(null);
-            })}
+            onClick={() =>
+              void op.run(async () => {
+                if (
+                  latest.folderId &&
+                  !folders.some((f) => f.id === latest.folderId)
+                )
+                  onFolder(await api.get(latest.folderId));
+                setDestination(latest.folderId ?? "");
+                setVersion(latest.version);
+                setLatest(null);
+              })
+            }
           >
             采用云端归类
           </button>

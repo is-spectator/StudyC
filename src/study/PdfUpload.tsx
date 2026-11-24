@@ -18,7 +18,7 @@ function message(error: unknown): string {
   return '上传没有完成，请重试。';
 }
 
-export default function PdfUpload({ api, studySetId, onExtracted }: { api: StudyApi; studySetId: string; onExtracted: () => void }) {
+export default function PdfUpload({ api, studySetId, onExtracted, hideRecords = false, onFilesChange }: { api: StudyApi; studySetId: string; onExtracted: () => void; hideRecords?: boolean; onFilesChange?: (files: SourceFile[]) => void }) {
   const [files, setFiles] = useState<SourceFile[]>([]);
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState(false);
@@ -37,6 +37,8 @@ export default function PdfUpload({ api, studySetId, onExtracted }: { api: Study
     });
     return () => controller.abort();
   }, [api, studySetId]);
+
+  useEffect(() => { onFilesChange?.(files); }, [files, onFilesChange]);
 
   async function upload(file: File) {
     if (!pending.current || pending.current.name !== file.name || pending.current.size !== file.size) {
@@ -76,14 +78,14 @@ export default function PdfUpload({ api, studySetId, onExtracted }: { api: Study
     <div className="section-heading"><h2><Upload size={18} />上传 PDF</h2>
       <label className={`btn ${busy ? 'is-disabled' : ''}`}>选择 PDF<input ref={input} className="cloud-pdf-input" type="file" accept="application/pdf,.pdf" disabled={busy} onChange={event => { const file = event.target.files?.[0]; if (file) void upload(file); }} /></label>
     </div>
-    <p className="cloud-pdf-note">只提取 PDF 中的文字，并保留页码。扫描件、加密或损坏的文件会标明失败，不会当成已解析的正文。</p>
+    <p className="cloud-pdf-note">支持含文字的 PDF（最大 8 MB、30 页）。扫描件和加密文件暂不支持。</p>
     {loading ? <p className="cloud-pdf-note" role="status">正在读取上传记录…</p> : null}
     {notice ? <p className="cloud-pdf-note" role="status">{notice}</p> : null}
     {error ? <p className="cloud-pdf-error" role="alert">{error}</p> : null}
-    <div className="cloud-pdf-list">{files.map(file => <article key={file.id} className={`cloud-pdf-item is-${file.status}`} data-source-file-id={file.id}>
+    {!hideRecords ? <div className="cloud-pdf-list">{files.map(file => <article key={file.id} className={`cloud-pdf-item is-${file.status}`} data-source-file-id={file.id}>
       <FileText size={18} />
       <span><strong>{file.displayName}</strong><small>{statusText[file.status]}{file.pageCount ? ` · ${file.pageCount} 页` : ''}</small></span>
       {file.status === 'ready' ? <button className="btn" type="button" onClick={() => void download(file)}><Download size={15} />下载原文件</button> : null}
-    </article>)}</div>
+    </article>)}</div> : null}
   </section>;
 }
