@@ -22,6 +22,7 @@ import {
 import {
   Archive,
   ArrowLeft,
+  ArrowRight,
   BookOpen,
   ChevronRight,
   ClipboardCheck,
@@ -31,8 +32,10 @@ import {
   Folder,
   Layers,
   LoaderCircle,
+  LogOut,
   Menu,
   MessageCircle,
+  Pencil,
   Plus,
   RefreshCw,
   Route,
@@ -444,6 +447,493 @@ export default function StudyWorkspace() {
     setLibraryRevision((v) => v + 1);
   };
 
+  return (
+    <div
+      className={`app cloud-app ${setId ? "has-study-context" : "is-global-workspace"}`}
+    >
+      <nav className="rail cloud-rail" aria-label="主导航" inert={mobile}>
+        <a
+          className="rail-button studyc-brand-link"
+          href="/platform/studysets"
+          title="StudyC"
+          aria-label="StudyC 首页"
+          onClick={(event) => followLink(event, go, "/platform/studysets")}
+        >
+          <span className="studyc-monogram">C</span>
+        </a>
+        {globalLinks.map(({ path: target, title, kind, Icon }) => (
+          <a
+            key={target}
+            href={target}
+            title={title}
+            aria-label={title}
+            aria-current={route.kind === kind ? "page" : undefined}
+            className={`rail-button ${route.kind === kind ? "active" : ""}`}
+            onClick={(event) => followLink(event, go, target)}
+          >
+            <Icon />
+          </a>
+        ))}
+        <div className="rail-bottom">
+          <a
+            className={`rail-button ${route.kind === "trash" ? "active" : ""}`}
+            title="回收站"
+            aria-label="回收站"
+            href="/platform/trash"
+            onClick={(event) => followLink(event, go, "/platform/trash")}
+          >
+            <Trash2 />
+          </a>
+          <AccountMenu onNavigate={go} onLogout={() => void logout()} />
+        </div>
+      </nav>
+      {mobile ? (
+        <button
+          className="cloud-nav-scrim"
+          aria-label="关闭导航"
+          onClick={() => setMobile(false)}
+        />
+      ) : null}
+      {(setId && !sidebarCollapsed) || mobile ? (
+        <aside
+          className={`set-sidebar cloud-sidebar ${mobile ? "is-open" : ""}`}
+          aria-label="学习空间导航"
+        >
+          <div className="cloud-sidebar-brand">
+            <span>StudyC</span>
+            <button
+              className="icon-button cloud-close-nav"
+              aria-label="关闭导航"
+              onClick={() => setMobile(false)}
+            >
+              <X />
+            </button>
+          </div>
+          {setId ? (
+            <>
+              <a
+                className="side-link cloud-back-library"
+                href="/platform/studysets"
+                onClick={(event) =>
+                  followLink(event, go, "/platform/studysets")
+                }
+              >
+                <ArrowLeft size={15} />
+                <span>全部学习集</span>
+              </a>
+              <details className="cloud-set-switcher">
+                <summary>
+                  <span>{currentSet.data?.title ?? "正在打开学习集…"}</span>
+                  <ChevronDown size={15} />
+                </summary>
+                <div>
+                  {sets.items.map((item) => (
+                    <a
+                      key={item.id}
+                      href={studySetPath(item.id)}
+                      onClick={(event) =>
+                        followLink(event, go, studySetPath(item.id))
+                      }
+                    >
+                      {item.title}
+                    </a>
+                  ))}
+                  {sets.nextCursor ? (
+                    <button
+                      disabled={sets.loadingMore}
+                      onClick={() => void sets.loadMore()}
+                    >
+                      加载更多学习集
+                    </button>
+                  ) : null}
+                  {sets.error ? (
+                    <p role="alert">
+                      {sets.error}
+                      <button onClick={sets.reload}>重试</button>
+                    </p>
+                  ) : null}
+                </div>
+              </details>
+              <div className="cloud-context-tools">
+                {tools.map(({ suffix, title, kind, Icon }) => {
+                  const target =
+                    studySetPath(setId) + (suffix ? "/" + suffix : "");
+                  return (
+                    <a
+                      key={kind}
+                      href={target}
+                      aria-current={route.kind === kind ? "page" : undefined}
+                      className={`side-link ${route.kind === kind ? "active" : ""}`}
+                      onClick={(event) => followLink(event, go, target)}
+                    >
+                      <Icon size={16} />
+                      <span>{title}</span>
+                    </a>
+                  );
+                })}
+              </div>
+              <div className="cloud-sidebar-label">
+                资料
+                <button
+                  className="icon-button"
+                  aria-label="新建文本资料"
+                  onClick={() => go(materialPath(setId))}
+                >
+                  <Plus size={15} />
+                </button>
+              </div>
+              <div className="cloud-sidebar-sets">
+                {materials.items.map((m) => (
+                  <a
+                    key={m.id}
+                    className={`side-link ${route.kind === "material" && route.materialId === m.id ? "active" : ""}`}
+                    href={materialPath(setId, m.id)}
+                    onClick={(event) =>
+                      followLink(event, go, materialPath(setId, m.id))
+                    }
+                  >
+                    <FileText size={15} />
+                    <span>{m.title}</span>
+                  </a>
+                ))}
+                {materials.loading ? (
+                  <p className="cloud-sidebar-note">正在读取资料…</p>
+                ) : null}
+                {!materials.loading && !materials.items.length ? (
+                  <p className="cloud-sidebar-note">
+                    添加第一份资料，开始学习。
+                  </p>
+                ) : null}
+                {materials.error ? (
+                  <button
+                    className="cloud-side-more"
+                    onClick={materials.reload}
+                  >
+                    资料读取失败，重试
+                  </button>
+                ) : null}
+                {materials.nextCursor ? (
+                  <button
+                    className="cloud-side-more"
+                    disabled={materials.loadingMore}
+                    onClick={() => void materials.loadMore()}
+                  >
+                    加载更多资料
+                  </button>
+                ) : null}
+              </div>
+            </>
+          ) : (
+            <div className="cloud-context-tools">
+              {globalLinks.map(({ path: target, title, kind, Icon }) => (
+                <a
+                  key={target}
+                  href={target}
+                  className={`side-link ${route.kind === kind ? "active" : ""}`}
+                  onClick={(event) => followLink(event, go, target)}
+                >
+                  <Icon size={17} />
+                  <span>{title}</span>
+                </a>
+              ))}
+            </div>
+          )}
+        </aside>
+      ) : null}
+      <div className="main-area cloud-main" inert={mobile}>
+        <header className="topbar cloud-topbar">
+          <div className="breadcrumb">
+            <button
+              className="icon-button cloud-mobile-menu"
+              aria-label="打开导航"
+              onClick={() => setMobile(true)}
+            >
+              <Menu />
+            </button>
+            {setId ? (
+              <button
+                className="icon-button cloud-context-toggle"
+                aria-label={
+                  sidebarCollapsed ? "展开学习集导航" : "收起学习集导航"
+                }
+                onClick={() => setSidebarCollapsed((v) => !v)}
+              >
+                <Menu size={17} />
+              </button>
+            ) : null}
+            <a
+              href="/platform/studysets"
+              onClick={(event) => followLink(event, go, "/platform/studysets")}
+            >
+              我的学习集
+            </a>
+            {setId ? (
+              <>
+                <ChevronRight size={14} />
+                <a
+                  href={studySetPath(setId)}
+                  onClick={(event) =>
+                    followLink(event, go, studySetPath(setId))
+                  }
+                >
+                  {currentSet.data?.title ?? "学习集"}
+                </a>
+              </>
+            ) : null}
+            {sectionTitle && route.kind !== "set" ? (
+              <>
+                <ChevronRight size={14} />
+                <span aria-current="page">{sectionTitle}</span>
+              </>
+            ) : null}
+          </div>
+          <span className="cloud-space-label">
+            <Cloud size={15} />
+            {import.meta.env.DEV &&
+            import.meta.env.VITE_LOCAL_ACCEPTANCE === "1"
+              ? "本地验收空间"
+              : "云端学习空间"}
+          </span>
+        </header>
+        <main className="main-scroll cloud-main-scroll">
+          {route.kind === "sets" ? (
+            <LibraryPage
+              path={path}
+              revision={libraryRevision}
+              onNavigate={go}
+              onCreate={() => setDialog({ mode: "create" })}
+              onRename={(studySet) => setDialog({ mode: "rename", studySet })}
+            />
+          ) : null}
+          {setId && currentSet.loading ? (
+            <Loading text="正在打开学习集…" />
+          ) : null}
+          {setId && currentSet.error ? (
+            <div className="cloud-page">
+              <ErrorState
+                text={currentSet.error}
+                onRetry={() => setSetRevision((value) => value + 1)}
+              />
+              <button className="btn" onClick={() => go("/platform/studysets")}>
+                <ArrowLeft size={16} />
+                返回学习集列表
+              </button>
+            </div>
+          ) : null}
+          {route.kind === "set" && currentSet.data ? (
+            <SetOverview
+              key={`${auth.user?.id}:${setId}`}
+              set={currentSet.data}
+              api={api}
+              materials={materials}
+              onNavigate={go}
+              onRename={(studySet) => setDialog({ mode: "rename", studySet })}
+            />
+          ) : null}
+          {route.kind === "material" && route.materialId && currentSet.data ? (
+            <div className="cloud-page">
+              <button
+                className="btn"
+                onClick={() =>
+                  go(
+                    `/platform/copy?setId=${route.studySetId}&materialId=${route.materialId}`,
+                  )
+                }
+              >
+                复制这份文本资料
+              </button>
+            </div>
+          ) : null}
+          {route.kind === "material" && currentSet.data ? (
+            <MaterialEditor
+              key={`${auth.user?.id}:${route.studySetId}:${route.materialId ?? "new"}`}
+              studySetId={route.studySetId}
+              materialId={route.materialId}
+              onNavigate={go}
+              onSaved={savedMaterial}
+            />
+          ) : null}
+          {(route.kind === "chat" ||
+            route.kind === "flashcards" ||
+            route.kind === "quizzes" ||
+            route.kind === "notes") &&
+          currentSet.data &&
+          (materials.loading || materials.error || materials.nextCursor) ? (
+            <div className="cloud-page cloud-source-status">
+              {materials.loading ? <Loading text="正在读取可选资料…" /> : null}
+              {materials.error ? (
+                <ErrorState text={materials.error} onRetry={materials.reload} />
+              ) : null}
+              {materials.nextCursor ? (
+                <button
+                  className="btn"
+                  disabled={materials.loadingMore}
+                  onClick={() => void materials.loadMore()}
+                >
+                  {materials.loadingMore ? "正在加载…" : "加载更多可选资料"}
+                </button>
+              ) : null}
+            </div>
+          ) : null}
+          {route.kind === "chat" && currentSet.data ? (
+            <ChatPanel
+              key={`${auth.user?.id}:${route.studySetId}`}
+              studySetId={route.studySetId}
+              threadId={route.threadId}
+              materials={materials.items}
+              onNavigate={go}
+            />
+          ) : null}
+          {route.kind === "flashcards" && currentSet.data ? (
+            <FlashcardsPanel
+              key={`${auth.user?.id}:${route.studySetId}:${path}`}
+              studySetId={route.studySetId}
+              materials={materials.items}
+            />
+          ) : null}
+          {route.kind === "quizzes" && currentSet.data ? (
+            <div className="cloud-page">
+              <QuizzesPanel
+                key={`${auth.user?.id}:${route.studySetId}:${path}`}
+                studySetId={route.studySetId}
+                materials={materials.items}
+              />
+            </div>
+          ) : null}
+          {route.kind === "mistakes" && currentSet.data ? (
+            <div className="cloud-page">
+              <MistakesPanel
+                key={`${auth.user?.id}:${route.studySetId}:${path}`}
+                studySetId={route.studySetId}
+                onNavigate={go}
+              />
+            </div>
+          ) : null}
+          {route.kind === "notes" && currentSet.data ? (
+            <div className="cloud-page">
+              <NotesPanel
+                key={`${auth.user?.id}:${route.studySetId}:${path}`}
+                studySetId={route.studySetId}
+                materials={materials.items}
+                onNavigate={go}
+              />
+            </div>
+          ) : null}
+          {route.kind === "plans" && currentSet.data ? (
+            <div className="cloud-page">
+              <PlansPanel
+                key={`${auth.user?.id}:${route.studySetId}:${path}`}
+                studySetId={route.studySetId}
+                onNavigate={go}
+              />
+            </div>
+          ) : null}
+          {route.kind === "import" ? (
+            <div className="cloud-page">
+              <ImportPanel
+                key={`${auth.user?.id}:${path}`}
+                onNavigate={go}
+                onChanged={changed}
+              />
+            </div>
+          ) : null}
+          {route.kind === "copy" ? (
+            <div className="cloud-page">
+              <CopyPanel
+                key={`${auth.user?.id}:${path}`}
+                onNavigate={go}
+                onChanged={changed}
+              />
+            </div>
+          ) : null}
+          {route.kind === "trash" ? (
+            <div className="cloud-page">
+              <TrashPanel
+                key={`${auth.user?.id}:${path}`}
+                onNavigate={go}
+                onChanged={changed}
+              />
+            </div>
+          ) : null}
+          {route.kind === "folders" ? (
+            <div className="cloud-page">
+              <FoldersPanel key={`${auth.user?.id}:${path}`} onNavigate={go} />
+            </div>
+          ) : null}
+          {route.kind === "search" ? (
+            <div className="cloud-page">
+              <SearchPanel key={`${auth.user?.id}:${path}`} onNavigate={go} />
+            </div>
+          ) : null}
+          {route.kind === "calendar" ? (
+            <div className="cloud-page">
+              <CalendarPanel key={`${auth.user?.id}:${path}`} onNavigate={go} />
+            </div>
+          ) : null}
+          {route.kind === "local-data" ? (
+            <LocalData accountId={auth.user?.id ?? ""} onNavigate={go} />
+          ) : null}
+          {route.kind === "unavailable" && (!setId || currentSet.data) ? (
+            <div className="cloud-page cloud-unavailable">
+              <span className="cloud-empty-mark">
+                <BookOpen size={30} />
+              </span>
+              <h1>{route.title}尚未开放</h1>
+              <p>
+                现在可以创建学习集、整理和编辑文本资料。
+                <br />
+                这项学习工具还在准备中。
+              </p>
+              <button
+                className="btn btn-black"
+                onClick={() =>
+                  go(setId ? studySetPath(setId) : "/platform/studysets")
+                }
+              >
+                返回我的资料
+                <ArrowRight size={16} />
+              </button>
+            </div>
+          ) : null}
+          {route.kind === "not-found" ? (
+            <div className="cloud-page cloud-unavailable">
+              <h1>没有找到这个页面</h1>
+              <p>请从学习集列表重新打开资料。</p>
+              <button
+                className="btn btn-black"
+                onClick={() => go("/platform/studysets")}
+              >
+                返回学习集列表
+              </button>
+            </div>
+          ) : null}
+        </main>
+      </div>
+      {dialog ? (
+        <SetDialog
+          key={dialog.mode === "create" ? "create" : dialog.studySet.id}
+          api={api}
+          {...dialog}
+          onClose={() => setDialog(null)}
+          onSaved={(item) => {
+            updateSet(item);
+            if (dialog.mode === "create" && !go(studySetPath(item.id)))
+              return false;
+            setDialog(null);
+            if (dialog.mode === "rename") setNotice("学习集名称已保存");
+            return true;
+          }}
+        />
+      ) : null}
+      {notice ? (
+        <div role="status" className="toast">
+          {notice}
+        </div>
+      ) : null}
+    </div>
+  );
+}
+function Loading({ text }: { text: string }) {
   return <div className="cloud-loading" role="status"><LoaderCircle size={20} /><span>{text}</span></div>;
 }
 function ErrorState({ text, onRetry }: { text: string; onRetry: () => void }) {
