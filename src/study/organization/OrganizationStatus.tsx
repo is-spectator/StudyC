@@ -7,7 +7,7 @@ export default function OrganizationStatus({
   busy: boolean;
   error: string;
   retry: (() => Promise<void>) | null;
-  onRetry: () => void;
+  onRetry?: () => void;
 }) {
   return (
     <>
@@ -15,9 +15,11 @@ export default function OrganizationStatus({
       {error ? (
         <div className="org-error" role="alert">
           <p>{error}</p>
-          <button className="btn" disabled={busy} onClick={onRetry}>
-            {retry ? "重试同一次请求" : "重新读取"}
-          </button>
+          {onRetry ? (
+            <button className="btn" disabled={busy} onClick={onRetry}>
+              {retry ? "重试同一次请求" : "重新读取"}
+            </button>
+          ) : null}
         </div>
       ) : null}
     </>
