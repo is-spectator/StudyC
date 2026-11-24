@@ -111,7 +111,7 @@ export class FlashcardService {
    const [old]=await q.query<Row>('SELECT * FROM study_flashcard_reviews WHERE user_id=$1 AND client_request_id=$2',[user,input.clientRequestId]);if(old){replay(old,set,hash,id);return {session:session(current),replayed:true};}
    const cards=current.card_snapshots as Flashcard[], target=cards[current.next_index];
    if(current.status!=='in_progress'||current.version!==input.version||current.next_index!==input.position||!target||target.id!==input.cardId)throw conflict();
-   await q.query('INSERT INTO study_flashcard_reviews(user_id,study_set_id,deck_id,session_id,card_id,card_version,position,rating,client_request_id,creation_digest) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)',[user,set,id,sessionId,target.id,target.version,input.position,input.rating,input.clientRequestId,hash]);
+   await q.query(`INSERT INTO study_flashcard_reviews(user_id,study_set_id,deck_id,session_id,card_id,card_version,position,rating,client_request_id,creation_digest,created_at) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,GREATEST(clock_timestamp(),COALESCE((SELECT max(created_at)+interval '1 microsecond' FROM study_flashcard_reviews WHERE user_id=$1 AND study_set_id=$2 AND deck_id=$3),clock_timestamp())))`,[user,set,id,sessionId,target.id,target.version,input.position,input.rating,input.clientRequestId,hash]);
    const [row]=await q.query<Row>("UPDATE study_flashcard_sessions SET next_index=next_index+1,version=version+1,status=CASE WHEN next_index+1=jsonb_array_length(card_snapshots) THEN 'completed' ELSE 'in_progress' END,updated_at=now() WHERE user_id=$1 AND study_set_id=$2 AND deck_id=$3 AND id=$4 RETURNING *",[user,set,id,sessionId]);return {session:session(row!),replayed:false};},user);
  }
 }
