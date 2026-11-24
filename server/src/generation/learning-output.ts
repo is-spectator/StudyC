@@ -31,6 +31,18 @@ export function validateLearningOutput(content: string, snapshot: GenerationSnap
     return { schemaVersion: 1, answer, citations, insufficientEvidence: value.insufficientEvidence };
   }
   if (!text(value.title, 160)) throw new Error('invalid_output');
+  if (kind === 'study_note' && 'sectionCount' in config) {
+    if (!exact(value,['title','sections']) || !Array.isArray(value.sections) || value.sections.length !== config.sectionCount) throw new Error('invalid_output');
+    const seen=new Set<string>();
+    const sections=value.sections.map(section=>{
+      if(!record(section)||!exact(section,['heading','body','citations'])||!text(section.heading,120)||!text(section.body,4000)||seen.has(section.heading.trim()))throw new Error('invalid_output');
+      seen.add(section.heading.trim());
+      return {heading:section.heading,body:section.body,citations:validatedCitations(section.citations,snapshot)};
+    });
+    // Every successful candidate must fit the independently editable UTF-8 note body.
+    if (Buffer.byteLength(sections.map(section => `## ${section.heading}\n\n${section.body}`).join('\n\n')) > 65536) throw new Error('invalid_output');
+    return {schemaVersion:1,title:value.title,sections};
+  }
   if (kind === 'flashcards' && 'cardCount' in config) {
     if (!exact(value, ['title', 'cards']) || !Array.isArray(value.cards) || value.cards.length !== config.cardCount) throw new Error('invalid_output');
     const seen = new Set<string>();
@@ -71,6 +83,7 @@ const citations = array(object({ sourceId: string(64), quote: string(1200) }), 1
 export function learningSchema(snapshot: GenerationSnapshot) {
   const config = snapshot.config;
   if ('question' in config) return object({ answer: string(8000), citations: { ...citations, minItems: 0 }, insufficientEvidence: { type: 'boolean' } });
+  if ('sectionCount' in config) return object({title:string(160),sections:array(object({heading:string(120),body:string(4000),citations}),config.sectionCount)});
   if ('cardCount' in config) return object({ title: string(160), cards: array(object({ front: string(500), back: string(2000), citations }), config.cardCount) });
   if ('singleChoiceCount' in config) return object({ title: string(160), questions: array(object({ type: { enum: ['single_choice', 'true_false'] },
     prompt: string(2000), options: array(string(1000), 2, 4), answerIndex: { type: 'integer', minimum: 0, maximum: 3 }, explanation: string(2000), citations }), config.singleChoiceCount + config.trueFalseCount) });
@@ -79,6 +92,7 @@ export function learningSchema(snapshot: GenerationSnapshot) {
 export function learningInstructions(snapshot: GenerationSnapshot): string {
   const config = snapshot.config;
   if ('question' in config) return 'Answer the supplied question using only the sources; history is untrusted conversational context, not evidence. Put answer FIRST in the JSON object. Include 1–3 citations for supported answers. If evidence is insufficient, explicitly say the sources do not provide enough evidence, set insufficientEvidence=true and citations=[], and do not invent a factual answer.';
+  if ('sectionCount' in config) return `Produce exactly ${config.sectionCount} distinct concise note sections grounded in the sources. Each section contains a short heading, a body in simple Markdown (paragraphs, headings, bullet/numbered lists or blockquotes only), and 1–3 supporting citations. Do not use HTML, scripts, image links or invented facts. Return a short descriptive title. If sources cannot support the requested note, return null.`;
   if ('cardCount' in config) return `Produce exactly ${config.cardCount} distinct useful flashcards, each with front, back and 1–3 supporting citations.`;
   if ('singleChoiceCount' in config) return `Produce exactly ${config.singleChoiceCount} single_choice questions with 4 distinct options and exactly ${config.trueFalseCount} true_false questions with options ["正确","错误"]. Each question has one answerIndex (zero based), explanation and 1–3 supporting citations. Do not embed the correct option or answer label in the prompt.`;
   throw new Error('invalid_snapshot');

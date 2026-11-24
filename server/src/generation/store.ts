@@ -375,6 +375,7 @@ export class GenerationStore {
     if (!result || result.schemaVersion !== 1) return false;
     const config = job.input_snapshot.config;
     if (job.kind === 'study_outline') return 'points' in result && 'pointCount' in config && result.points.length === config.pointCount;
+    if (job.kind === 'study_note') return 'sections' in result && 'sectionCount' in config && result.sections.length === config.sectionCount;
     if (job.kind === 'flashcards') return 'cards' in result && 'cardCount' in config && result.cards.length === config.cardCount;
     if (job.kind === 'quiz') return 'questions' in result && 'singleChoiceCount' in config && result.questions.length === config.singleChoiceCount + config.trueFalseCount;
     return job.kind === 'chat_answer' && 'answer' in result && typeof result.answer === 'string' && typeof result.insufficientEvidence === 'boolean';

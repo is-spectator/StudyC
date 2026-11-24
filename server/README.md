@@ -57,3 +57,5 @@ pnpm verify:generation:live --run --planplan-config /绝对路径/受限OpenRout
 确认独立进程健康后，仅向已核验的 Study 主机配置插入业务路由；`nginx -t` 通过再 reload。使用有界只读重试等待 worker 切换，写请求不自动重试。验收工具通过两个合成账户验证公网 API、独立重启持久化及注销清理；不发送邮件、不调用 AI。运行前阅读工具头部参数与私密报告要求。
 
 迁移版本 3 应用后，旧代码因不认识新增登记不能直接启动；先关闭 AI 并保持兼容版本 3 的程序，或准备显式兼容迁移登记的回退构建。不得删除表或登记记录来回退。Nginx 可恢复先前 Study 配置以关闭生成入口，保留业务表与资料。Clyna/PlanPlan 进程与静态资源不参与 StudyC 发布切换。实际结果见 [发布记录](../deploy/release-20261121-independent-backend.md)。
+
+PR-010新增 `study_note` 生成和独立笔记API，使用v9迁移。设置 `STUDYC_NOTES_ENABLED=false` 可关闭生成/重试/保存/编辑，原稿与保存稿仍可读取；回退版本须继续识别v9。详见 [PR-010契约与验收](../docs/pr-010-generated-notes.md)。
