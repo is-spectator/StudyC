@@ -1,3 +1,4 @@
+import {CALENDAR_TABLES,CALENDAR_SQL} from './calendar-schema.js';
 import {PLAN_TABLES,PLANS_SQL} from './plans-schema.js';
 import { NOTE_TABLES, NOTES_SQL } from './notes-schema.js';
 import { MISTAKE_TABLES, MISTAKES_SQL } from './mistakes-schema.js';
@@ -221,6 +222,7 @@ export const LEARNING_MIGRATIONS = [
   { version: 8, name: 'studyc_mistake_review', sql: MISTAKES_SQL, tables: MISTAKE_TABLES },
   { version: 9, name: 'studyc_generated_notes', sql: NOTES_SQL, tables: NOTE_TABLES },
   { version: 10, name: 'studyc_study_plans', sql: PLANS_SQL, tables: PLAN_TABLES },
+  { version: 11, name: 'studyc_learning_calendar', sql: CALENDAR_SQL, tables: CALENDAR_TABLES },
 ];
 const additionChecksum = (migration: typeof LEARNING_MIGRATIONS[number]) => createHash('sha256').update(`${migration.name}\n${migration.sql}`).digest('hex');
 async function additionShape(q: Queryable, migration: typeof LEARNING_MIGRATIONS[number]) {

@@ -702,6 +702,7 @@ function TaskCard({
           · {new Date(e.completedAt).toLocaleString("zh-CN")}
         </p>
       ))}
+      <button className="btn" disabled={!!task.cancelledAt||op.busy} onClick={()=>onNavigate('/platform/calendar?'+new URLSearchParams({studySetId:task.studySetId,planId:task.planId,taskId:task.id}))}>安排到日历</button>
       <OrganizationStatus
         {...op}
         onRetry={() => void op.run(op.retry ?? refresh, !!op.retry)}

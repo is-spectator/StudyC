@@ -45,6 +45,12 @@ STUDY_API_ROUTES = {
     '/v1/study/sets/{setId}/flashcard-decks/{deckId}/review-sessions': ['POST'],
     '/v1/study/sets/{setId}/flashcard-decks/{deckId}/review-sessions/{sessionId}': ['GET'],
     '/v1/study/sets/{setId}/flashcard-decks/{deckId}/review-sessions/{sessionId}/actions': ['POST'],
+    '/v1/study/calendar/settings': ['GET', 'PATCH'],
+    '/v1/study/calendar/events': ['GET', 'POST'],
+    '/v1/study/calendar/events/{eventId}': ['GET', 'PATCH'],
+    '/v1/study/calendar/time-options': ['GET'],
+    '/v1/study/calendar/task-event': ['GET'],
+    '/v1/study/calendar/conflicts': ['POST'],
     '/v1/study/sets/{setId}/plans': ['GET', 'POST'],
     '/v1/study/sets/{setId}/plans/{planId}': ['GET', 'PATCH'],
     '/v1/study/sets/{setId}/plans/{planId}/tasks': ['GET', 'POST'],
@@ -119,7 +125,13 @@ def study_api_locations() -> str:
     routes = [STUDY_API_BEGIN,
               proxy_location('= /v1/study/sets', ['GET', 'POST'], 4),
               proxy_location('= /v1/study/generation-usage', ['GET'], 4),
-              '    location ^~ /v1/study/ {']
+              proxy_location('= /v1/study/calendar/settings', ['GET', 'PATCH'], 4),
+              proxy_location('= /v1/study/calendar/events', ['GET', 'POST'], 4),
+              proxy_location('= /v1/study/calendar/time-options', ['GET'], 4),
+              proxy_location('= /v1/study/calendar/task-event', ['GET'], 4),
+              proxy_location('= /v1/study/calendar/conflicts', ['POST'], 4),
+              '    location ^~ /v1/study/ {',
+              proxy_location(f'~ "^/v1/study/calendar/events/{UUID_PATTERN}$"', ['GET', 'PATCH'], 8)]
     # 8256 KiB is an 8 MiB PDF plus the 64 KiB multipart overhead the service allows.
     for suffix, methods, body in [('', ['GET', 'PATCH'], ''),
                                    ('/materials', ['GET', 'POST'], '2m'),

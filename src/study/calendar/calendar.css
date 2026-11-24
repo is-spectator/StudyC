@@ -1,0 +1,117 @@
+.calendar-window {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin: 20px 0;
+}
+.calendar-window label {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.calendar-window .field {
+  width: 160px;
+}
+.calendar-window .org-actions {
+  margin: 0;
+}
+.calendar-days {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 10px;
+}
+.calendar-days.is-day {
+  grid-template-columns: 1fr;
+}
+.calendar-day {
+  background: #fff;
+  border: 1px solid #e2e4e9;
+  border-radius: 12px;
+  padding: 12px;
+  min-width: 0;
+  min-height: 240px;
+}
+.calendar-day h2 {
+  font-size: 17px;
+}
+.calendar-day h2 small {
+  display: block;
+  color: #797583;
+  font-size: 12px;
+  margin: 6px 0;
+}
+.calendar-event {
+  display: grid;
+  gap: 8px;
+  width: 100%;
+  text-align: left;
+  border: 0;
+  background: #f0ecfa;
+  border-left: 3px solid #9f88d5;
+  border-radius: 8px;
+  padding: 12px;
+  margin: 12px 0;
+  cursor: pointer;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+.calendar-event span,
+.calendar-event small {
+  font-size: 12px;
+  line-height: 1.6;
+  color: #676171;
+}
+.calendar-event strong {
+  font-size: 14px;
+  line-height: 1.5;
+}
+.calendar-event.is-inactive {
+  opacity: 0.6;
+  background: #f1f1ef;
+  border-color: #b7b6b3;
+}
+.calendar-overlap {
+  font-size: 12px;
+  color: #865914;
+  background: #fff1d4;
+  padding: 8px;
+  border-radius: 6px;
+}
+.calendar-editor .calendar-check {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+.calendar-check input {
+  margin-top: 4px;
+}
+.calendar-source {
+  background: #f7f5fa;
+  padding: 14px;
+  border-radius: 10px;
+  line-height: 1.7;
+}
+.calendar-panel .cloud-page-heading {
+  align-items: flex-start;
+}
+.calendar-panel .cloud-page-heading .org-actions {
+  margin-top: 0;
+}
+@media (max-width: 1100px) {
+  .calendar-days {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+@media (max-width: 600px) {
+  .calendar-days {
+    grid-template-columns: 1fr;
+  }
+  .calendar-day {
+    min-height: 100px;
+  }
+  .calendar-window label {
+    flex-wrap: wrap;
+  }
+}

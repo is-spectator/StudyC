@@ -21,7 +21,7 @@ test('actual entity IDs survive direct links, trailing slashes and query strings
 });
 test('unsupported cloud tools have explicit unavailable routes and retain their set scope', () => {
   assert.deepEqual(parseStudyRoute(`/platform/studyset/${a}/study-plan`), { kind: 'plans', studySetId: a });
-  assert.deepEqual(parseStudyRoute('/platform/calendar'), { kind: 'unavailable', title: '日历' });
+  assert.deepEqual(parseStudyRoute('/platform/calendar'), { kind: 'calendar' });
   assert.deepEqual(parseStudyRoute('/platform/local-data'), { kind: 'local-data' });
 });
 test('malformed and external paths never become a fallback learning set', () => {

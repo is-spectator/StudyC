@@ -1,3 +1,4 @@
+import {registerCalendarRoutes} from './calendar.js';
 import {registerPlanRoutes} from './plans.js';
 import { registerNoteRoutes } from './notes.js';
 import { registerMistakeRoutes } from './mistakes.js';
@@ -119,6 +120,8 @@ export function createApp(db: Db, options: AppOptions) {
     const mistakeCollection = /^\/v1\/study\/sets\/[^/]+\/mistake-reviews$/.test(path);
     const mistakeWrite = /^\/v1\/study\/sets\/[^/]+\/mistake-reviews\/[^/]+\/(?:answers|submit)$/.test(path);
     if ((mistakeRead && c.req.method !== 'GET') || (mistakeCollection && !['GET','POST'].includes(c.req.method)) || (mistakeWrite && c.req.method !== 'POST')) return c.json({error:{code:'method_not_allowed',message:'请求方法不支持。'}},405);
+    const calendarSettings=path==='/v1/study/calendar/settings',calendarCollection=path==='/v1/study/calendar/events',calendarDetail=/^\/v1\/study\/calendar\/events\/[^/]+$/.test(path),calendarRead=['/v1/study/calendar/time-options','/v1/study/calendar/task-event'].includes(path),calendarPreview=path==='/v1/study/calendar/conflicts';
+    if(((calendarSettings||calendarDetail)&&!['GET','PATCH'].includes(c.req.method))||(calendarCollection&&!['GET','POST'].includes(c.req.method))||(calendarRead&&c.req.method!=='GET')||(calendarPreview&&c.req.method!=='POST'))return c.json({error:{code:'method_not_allowed',message:'请求方法不支持。'}},405);
     const planCollection=/^\/v1\/study\/sets\/[^/]+\/plans(?:\/[^/]+\/tasks)?$/.test(path);
     const planDetail=/^\/v1\/study\/sets\/[^/]+\/plans\/[^/]+$/.test(path);
     const planTask=/^\/v1\/study\/sets\/[^/]+\/plans\/[^/]+\/tasks\/[^/]+$/.test(path);
@@ -149,6 +152,7 @@ export function createApp(db: Db, options: AppOptions) {
   registerMistakeRoutes(app,db,limits);
   registerNoteRoutes(app,db,limits);
   registerPlanRoutes(app,db,limits);
+  registerCalendarRoutes(app,db,limits);
   registerQuizRoutes(app, db, options.generationStore, limits);
   if (options.fileRoot) registerFileRoutes(app, db, limits, options.fileRoot);
   // No PlanPlan or account-management routes are mounted.
