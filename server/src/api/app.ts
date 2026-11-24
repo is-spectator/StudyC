@@ -1,3 +1,4 @@
+import {registerImportRoutes} from './local-import.js';
 import {registerCopyRoutes} from './content-copy.js';
 import {registerTrashRoutes} from './trash.js';
 import {registerFolderRoutes} from './folders.js';
@@ -126,6 +127,7 @@ export function createApp(db: Db, options: AppOptions) {
     if ((mistakeRead && c.req.method !== 'GET') || (mistakeCollection && !['GET','POST'].includes(c.req.method)) || (mistakeWrite && c.req.method !== 'POST')) return c.json({error:{code:'method_not_allowed',message:'请求方法不支持。'}},405);
     if((path==='/v1/study/trash'&&c.req.method!=='GET')||(/^\/v1\/study\/trash\/[^/]+$/.test(path)&&!['GET','PATCH'].includes(c.req.method)))return c.json({error:{code:'method_not_allowed',message:'请求方法不支持。'}},405);
     if((path==='/v1/study/copies'&&c.req.method!=='POST')||(/^\/v1\/study\/sets\/[^/]+\/copy-preview$/.test(path)&&c.req.method!=='GET'))return c.json({error:{code:'method_not_allowed',message:'请求方法不支持。'}},405);
+    if((path==='/v1/study/imports'&&c.req.method!=='POST')||(path==='/v1/study/imports/status'&&c.req.method!=='GET'))return c.json({error:{code:'method_not_allowed',message:'请求方法不支持。'}},405);
     const folderCollection=path==='/v1/study/folders',folderDetail=/^\/v1\/study\/folders\/[^/]+$/.test(path),folderRemove=/^\/v1\/study\/folders\/[^/]+\/remove$/.test(path),folderSets=/^\/v1\/study\/folders\/[^/]+\/sets$/.test(path),folderAssignment=/^\/v1\/study\/sets\/[^/]+\/folder$/.test(path);
     if((folderCollection&&!['GET','POST'].includes(c.req.method))||((folderDetail||folderAssignment)&&!['GET','PATCH'].includes(c.req.method))||(folderRemove&&c.req.method!=='POST')||(folderSets&&c.req.method!=='GET'))return c.json({error:{code:'method_not_allowed',message:'请求方法不支持。'}},405);
     if(path==='/v1/study/search'&&c.req.method!=='GET')return c.json({error:{code:'method_not_allowed',message:'请求方法不支持。'}},405);
@@ -164,6 +166,7 @@ export function createApp(db: Db, options: AppOptions) {
   registerCalendarRoutes(app,db,limits);
   registerSearchRoutes(app,db);
   registerFolderRoutes(app,db,limits);
+  registerImportRoutes(app,db,limits);
   registerCopyRoutes(app,db,limits);
   registerTrashRoutes(app,db,limits,options.generationStore instanceof GenerationStore ? options.generationStore : undefined);
   registerQuizRoutes(app, db, options.generationStore, limits);

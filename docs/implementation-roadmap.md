@@ -2,7 +2,7 @@
 
 更新：2026-11-24。状态：PR-001～007 已合并到 StudyC 独立后端集成分支 `codex/studyc-independent-backend`，当前基线为 `4feb94d`；`main` 尚未包含全部后续功能。PR-005 [资料问答](pr-005-grounded-chat.md)、PR-006 [闪卡](pr-006-flashcards.md)、PR-007 [测验与考试](pr-007-quizzes.md) 已完成测试账户 A/B 的本地核心流程验收，原 OpenRouter/Baidu 免费模型实际生成了回答、卡片和试题。完整证据边界见[本地验收记录](acceptance-pr005-007.md)。这三项功能未发布生产。
 
-本地实测发现的 OpenRouter 流式结束帧兼容问题已修复于 [GitHub #8](https://github.com/is-spectator/StudyC/pull/8)（`b7c322c`），CI 通过、本地已应用，核对时尚未合并。**GitHub #8 是修复 PR，不是功能交付包 PR-008。** 下一阶段顺序、拆分与依赖见[PR-008～013 规划](next-pr-plan.md)，下一个可交接任务为 [PR-008：间隔复习与到期队列](pr-008-spaced-review.md)。
+本地实测发现的 OpenRouter 流式结束帧兼容问题已修复于 [GitHub #8](https://github.com/is-spectator/StudyC/pull/8)（`b7c322c`），CI 通过、本地已应用，核对时尚未合并。**GitHub #8 是修复 PR，不是功能交付包 PR-008。** PR-008～017 已在 StudyC 独立栈分支实现并本地验收，详见[PR 编号、GitHub PR 与任务书映射](next-pr-plan.md#pr-011017-本地交付2026-11-24)。当前本地集成分支为 `codex/studyc-local-import`，PR 保持待审，不自动合并或发布生产。后端477项、前端117项、部署23项回归及前后端构建通过。未编号的 OCR、多媒体、辅导、分享与支付阶段不在本轮交付范围。
 
 实施边界：StudyC 的前后端、业务迁移和 PR 统一在 `is-spectator/StudyC`；Clyna 继续提供共享账户体系。后端与前端交付边界分别见 [PR-001 任务书](pr-001-study-data-api.md)和 [PR-002 任务书](pr-002-cloud-workspace.md)。
 
@@ -20,7 +20,7 @@
 
 旧版预览的学习集是名称数组，路由固定为 `/platform/studyset/main`；资料没有 `studySetId`，多种学习产物只保存最近一份。因此先建立业务对象和数据归属，再接生成服务。
 
-PR-001/002 已把正式账户的学习集和纯文本资料接到独立后端：按 UUID 路由，支持列表、创建、改名、文本编辑与版本冲突处理。已保存内容以服务器为准，旧本机记录和未同步草稿可单独查看/导出；旧 `main` 入口回到云端列表。旧示例仅在显式开发预览中加载，正式账户的后续学习工具显示未开放。前端部署与验收记录见 [PR-002 任务书](pr-002-cloud-workspace.md)。
+PR-001/002 已把正式账户的学习集和纯文本资料接到独立后端：按 UUID 路由，支持列表、创建、改名、文本编辑与版本冲突处理。已保存内容以服务器为准，旧本机记录和未同步草稿可单独查看/导出；PR-017新增当前账户旧上传文本的显式预览导入，其他记录仍完整保留；旧 `main` 入口回到云端列表。旧示例仅在显式开发预览中加载，正式账户的后续学习工具显示未开放。前端部署与验收记录见 [PR-002 任务书](pr-002-cloud-workspace.md)。
 
 本规划的表结构、接口和实施顺序是 **StudyC 的设计决策**，没有声称获得 StudyFetch 的内部实现。OCR、实时语音辅导、专业题库质量、长期 SRS 效果、视频生成质量和第三方同步仍没有充分实测依据。
 

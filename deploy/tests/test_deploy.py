@@ -123,12 +123,12 @@ class ReleaseChecks(unittest.TestCase):
                     self.assertIn('proxy_pass http://127.0.0.1:8789;', auth_location)
                     self.assertNotIn('127.0.0.1:8790', auth_location)
                 self.assertEqual(text.count('proxy_pass http://127.0.0.1:8789;'), len(renderer.AUTH_METHODS))
-                self.assertEqual(text.count('proxy_pass http://127.0.0.1:8790;'), 65 if enabled else 0)
+                self.assertEqual(text.count('proxy_pass http://127.0.0.1:8790;'), 67 if enabled else 0)
                 if enabled:
-                    self.assertEqual(len(review['studyApiRoutes']), 65)
-                    self.assertEqual(text.count('client_max_body_size 2m;'), 2)
+                    self.assertEqual(len(review['studyApiRoutes']), 67)
+                    self.assertEqual(text.count('client_max_body_size 2m;'), 3)
                     self.assertEqual(text.count('client_max_body_size 8256k;'), 1)
-                    self.assertEqual(sum(len(methods) for methods in review['studyApiRoutes'].values()), 90)
+                    self.assertEqual(sum(len(methods) for methods in review['studyApiRoutes'].values()), 92)
                     self.assertEqual(review['studyApiBodyLimits']['flashcardLocationBytes'], 32 * 1024)
                 planplan = (output / 'clyna-planplan-alias.conf').read_bytes()
                 self.assertIn(b'proxy_pass http://127.0.0.1:8789;', planplan)
@@ -200,10 +200,10 @@ class ReleaseChecks(unittest.TestCase):
             self.assertFalse(any(re.fullmatch(pattern, path) for pattern in patterns), path)
         self.assertEqual(locations.count('if ($request_method !~ ^(GET|POST)$) { return 405; }'), 15)
         self.assertEqual(locations.count('if ($request_method !~ ^(GET|PATCH)$) { return 405; }'), 10)
-        self.assertEqual(locations.count('if ($request_method !~ ^(GET)$) { return 405; }'), 20)
-        self.assertEqual(locations.count('if ($request_method !~ ^(POST)$) { return 405; }'), 18)
+        self.assertEqual(locations.count('if ($request_method !~ ^(GET)$) { return 405; }'), 21)
+        self.assertEqual(locations.count('if ($request_method !~ ^(POST)$) { return 405; }'), 19)
         self.assertEqual(locations.count('if ($request_method !~ ^(PATCH)$) { return 405; }'), 2)
-        self.assertEqual(locations.count('proxy_pass http://127.0.0.1:8790;'), 65)
+        self.assertEqual(locations.count('proxy_pass http://127.0.0.1:8790;'), 67)
         self.assertIn('location = /v1/study/generation-usage {', locations)
         self.assertIn('location = /v1/study/search {', locations)
         self.assertIn('location = /v1/study/folders {', locations)
@@ -219,7 +219,7 @@ class ReleaseChecks(unittest.TestCase):
                           'proxy_set_header X-PlanPlan-Expected-User $http_x_planplan_expected_user;',
                           'proxy_cache off;', 'proxy_no_cache 1;', 'proxy_next_upstream off;',
                           'proxy_hide_header Cache-Control;']:
-            self.assertEqual(locations.count(directive), 65)
+            self.assertEqual(locations.count(directive), 67)
 
     def test_study_api_surgical_insertion_preserves_existing_config_and_guards_duplicates(self):
         original = '''server { server_name study.clyna.ai; }

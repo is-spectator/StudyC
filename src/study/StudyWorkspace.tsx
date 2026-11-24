@@ -1,3 +1,4 @@
+import ImportPanel from './import/ImportPanel';
 import CopyPanel from './copy/CopyPanel';
 import TrashPanel from './trash/TrashPanel';
 import FoldersPanel from './folders/FoldersPanel';
@@ -117,7 +118,7 @@ export default function StudyWorkspace() {
   }, [api, setId, setRevision]);
   useEffect(() => { setDialog(null); setMobile(false); document.querySelector('.cloud-main-scroll')?.scrollTo(0, 0); }, [path]);
   useEffect(() => {
-    const title = route.kind === 'copy' ? '复制学习内容' : route.kind === 'trash' ? '回收站' : route.kind === 'folders' ? '文件夹' : route.kind === 'search' ? '搜索学习内容' : route.kind === 'calendar' ? '学习日历' : route.kind === 'local-data' ? '本机旧数据' : currentSet.data?.title ?? '我的学习集';
+    const title = route.kind === 'import' ? '导入旧文本资料' : route.kind === 'copy' ? '复制学习内容' : route.kind === 'trash' ? '回收站' : route.kind === 'folders' ? '文件夹' : route.kind === 'search' ? '搜索学习内容' : route.kind === 'calendar' ? '学习日历' : route.kind === 'local-data' ? '本机旧数据' : currentSet.data?.title ?? '我的学习集';
     document.title = `${title} | StudyC`;
   }, [route.kind, currentSet.data?.title]);
   useEffect(() => { if (!notice) return; const timer = setTimeout(() => setNotice(''), 5000); return () => clearTimeout(timer); }, [notice]);
@@ -212,12 +213,13 @@ export default function StudyWorkspace() {
         {route.kind === 'mistakes' && currentSet.data ? <div className="cloud-page"><MistakesPanel key={`${auth.user?.id}:${route.studySetId}:${path}`} studySetId={route.studySetId} onNavigate={go}/></div> : null}
         {route.kind === 'notes' && currentSet.data ? <div className="cloud-page"><NotesPanel key={`${auth.user?.id}:${route.studySetId}:${path}`} studySetId={route.studySetId} materials={materials.items} onNavigate={go}/></div> : null}
         {route.kind === 'plans' && currentSet.data ? <div className="cloud-page"><PlansPanel key={`${auth.user?.id}:${route.studySetId}:${path}`} studySetId={route.studySetId} onNavigate={go}/></div> : null}
+        {route.kind === 'import' ? <div className="cloud-page"><ImportPanel key={`${auth.user?.id}:${path}`} onNavigate={go} onChanged={sets.reload}/></div> : null}
         {route.kind === 'copy' ? <div className="cloud-page"><CopyPanel key={`${auth.user?.id}:${path}`} onNavigate={go} onChanged={sets.reload}/></div> : null}
         {route.kind === 'trash' ? <div className="cloud-page"><TrashPanel key={`${auth.user?.id}:${path}`} onNavigate={go} onChanged={sets.reload}/></div> : null}
         {route.kind === 'folders' ? <div className="cloud-page"><FoldersPanel key={`${auth.user?.id}:${path}`} onNavigate={go}/></div> : null}
         {route.kind === 'search' ? <div className="cloud-page"><SearchPanel key={`${auth.user?.id}:${path}`} onNavigate={go}/></div> : null}
         {route.kind === 'calendar' ? <div className="cloud-page"><CalendarPanel key={`${auth.user?.id}:${path}`} onNavigate={go}/></div> : null}
-        {route.kind === 'local-data' ? <LocalData accountId={auth.user?.id ?? ''} /> : null}
+        {route.kind === 'local-data' ? <LocalData accountId={auth.user?.id ?? ''} onNavigate={go} /> : null}
         {route.kind === 'unavailable' && (!setId || currentSet.data) ? <div className="cloud-page cloud-unavailable"><span className="cloud-empty-mark"><BookOpen size={30} /></span><h1>{route.title}尚未开放</h1><p>现在可以创建学习集、整理和编辑文本资料。<br />这项学习工具还在准备中。</p><button className="btn btn-black" onClick={() => go(setId ? studySetPath(setId) : '/platform/studysets')}>返回我的资料<ArrowRight size={16} /></button></div> : null}
         {route.kind === 'not-found' ? <div className="cloud-page cloud-unavailable"><h1>没有找到这个页面</h1><p>请从学习集列表重新打开资料。</p><button className="btn btn-black" onClick={() => go('/platform/studysets')}>返回学习集列表</button></div> : null}
       </main>
@@ -358,7 +360,7 @@ function readLocalEntries() {
     return [{ key, value, raw }];
   });
 }
-function LocalData({ accountId }: { accountId: string }) {
+function LocalData({ accountId,onNavigate }: { accountId: string;onNavigate:(p:string)=>boolean }) {
   const [entries, setEntries] = useState(readLocalEntries);
   const [opened, setOpened] = useState<string | null>(null);
   const [error, setError] = useState('');
@@ -392,7 +394,7 @@ function LocalData({ accountId }: { accountId: string }) {
         : Object.hasOwn(names, key) ? names[key] : `其他本机记录 ${index + 1}`;
       return <section key={entry.key}><button className="cloud-archive-row" aria-expanded={opened === entry.key} onClick={() => setOpened(opened === entry.key ? null : entry.key)}><FileText size={18} /><span>{title}</span><small>{Array.isArray(entry.value) ? `${entry.value.length} 条记录` : '查看内容'}</small><ChevronRight size={16} /></button>{opened === entry.key ? <><pre>{content.slice(0, 20_000)}</pre>{content.length > 20_000 ? <p className="cloud-field-hint">预览已截断，导出可保存全部内容。</p> : null}</> : null}</section>;
     })}</div>;
-  return <div className="cloud-page"><div className="cloud-page-heading"><div><span className="cloud-eyebrow">LOCAL ARCHIVE</span><h1>本机旧数据</h1><p>查看当前账户保存在本机的旧记录与未同步草稿。</p></div><button className="btn btn-black" onClick={exportData} disabled={!entries.length}><Download size={17} />导出 JSON</button></div><div className="cloud-archive-note"><Archive size={20} /><p>这里的记录只供查看和导出，不会自动上传到云端。导出包含旧记录、未同步草稿和待确认的请求，并保留原始内容；本机草稿不代表云端已经保存。</p></div>{error ? <p role="alert" className="cloud-form-error">{error}</p> : null}{!entries.length ? <div className="cloud-empty"><h2>未读取到本机数据</h2><p>这里只显示当前账户的记录。</p></div> : <>
+  return <div className="cloud-page"><div className="cloud-page-heading"><div><span className="cloud-eyebrow">LOCAL ARCHIVE</span><h1>本机旧数据</h1><button className="btn" onClick={()=>onNavigate('/platform/import')}>导入旧文本资料</button><p>查看当前账户保存在本机的旧记录与未同步草稿。</p></div><button className="btn btn-black" onClick={exportData} disabled={!entries.length}><Download size={17} />导出 JSON</button></div><div className="cloud-archive-note"><Archive size={20} /><p>这里的记录可以查看、导出，并从导入入口明确选择文本资料上传，不会自动同步。导出包含旧记录、未同步草稿和待确认的请求，并保留原始内容；本机草稿不代表云端已经保存。</p></div>{error ? <p role="alert" className="cloud-form-error">{error}</p> : null}{!entries.length ? <div className="cloud-empty"><h2>未读取到本机数据</h2><p>这里只显示当前账户的记录。</p></div> : <>
       <section className="cloud-archive-group"><h2>旧版本机记录</h2><p>旧版资料没有明确的学习集归属，后续导入时需要重新选择。</p>{legacy.length ? rows(legacy, false) : <p className="cloud-field-hint">没有读取到旧版本机记录。</p>}</section>
       <section className="cloud-archive-group"><h2>未同步草稿与待确认请求</h2><p>包括正常草稿和暂时无法读取的原始记录。导出可保留它们供后续恢复。</p>{drafts.length ? rows(drafts, true) : <p className="cloud-field-hint">没有读取到本机草稿。</p>}</section>
     </>}</div>;
