@@ -1,6 +1,6 @@
-# StudyC 后续 PR 规划：PR-008～013
+# StudyC 后续 PR 规划：PR-008～017
 
-日期：2026-11-24。状态：PR-008～010已实现并提交GitHub #9～11；PR-011～017正在依次实现，每包独立PR与本地验收。功能编号与GitHub PR号分开使用。
+日期：2026-11-24。状态：PR-008～010已实现并提交GitHub #9～11；PR-011～017已实现，每包独立PR与本地验收；全部保持待审，不自动合并或发布生产。功能编号与GitHub PR号分开使用。
 
 ## 当前起点
 
@@ -83,3 +83,18 @@ PR-011已实现并提交GitHub #12，最新修复CI通过，见[学习计划任�
 原站的 A11/A12/A13 实测证明首次错误与最终成绩要分开，但没有证明其掌握算法正确；A14 验证了题目高亮创建和跨页面汇总；A15 验证了文字阅读生成和来源打开；A25 验证了计划/单元改名及返回首页后保留，A26 验证了手动日历事件，A27 验证了关键词搜索并打开资料，具体以[原始实测](../reference/studyfetch-functional-audit-20261120.md)为准。SRS 长期效果、自动计划质量、提醒和第三方同步没有充分验证，以上规则是 StudyC 自己的产品设计，不是对原站内部算法的复刻声明。
 
 每个 PR 交付：范围/不包含项、数据库与 API 契约、迁移/关闭功能后的数据保留方式、关键回归、测试账户 A/B 的桌面/手机本地验收。生成类功能分别记录受控上游测试和原模型实测；学习记录、调度、错题等确定性流程不依赖 AI 才能验收。估时由接手开发者确认，不把规划顺序写成承诺上线日期。
+
+
+## PR-011～017 本地交付（2026-11-24）
+
+| 功能编号 | GitHub PR | 任务与验收 |
+| --- | --- | --- |
+| 011 学习计划 | [#12](https://github.com/is-spectator/StudyC/pull/12) | [计划](pr-011-study-plans.md) |
+| 012 学习日历 | [#13](https://github.com/is-spectator/StudyC/pull/13) | [日历](pr-012-learning-calendar.md) |
+| 013 当前内容搜索 | [#14](https://github.com/is-spectator/StudyC/pull/14) | [搜索](pr-013-content-search.md) |
+| 014 文件夹与归类 | [#15](https://github.com/is-spectator/StudyC/pull/15) | [文件夹](pr-014-folders.md) |
+| 015 回收站 | [#16](https://github.com/is-spectator/StudyC/pull/16) | [回收站](pr-015-recycle-bin.md) |
+| 016 独立文本复制 | [#17](https://github.com/is-spectator/StudyC/pull/17) | [复制](pr-016-content-copy.md) |
+| 017 旧本机文本导入 | [#18](https://github.com/is-spectator/StudyC/pull/18) | [导入](pr-017-local-data-import.md) |
+
+按栈依赖审查/合并，当前本地集成分支 `codex/studyc-local-import`，包含上述全部功能。正式 `main` 未因此自动更新。本地 http://127.0.0.1:5180 ，使用内置验收账户A/B；最后基线后端477项、前端117项、部署23项及前后端构建/类型检查通过。模型配置保持原 OpenRouter/Baidu 免费模型，本轮确定性流程没有模型调用。

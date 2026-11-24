@@ -119,3 +119,7 @@ PR-004～007 提供 OpenRouter 生成任务、带来源问答、资料闪卡和�
 - PR-015 回收站：见 [任务与验收](docs/pr-015-recycle-bin.md)。本地 `/platform/trash`，不提供永久删除。
 
 - PR-016 真实文本复制：见 [范围与验收](docs/pr-016-content-copy.md)，学习集页或资料页进入复制预览。
+
+- PR-017 旧本机文本导入：见 [范围与验收](docs/pr-017-local-data-import.md)，从本机旧数据页进入。仅预览不会上传；原始记录完整保留。
+
+PR-011～017 的 PR 映射、本地入口和验收数据见 [本地集成交付记录](docs/acceptance-pr011-017.md)。
