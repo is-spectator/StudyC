@@ -180,6 +180,7 @@ export default function FoldersPanel({
           folders={folders}
           hasMore={!!folderCursor}
           onMore={moreFolders}
+          onFolder={(f) => setFolders(old => old.some(o => o.id === f.id) ? old : [f, ...old])}
           onCancel={() => {
             setMoving(null);
             if (moveId) onNavigate(base);
@@ -438,6 +439,7 @@ function MoveEditor({
   folders,
   hasMore,
   onMore,
+  onFolder,
   onCancel,
   onSaved,
 }: {
@@ -448,6 +450,7 @@ function MoveEditor({
   folders: Folder[];
   hasMore: boolean;
   onMore: () => Promise<void>;
+  onFolder: (f: Folder) => void;
   onCancel: () => void;
   onSaved: (a: Assignment) => void;
 }) {
@@ -540,12 +543,14 @@ function MoveEditor({
           <button
             type="button"
             className="btn"
-            onClick={() => {
+            disabled={op.busy}
+            onClick={() => void op.run(async () => {
+              if (latest.folderId && !folders.some(f => f.id === latest.folderId))
+                onFolder(await api.get(latest.folderId));
               setDestination(latest.folderId ?? "");
               setVersion(latest.version);
               setLatest(null);
-              op.clearError();
-            }}
+            })}
           >
             采用云端归类
           </button>
