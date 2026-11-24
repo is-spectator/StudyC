@@ -1,3 +1,4 @@
+import { registerSpacedRoutes } from './spaced-review.js';
 import { Hono } from 'hono';
 import { ZodError } from 'zod';
 import type { Db } from '../db/db.js';
@@ -26,7 +27,7 @@ export interface AppOptions {
   generationStore?: GenerationHttpStore;
 }
 
-const statuses = {
+const statuses = { no_cards_due: 409,
   unauthorized: 401, credential_conflict: 401, account_mismatch: 409,
   origin_forbidden: 403, csrf_invalid: 403, service_unavailable: 503,
   not_found: 404, version_conflict: 409, idempotency_conflict: 409,
@@ -108,6 +109,9 @@ export function createApp(db: Db, options: AppOptions) {
     const flashcardWrite = flashcardMaterialize || /^\/v1\/study\/sets\/[^/]+\/flashcard-decks\/[^/]+\/(?:cards|sessions(?:\/[^/]+\/reviews)?)$/.test(path);
     const flashcardEdit = /^\/v1\/study\/sets\/[^/]+\/flashcard-decks\/[^/]+\/cards\/[^/]+$/.test(path);
     const flashcardSession = /^\/v1\/study\/sets\/[^/]+\/flashcard-decks\/[^/]+\/sessions\/[^/]+$/.test(path);
+    const spacedRead = /^\/v1\/study\/sets\/[^/]+\/flashcard-decks\/[^/]+\/(?:review-queue|review-sessions\/[^/]+)$/.test(path);
+    const spacedWrite = /^\/v1\/study\/sets\/[^/]+\/flashcard-decks\/[^/]+\/review-sessions(?:\/[^/]+\/actions)?$/.test(path);
+    if ((spacedRead && c.req.method !== 'GET') || (spacedWrite && c.req.method !== 'POST')) return c.json({error:{code:'method_not_allowed',message:'请求方法不支持。'}},405);
     const quizCollection = /^\/v1\/study\/sets\/[^/]+\/quizzes(?:\/[^/]+\/attempts)?$/.test(path);
     const quizRead = /^\/v1\/study\/sets\/[^/]+\/quizzes\/[^/]+(?:\/attempts\/[^/]+)?$/.test(path);
     const quizWrite = /^\/v1\/study\/sets\/[^/]+\/quizzes\/[^/]+\/attempts\/[^/]+\/(?:answers|submit)$/.test(path);
@@ -126,6 +130,7 @@ export function createApp(db: Db, options: AppOptions) {
   registerGenerationRoutes(app, options.generationStore, limits);
   registerChatRoutes(app, db, options.generationStore instanceof GenerationStore ? options.generationStore : undefined, limits);
   registerFlashcardRoutes(app, db, options.generationStore instanceof GenerationStore ? options.generationStore : undefined, limits);
+  registerSpacedRoutes(app, db, limits);
   registerQuizRoutes(app, db, options.generationStore, limits);
   if (options.fileRoot) registerFileRoutes(app, db, limits, options.fileRoot);
   // No PlanPlan or account-management routes are mounted.

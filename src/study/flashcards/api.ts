@@ -2,7 +2,7 @@ import { AuthApiError, throwIfAborted, type RequestOptions } from '../../auth/ap
 export type Citation={sourceId:string;materialId:string;version:number;quote:string;start:number;end:number;page:number|null};
 export type Source={sourceId:string;materialId:string;version:number;title:string;body:string;pageProvenance:string};
 export type Card={id:string;front:string;back:string;version:number;position:number;citations:Citation[]};
-export type Deck={id:string;studySetId:string;title:string;version:number;generationJobId:string|null;sourceSnapshots:Source[];cardCount?:number};
+export type Deck={id:string;studySetId:string;title:string;version:number;generationJobId:string|null;sourceSnapshots:Source[];cardCount?:number;reviewSummary?:{newCount:number;dueCount:number}};
 export type Session={id:string;deckId:string;status:'in_progress'|'completed';version:number;nextIndex:number;cards:Card[];updatedAt:string};
 export type Detail={deck:Deck;cards:Card[];lastSession:Session|null;metrics:{kind:'self_rated';totalReviews:number;ratings:Record<string,number>;lastReviewedAt:string|null;lastRating:string|null}};
 export type Job={id:string;kind:string;status:string;errorCode:string|null;result:{title:string;cards?:{front:string;back:string;citations:Citation[]}[]}|null};

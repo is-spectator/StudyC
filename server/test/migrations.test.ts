@@ -10,7 +10,7 @@ async function restoreV3(db: Awaited<ReturnType<typeof openTestDb>>) {
   for (const migration of [...LEARNING_MIGRATIONS].reverse()) {
     for (const table of [...migration.tables].reverse()) await db.exec(`DROP TABLE IF EXISTS ${table} CASCADE`);
   }
-  await db.exec(`DROP FUNCTION studyc_chat_turn_immutable(); DELETE FROM studyc_schema_migrations WHERE version>=4;
+  await db.exec(`DROP FUNCTION studyc_schedule_owner(); DROP FUNCTION studyc_chat_turn_immutable(); DELETE FROM studyc_schema_migrations WHERE version>=4;
     ALTER TABLE study_generation_jobs DROP CONSTRAINT study_generation_jobs_kind_check;
     ALTER TABLE study_generation_jobs ADD CONSTRAINT study_generation_jobs_kind_check CHECK(kind='study_outline');`);
 }

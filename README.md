@@ -2,7 +2,9 @@
 
 前端 React + TypeScript + Vite，独立后端 Hono + PostgreSQL。以实际浏览器采集的 StudyFetch 页面、原站公开字体和插画为视觉依据，将资料整理、理解和练习整合为一个学习空间。当前正式账户使用云端学习集和纯文本资料；旧引导与内置学科示例仅保留在开发预览中，不作为云端学习数据。
 
-**2026-11-23：PR-001～004 已合并到独立后端基线；PR-005～007 分别实现并提交审查，当前仅供本地验收。** 新增[资料问答与引用](docs/pr-005-grounded-chat.md)、[多套闪卡与自评](docs/pr-006-flashcards.md)、[测验、考试和作答历史](docs/pr-007-quizzes.md)。生产状态仍以各次发布记录为准，此轮未发布生产。
+**2026-11-24：PR-001～007 已合并到 `codex/studyc-independent-backend`，005～007 的本地核心流程与原模型补验已通过。** 已实现[资料问答与引用](docs/pr-005-grounded-chat.md)、[多套闪卡与自评](docs/pr-006-flashcards.md)、[测验、考试和作答历史](docs/pr-007-quizzes.md)。问答流式兼容修复 [GitHub #8](https://github.com/is-spectator/StudyC/pull/8) CI 通过、本地已应用，核对时尚未合并；`main` 尚未包含全部后续功能。生产状态仍以各次发布记录为准，005～007 未发布生产。
+
+下一阶段见 [PR-008～013 规划](docs/next-pr-plan.md)；已实现的下一功能包为 [PR-008：闪卡间隔复习与到期队列](docs/pr-008-spaced-review.md)。PR-008 已提交 [GitHub #9](https://github.com/is-spectator/StudyC/pull/9)，后续仍是待实现任务；功能编号与 GitHub PR 号分开使用。
 
 当前归档 **34 张原站参考截图**，覆盖主要入口、列表空态、创建首步和部分弹窗。它们不代表原站所有页面与状态；本项目也不宣称全站逐页像素级复刻。
 
@@ -22,7 +24,7 @@ npm run local:acceptance -- --planplan-config /绝对路径/PlanPlan的私密Ope
 
 打开 `http://127.0.0.1:5180/`，点击「进入验收账户 A」，在「水循环与城市」内查看资料问答、闪卡、测验与考试。「进入验收账户 B」用于检查账户隔离。独立 PGlite 数据保存在忽略目录 `.local/acceptance`，重启后保留；Ctrl-C 停止服务。此入口仅绑定回环地址，使用合成身份，不连接生产数据库或发送注册邮件。
 
-模型继续使用 PlanPlan 原 OpenRouter 配置。2026-11-23 实际上游返回 429 限流，按用户选择未切换模型；手动卡片和学习记录可直接验收，新的 AI 生成需等待限流恢复。自动化成功用例使用独立 `automated-qa` 数据目录与测试上游，不能当作真实模型成功或内容质量验收。
+模型继续使用 PlanPlan 原 OpenRouter 配置。2026-11-23 初验遇到 429；随后保持原模型完成真实问答、闪卡与测验生成，实测结果见[本地验收记录](docs/acceptance-pr005-007.md)。问答成功补验包含 GitHub #8 的兼容修复。免费模型仍可能限流，失败时明确提示，不自动切换模型。独立 `automated-qa` 与测试上游只用于受控回归，与上述真实调用分开记录。
 
 ## 启动
 

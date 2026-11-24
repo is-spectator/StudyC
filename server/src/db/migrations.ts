@@ -1,3 +1,4 @@
+import { SPACED_TABLES, SPACED_SQL, SCHEDULE_OWNER_BODY } from './spaced-review-schema.js';
 import { createHash } from 'node:crypto';
 import type { Db, Queryable, Transaction } from './db.js';
 import { STUDY_FILES_SQL } from './study-files-schema.js';
@@ -209,11 +210,17 @@ export const LEARNING_MIGRATIONS = [
   { version: 4, name: 'studyc_chat_and_learning_generations', sql: CHAT_SCHEMA_SQL, tables: CHAT_TABLES },
   { version: 5, name: 'studyc_flashcards', sql: FLASHCARDS_SCHEMA_SQL, tables: FLASHCARD_TABLES },
   { version: 6, name: 'studyc_quizzes', sql: QUIZZES_SCHEMA_SQL, tables: QUIZ_TABLES },
+  { version: 7, name: 'studyc_spaced_review', sql: SPACED_SQL, tables: SPACED_TABLES },
 ];
 const additionChecksum = (migration: typeof LEARNING_MIGRATIONS[number]) => createHash('sha256').update(`${migration.name}\n${migration.sql}`).digest('hex');
 async function additionShape(q: Queryable, migration: typeof LEARNING_MIGRATIONS[number]) {
   const tables: Record<string, unknown> = {};
   for (const table of migration.tables) tables[table] = await tableShape(q, table);
+  if (migration.version === 7) {
+    const [fn] = await q.query<{body:string;security_definer:boolean;language:string;result:string}>(`SELECT p.prosrc AS body,p.prosecdef AS security_definer,l.lanname AS language,p.prorettype::regtype::text AS result FROM pg_proc p JOIN pg_language l ON l.oid=p.prolang WHERE p.oid=to_regprocedure('studyc_schedule_owner()')`);
+    if (!fn || fn.security_definer || fn.language !== 'plpgsql' || fn.result !== 'trigger' || whitespace(fn.body)!==whitespace(SCHEDULE_OWNER_BODY)) throw new Error('StudyC schedule owner function drift');
+    return {tables,ownerGuard:{...fn,body:whitespace(fn.body)}};
+  }
   if (migration.version !== 4) return { tables };
   const [fn] = await q.query<{ body: string; security_definer: boolean; language: string; result: string }>(`SELECT p.prosrc AS body,
     p.prosecdef AS security_definer,l.lanname AS language,p.prorettype::regtype::text AS result
