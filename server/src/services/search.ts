@@ -106,7 +106,7 @@ function branches(type: z.infer<typeof searchInput>["type"], equal = false) {
         text =
           "CASE WHEN strpos(lower(o.title),lower($2))>0 THEN o.title ELSE hit.text END";
       }
-      return `SELECT ${rank} AS type_rank,'${kind}'::text AS type,o.id,${set} AS study_set_id,o.title,${setTitle} AS set_title,${text} AS haystack FROM ${table} o ${relation} ${extra} WHERE o.user_id=$1 AND ($3::uuid IS NULL OR ${set}=$3::uuid) AND (${bound}) AND (${match})`;
+      return `SELECT ${rank} AS type_rank,'${kind}'::text AS type,o.id,${set} AS study_set_id,o.title,${setTitle} AS set_title,${text} AS haystack FROM ${table} o ${relation} ${extra} WHERE o.user_id=$1 AND NOT EXISTS(SELECT 1 FROM study_set_lifecycle l WHERE l.user_id=o.user_id AND l.study_set_id=${set} AND l.deleted_at IS NOT NULL) AND ($3::uuid IS NULL OR ${set}=$3::uuid) AND (${bound}) AND (${match})`;
     })
     .join(" UNION ALL ");
 }

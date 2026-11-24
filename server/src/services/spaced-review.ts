@@ -1,3 +1,4 @@
+import {requireVisibleSet} from './set-visibility.js';
 import { createHash } from 'node:crypto';
 import { z } from 'zod';
 import type { Db, Queryable } from '../db/db.js';
@@ -18,7 +19,7 @@ export class SpacedReviewService {
     constructor(private db: Db, private clock = () => new Date(), private enabled = () => process.env.STUDYC_SRS_ENABLED !== 'false') { }
     private writable() { if (!this.enabled())
         throw new DomainError('invalid_input', '到期复习已关闭，已有记录保留，可返回自由翻卡。'); }
-    private async owned(q: Queryable, user: string, set: string, deck: string) { await requireActiveUser(q, user); const [d] = await q.query<Row>('SELECT * FROM study_flashcard_decks WHERE user_id=$1 AND study_set_id=$2 AND id=$3', [user, set, deck]); if (!d)
+    private async owned(q: Queryable, user: string, set: string, deck: string) { await requireVisibleSet(q, user, set); const [d] = await q.query<Row>('SELECT * FROM study_flashcard_decks WHERE user_id=$1 AND study_set_id=$2 AND id=$3', [user, set, deck]); if (!d)
         throw missing(); return d; }
     private async cards(q: Queryable, user: string, set: string, deck: string) { return q.query<Row>(`SELECT c.*,s.revision AS schedule_revision,s.card_version AS schedule_card_version,s.stage,s.due_at FROM study_flashcards c LEFT JOIN study_flashcard_schedules s ON s.card_id=c.id AND s.user_id=c.user_id WHERE c.user_id=$1 AND c.study_set_id=$2 AND c.deck_id=$3 ORDER BY c.position,c.id`, [user, set, deck]); }
     private async read(q: Queryable, user: string, set: string, deck: string, id: string) { const [row] = await q.query<Row>('SELECT * FROM study_spaced_review_sessions WHERE user_id=$1 AND study_set_id=$2 AND deck_id=$3 AND id=$4', [user, set, deck, id]); if (!row)

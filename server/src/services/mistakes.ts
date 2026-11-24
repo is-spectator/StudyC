@@ -1,3 +1,4 @@
+import {requireVisibleSet} from './set-visibility.js';
 import { createHash } from 'node:crypto';
 import { z } from 'zod';
 import type { Db, Queryable } from '../db/db.js';
@@ -23,11 +24,7 @@ export async function backfillMistakes(db: Db) {
         return { inserted: rows.length };
     });
 }
-async function scope(q: Queryable, user: string, set: string) {
-    await requireActiveUser(q, user);
-    if (!(await q.query('SELECT id FROM study_sets WHERE user_id=$1 AND id=$2', [user, set])).length)
-        throw missing();
-}
+async function scope(q: Queryable, user: string, set: string) { return requireVisibleSet(q,user,set); }
 function present(row: Row) {
     const d = row.data;
     const total = d.items.length;

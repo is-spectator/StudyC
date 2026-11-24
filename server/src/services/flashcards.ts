@@ -1,3 +1,4 @@
+import {requireVisibleSet} from './set-visibility.js';
 import { createHash, randomUUID } from 'node:crypto';
 import { z } from 'zod';
 import type { Db, Queryable } from '../db/db.js';
@@ -26,10 +27,7 @@ export interface FlashcardSession {id:string;deckId:string;status:'in_progress'|
 const card = (r:Row):Flashcard => ({id:r.id,front:r.front,back:r.back,version:r.version,citations:r.citations,position:r.position});
 const session = (r:Row):FlashcardSession => ({id:r.id,deckId:r.deck_id,status:r.status,version:r.version,nextIndex:r.next_index,cards:r.card_snapshots,updatedAt:r.updated_at.toISOString()});
 const deck = (r:Row) => ({id:r.id,studySetId:r.study_set_id,title:r.title,version:r.version,generationJobId:r.generation_job_id,sourceSnapshots:r.source_snapshots,createdAt:r.created_at.toISOString(),updatedAt:r.updated_at.toISOString()});
-async function ownedSet(q:Queryable,user:string,set:string) {
-  await requireActiveUser(q,user);
-  if (!(await q.query('SELECT id FROM study_sets WHERE user_id=$1 AND id=$2',[user,set])).length) throw missing();
-}
+async function ownedSet(q:Queryable,user:string,set:string) { return requireVisibleSet(q,user,set); }
 async function ownedDeck(q:Queryable,user:string,set:string,id:string,lock=false):Promise<Row> {
   const [row]=await q.query<Row>(`SELECT * FROM study_flashcard_decks WHERE user_id=$1 AND study_set_id=$2 AND id=$3${lock?' FOR UPDATE':''}`,[user,set,id]);
   if(!row)throw missing(); return row;

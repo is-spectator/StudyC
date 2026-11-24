@@ -183,3 +183,23 @@ describe('generation worker orchestration with real persisted claims', () => {
     expect(recoverCalls).toBeGreaterThan(1);
   });
 });
+
+describe('trash generation accounting',()=>{
+ it('cancels queued and running attempts without refunding reported usage or dispatching on restore',async()=>{
+  const {TrashService}=await import('../src/services/trash.js');const db=await openTestDb();
+  try{
+   const user=(await db.query<{id:string}>('INSERT INTO users DEFAULT VALUES RETURNING id'))[0]!.id;
+   const set=(await createStudySet(db,user,{clientRequestId:randomUUID(),title:'回收站生成'})).studySet.id;
+   const material=(await createTextMaterial(db,user,set,{clientRequestId:randomUUID(),title:'来源',body:'保留实际用量'})).material;
+   const store=new GenerationStore(db,DEFAULT_GENERATION_POLICY,config),trash=new TrashService(db,store);
+   const enqueue=()=>store.create(user,set,{clientRequestId:randomUUID(),kind:'study_outline',sources:[{materialId:material.id,version:1}],config:{language:'zh-CN',pointCount:1}});
+   const first=await enqueue(),claim=await store.claim(),second=await enqueue();expect(claim!.jobId).toBe(first.job.id);
+   await trash.change(user,set,{clientRequestId:randomUUID(),version:0,deleted:true});
+   expect(await store.shouldCancel(claim!)).toBe(true);expect(await store.claim()).toBeNull();
+   const [queued]=await db.query<any>('SELECT * FROM study_generation_attempts WHERE job_id=$1',[second.job.id]);expect(queued.status).toBe('cancelled');expect(queued.usage_state).toBe('not_sent');expect(Number(queued.accounted_tokens)).toBe(0);
+   await store.settle(claim!,outcome(claim!));
+   await trash.change(user,set,{clientRequestId:randomUUID(),version:1,deleted:false});
+   const saved=await store.get(user,set,first.job.id);expect(saved.status).toBe('cancelled');expect(saved.result).toBeNull();expect(saved.attempts[0]!.usage.totalTokens).toBe(15);expect(await store.claim()).toBeNull();
+  }finally{await db.close();}
+ },30000);
+});

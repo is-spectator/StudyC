@@ -1,3 +1,4 @@
+import {requireVisibleSet} from './set-visibility.js';
 import { createHash, randomUUID } from 'node:crypto';
 import { lstat, mkdir, open, readdir, readFile, rm } from 'node:fs/promises';
 import { isAbsolute, join, resolve, sep } from 'node:path';
@@ -125,8 +126,7 @@ export async function uploadPdf(db: Db, root: string, userId: string, setId: str
   const requestId = input.clientRequestId.toLowerCase();
   const existing = await db.tx(async q => {
     await requireActiveUser(q, userId);
-    const [set] = await q.query('SELECT id FROM study_sets WHERE user_id = $1 AND id = $2', [userId, setId]);
-    if (!set) throw new DomainError('not_found', '没有找到该学习资料。');
+    await requireVisibleSet(q,userId,setId);
     const [row] = await q.query<FileRow>(`SELECT id, study_set_id, material_id, display_name, byte_size, status, page_count,
       content_sha256, creation_digest, created_at, updated_at FROM study_source_files WHERE user_id = $1 AND client_request_id = $2`, [userId, requestId]);
     return row;
@@ -152,8 +152,7 @@ export async function uploadPdf(db: Db, root: string, userId: string, setId: str
   try {
     const saved = await db.tx(async q => {
       await requireActiveUser(q, userId);
-      const [set] = await q.query('SELECT id FROM study_sets WHERE user_id = $1 AND id = $2', [userId, setId]);
-      if (!set) throw new DomainError('not_found', '没有找到该学习资料。');
+      await requireVisibleSet(q,userId,setId);
       let materialId: string | null = null;
       if (extracted.ok) {
         const [material] = await q.query<{ id: string }>(`INSERT INTO study_materials
@@ -194,20 +193,20 @@ export async function uploadPdf(db: Db, root: string, userId: string, setId: str
 }
 
 export async function listSourceFiles(db: Db, userId: string, setId: string): Promise<SourceFileRecord[]> {
-  const [set] = await db.query('SELECT id FROM study_sets WHERE user_id = $1 AND id = $2', [userId, setId]);
-  if (!set) throw new DomainError('not_found', '没有找到该学习资料。');
+  await requireVisibleSet(db,userId,setId);
   const rows = await db.query<FileRow>(`SELECT id, study_set_id, material_id, display_name, byte_size, status, page_count,
     content_sha256, creation_digest, created_at, updated_at FROM study_source_files
-    WHERE user_id = $1 AND study_set_id = $2 ORDER BY created_at DESC, id DESC LIMIT 100`, [userId, setId]);
+    WHERE user_id = $1 AND study_set_id = $2 AND NOT EXISTS(SELECT 1 FROM study_set_lifecycle l WHERE l.user_id=$1 AND l.study_set_id=$2 AND l.deleted_at IS NOT NULL) ORDER BY created_at DESC, id DESC LIMIT 100`, [userId, setId]);
   const result: SourceFileRecord[] = [];
   for (const row of rows) result.push(toRecord(row, row.status === 'ready' ? await pagesFor(db, userId, row.id) : []));
   return result;
 }
 
 export async function readSourceFile(db: Db, root: string, userId: string, setId: string, fileId: string): Promise<{ name: string; bytes: Buffer }> {
+  await requireVisibleSet(db,userId,setId);
   const [row] = await db.query<FileRow>(`SELECT id, study_set_id, material_id, display_name, byte_size, status, page_count,
     content_sha256, creation_digest, created_at, updated_at FROM study_source_files
-    WHERE user_id = $1 AND study_set_id = $2 AND id = $3`, [userId, setId, fileId]);
+    WHERE user_id = $1 AND study_set_id = $2 AND NOT EXISTS(SELECT 1 FROM study_set_lifecycle l WHERE l.user_id=$1 AND l.study_set_id=$2 AND l.deleted_at IS NOT NULL) AND id = $3`, [userId, setId, fileId]);
   if (!row || row.status !== 'ready') throw new DomainError('not_found', '没有找到该学习资料。');
   const path = storagePath(root, userId, row.id);
   const info = await lstat(path).catch(() => null);

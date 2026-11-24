@@ -39,8 +39,9 @@ describe('independent StudyC migration registry', () => {
       await db.exec(STUDY_SCHEMA_SQL);
       await db.exec("CREATE TABLE schema_migrations(version integer PRIMARY KEY,name text,checksum text); INSERT INTO schema_migrations SELECT n,'external-'||n,repeat('a',64) FROM generate_series(1,18)n;");
       const [u] = await db.query<{ id: string }>('INSERT INTO users DEFAULT VALUES RETURNING id');
-      const set = (await createStudySet(db, u!.id, { clientRequestId: randomUUID(), title: '保留原资料' })).studySet;
-      await createTextMaterial(db, u!.id, set.id, { clientRequestId: randomUUID(), title: 'legacy笔记', body: '跨服务保留\n😀' });
+      // Genuine pre-registry fixture must use legacy SQL, not services requiring the current lifecycle schema.
+      const [set] = await db.query<{id:string}>("INSERT INTO study_sets(user_id,title,client_request_id,creation_digest) VALUES($1,'保留原资料',$2,repeat('a',64)) RETURNING id",[u!.id,randomUUID()]);
+      await db.query("INSERT INTO study_materials(user_id,study_set_id,title,body,client_request_id,creation_digest) VALUES($1,$2,'legacy笔记',$3,$4,repeat('a',64))",[u!.id,set!.id,'跨服务保留\n😀',randomUUID()]);
       const history = await db.query('SELECT * FROM schema_migrations ORDER BY version');
       const notes = await db.query('SELECT * FROM study_materials');
       await migrate(db); await migrate(db); await checkMigrations(db);

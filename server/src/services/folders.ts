@@ -39,7 +39,7 @@ const folderView = (r: Row) => ({
   updatedAt: iso(r.updated_at),
   setCount: r.set_count ?? 0,
 });
-const count = `(SELECT count(*)::integer FROM study_folder_assignments a JOIN study_sets s ON s.id=a.study_set_id AND s.user_id=a.user_id WHERE a.user_id=f.user_id AND a.folder_id=f.id) AS set_count`;
+const count = `(SELECT count(*)::integer FROM study_folder_assignments a JOIN study_sets s ON s.id=a.study_set_id AND s.user_id=a.user_id WHERE a.user_id=f.user_id AND a.folder_id=f.id AND NOT EXISTS(SELECT 1 FROM study_set_lifecycle l WHERE l.user_id=s.user_id AND l.study_set_id=s.id AND l.deleted_at IS NOT NULL)) AS set_count`;
 export class FolderService {
   constructor(private db: Db) {}
   private async folder(q: Queryable, user: string, id: string) {
@@ -280,7 +280,7 @@ export class FolderService {
         folder === "unfiled" ? "a.folder_id IS NULL" : "a.folder_id=$2::uuid";
       const parameters = [user, ...(folder === "unfiled" ? [] : [folder])],
         cursorIndex = parameters.length + 1;
-      const base = `FROM study_sets s LEFT JOIN study_folder_assignments a ON a.study_set_id=s.id AND a.user_id=s.user_id WHERE s.user_id=$1 AND ${filter}`;
+      const base = `FROM study_sets s LEFT JOIN study_folder_assignments a ON a.study_set_id=s.id AND a.user_id=s.user_id WHERE s.user_id=$1 AND NOT EXISTS(SELECT 1 FROM study_set_lifecycle l WHERE l.user_id=s.user_id AND l.study_set_id=s.id AND l.deleted_at IS NOT NULL) AND ${filter}`;
       if (cursor) {
         const exists = await q.query(
           `SELECT s.id ${base} AND s.id=$${cursorIndex}`,

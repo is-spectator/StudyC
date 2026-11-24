@@ -1,3 +1,4 @@
+import {requireVisibleSet} from './set-visibility.js';
 import { z } from "zod";
 import { createHash } from "node:crypto";
 import type { Queryable } from "../db/db.js";
@@ -31,15 +32,7 @@ export const digest = (v: unknown) =>
   createHash("sha256").update(JSON.stringify(v)).digest("hex");
 export const iso = (v: Date | string | null) =>
   v === null ? null : typeof v === "string" ? v : new Date(v).toISOString();
-export async function ownedSet(q: Queryable, user: string, set: string) {
-  await requireActiveUser(q, user);
-  const [row] = await q.query(
-    "SELECT id,title FROM study_sets WHERE id=$1 AND user_id=$2 FOR SHARE",
-    [set, user],
-  );
-  if (!row) throw missing();
-  return row;
-}
+export async function ownedSet(q: Queryable, user: string, set: string) { return requireVisibleSet(q,user,set); }
 export function featureEnabled(name: string) {
   if (process.env[name] === "false")
     throw new GenerationError(

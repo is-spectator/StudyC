@@ -1,3 +1,4 @@
+import {requireVisibleSet} from './set-visibility.js';
 import { createHash } from "node:crypto";
 import { z } from "zod";
 import type { Db, Queryable } from "../db/db.js";
@@ -35,18 +36,7 @@ const missing = () => new GenerationError("not_found", "没有找到这份笔记
 export const noteMarkdown = (result: NoteResult) =>
   result.sections.map((s) => `## ${s.heading}\n\n${s.body}`).join("\n\n");
 type Row = Record<string, any>;
-async function scope(q: Queryable, user: string, set: string) {
-  await requireActiveUser(q, user);
-  if (
-    !(
-      await q.query("SELECT id FROM study_sets WHERE user_id=$1 AND id=$2", [
-        user,
-        set,
-      ])
-    ).length
-  )
-    throw missing();
-}
+async function scope(q: Queryable, user: string, set: string) { return requireVisibleSet(q,user,set); }
 const present = (r: Row) => ({
   id: r.id,
   studySetId: r.study_set_id,

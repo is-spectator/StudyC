@@ -1,3 +1,4 @@
+import {requireVisibleSet} from './set-visibility.js';
 import { collectMistakes } from './mistakes.js';
 import { createHash } from 'node:crypto';
 import type { Db, Queryable } from '../db/db.js';
@@ -17,10 +18,7 @@ const digest = (value: unknown) => createHash('sha256').update(JSON.stringify(va
 const iso = (value: Date | string) => new Date(value).toISOString();
 const lock = (user: string) => `studyc:quizzes:${user}`;
 const publicQuestion = (question: QuizQuestion, index: number) => ({ index, type: question.type, prompt: question.prompt, options: question.options });
-async function scope(q: Queryable, user: string, set: string) {
-  await requireActiveUser(q, user);
-  if (!(await q.query('SELECT id FROM study_sets WHERE id=$1 AND user_id=$2', [set, user])).length) missing();
-}
+async function scope(q: Queryable, user: string, set: string) { return requireVisibleSet(q,user,set); }
 async function quizRow(q: Queryable, user: string, set: string, quizId: string): Promise<QuizRow> {
   const [quiz] = await q.query<QuizRow>('SELECT * FROM study_quizzes WHERE id=$1 AND user_id=$2 AND study_set_id=$3', [quizId, user, set]);
   return quiz ?? missing();

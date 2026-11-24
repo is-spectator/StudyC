@@ -1,3 +1,4 @@
+import {requireVisibleSet} from './set-visibility.js';
 import { createHash } from 'node:crypto';
 import type { Db, Queryable } from '../db/db.js';
 import { requireActiveUser } from './identity.js';
@@ -101,10 +102,7 @@ function pageOptions(options: StudyPageOptions, userId: string, scope: string) {
   return parseCursor(options.cursor, userId, scope);
 }
 
-async function requireStudySet(q: Queryable, userId: string, setId: string): Promise<void> {
-  const [row] = await q.query('SELECT id FROM study_sets WHERE user_id = $1 AND id = $2', [userId, setId]);
-  if (!row) throw missing();
-}
+async function requireStudySet(q: Queryable, userId: string, setId: string): Promise<void> { await requireVisibleSet(q,userId,setId); }
 
 export async function createStudySet(db: Db, userId: string, input: CreateStudySetInput): Promise<{ studySet: StudySet; replayed: boolean }> {
   const title = input.title.trim();
@@ -119,27 +117,28 @@ export async function createStudySet(db: Db, userId: string, input: CreateStudyS
     const [existing] = await q.query<SetRow & { creation_digest: string }>(`SELECT ${setColumns}, creation_digest
       FROM study_sets WHERE user_id = $1 AND client_request_id = $2`, [userId, requestId]);
     if (!existing || existing.creation_digest !== hash) throw new StudyError('idempotency_conflict', '同一次创建请求的内容已变化，请重新发起创建。');
+    await requireStudySet(q,userId,existing.id);
     return { studySet: studySet(existing), replayed: true };
   }, userId);
 }
 
 export async function listStudySets(db: Db, userId: string, options: StudyPageOptions): Promise<StudyPage<StudySet>> {
   const cursor = pageOptions(options, userId, 'sets');
-  const rows = await db.query<SetRow>(`SELECT ${setColumns} FROM study_sets WHERE user_id = $1
+  const rows = await db.query<SetRow>(`SELECT ${setColumns} FROM study_sets WHERE user_id = $1 AND NOT EXISTS(SELECT 1 FROM study_set_lifecycle l WHERE l.study_set_id=study_sets.id AND l.user_id=$1 AND l.deleted_at IS NOT NULL)
     ${cursor ? 'AND (created_at, id) < ($3::timestamptz, $4::uuid)' : ''}
     ORDER BY created_at DESC, id DESC LIMIT $2`, [userId, options.limit + 1, ...(cursor ? [cursor.createdAt, cursor.id] : [])]);
   return page(rows, options.limit, userId, 'sets', studySet);
 }
 
 export async function getStudySet(db: Db, userId: string, setId: string): Promise<StudySet> {
-  const [row] = await db.query<SetRow>(`SELECT ${setColumns} FROM study_sets WHERE user_id = $1 AND id = $2`, [userId, setId]);
+  const [row] = await db.query<SetRow>(`SELECT ${setColumns} FROM study_sets WHERE user_id = $1 AND id = $2 AND NOT EXISTS(SELECT 1 FROM study_set_lifecycle l WHERE l.study_set_id=study_sets.id AND l.user_id=$1 AND l.deleted_at IS NOT NULL)`, [userId, setId]);
   if (!row) throw missing();
   return studySet(row);
 }
 
 export async function updateStudySet(db: Db, userId: string, setId: string, input: UpdateStudySetInput): Promise<StudySet> {
   return db.tx(async q => {
-    await requireActiveUser(q, userId);
+    await requireStudySet(q,userId,setId);
     const [updated] = await q.query<SetRow>(`UPDATE study_sets SET title = $3, version = version + 1, updated_at = clock_timestamp()
       WHERE user_id = $1 AND id = $2 AND version = $4 RETURNING ${setColumns}`, [userId, setId, input.title.trim(), input.version]);
     if (updated) return studySet(updated);
@@ -170,7 +169,7 @@ export async function listTextMaterials(db: Db, userId: string, setId: string, o
   const scope = `materials:${setId.toLowerCase()}`;
   const cursor = pageOptions(options, userId, scope);
   await requireStudySet(db, userId, setId);
-  const rows = await db.query<MaterialRow>(`SELECT ${materialColumns} FROM study_materials WHERE user_id = $1 AND study_set_id = $2
+  const rows = await db.query<MaterialRow>(`SELECT ${materialColumns} FROM study_materials WHERE user_id = $1 AND study_set_id = $2 AND NOT EXISTS(SELECT 1 FROM study_set_lifecycle l WHERE l.user_id=$1 AND l.study_set_id=$2 AND l.deleted_at IS NOT NULL)
     ${cursor ? 'AND (created_at, id) < ($4::timestamptz, $5::uuid)' : ''}
     ORDER BY created_at DESC, id DESC LIMIT $3`, [userId, setId, options.limit + 1, ...(cursor ? [cursor.createdAt, cursor.id] : [])]);
   return page(rows, options.limit, userId, scope, summary);
@@ -179,7 +178,7 @@ export async function listTextMaterials(db: Db, userId: string, setId: string, o
 export async function getTextMaterial(db: Db, userId: string, setId: string, materialId: string): Promise<TextMaterial> {
   await requireStudySet(db, userId, setId);
   const [row] = await db.query<TextRow>(`SELECT ${textColumns} FROM study_materials
-    WHERE user_id = $1 AND study_set_id = $2 AND id = $3`, [userId, setId, materialId]);
+    WHERE user_id = $1 AND study_set_id = $2 AND id = $3 AND NOT EXISTS(SELECT 1 FROM study_set_lifecycle l WHERE l.user_id=$1 AND l.study_set_id=$2 AND l.deleted_at IS NOT NULL)`, [userId, setId, materialId]);
   if (!row) throw missing();
   return material(row);
 }

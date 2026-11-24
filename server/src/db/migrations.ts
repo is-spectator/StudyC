@@ -1,3 +1,4 @@
+import {TRASH_TABLES,TRASH_SQL} from './trash-schema.js';
 import {FOLDER_TABLES,FOLDERS_SQL} from './folders-schema.js';
 import {CALENDAR_TABLES,CALENDAR_SQL} from './calendar-schema.js';
 import {PLAN_TABLES,PLANS_SQL} from './plans-schema.js';
@@ -225,6 +226,7 @@ export const LEARNING_MIGRATIONS = [
   { version: 10, name: 'studyc_study_plans', sql: PLANS_SQL, tables: PLAN_TABLES },
   { version: 11, name: 'studyc_learning_calendar', sql: CALENDAR_SQL, tables: CALENDAR_TABLES },
   { version: 12, name: 'studyc_folders', sql: FOLDERS_SQL, tables: FOLDER_TABLES },
+  { version: 13, name: 'studyc_trash', sql: TRASH_SQL, tables: TRASH_TABLES },
 ];
 const additionChecksum = (migration: typeof LEARNING_MIGRATIONS[number]) => createHash('sha256').update(`${migration.name}\n${migration.sql}`).digest('hex');
 async function additionShape(q: Queryable, migration: typeof LEARNING_MIGRATIONS[number]) {
