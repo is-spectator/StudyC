@@ -145,7 +145,7 @@ export default function PlansPanel({ studySetId, onNavigate }: Props) {
           {addTask ? (
             <TaskCreator
               api={api}
-              disabled={op.busy || !enabled}
+              disabled={op.busy || !enabled || !!op.retry}
               onCancel={() => setAddTask(false)}
               onCreate={(body) => {
                 const input = { ...body, clientRequestId: crypto.randomUUID() };
@@ -443,8 +443,8 @@ function TaskCreator({
     setOptions([]);
     setCursor(null);
     setError("");
+    setLoading(kind !== "manual");
     if (kind !== "manual") {
-      setLoading(true);
       void api
         .options(kind)
         .then((p) => {
