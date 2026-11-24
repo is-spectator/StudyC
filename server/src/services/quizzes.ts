@@ -1,3 +1,4 @@
+import { collectMistakes } from './mistakes.js';
 import { createHash } from 'node:crypto';
 import type { Db, Queryable } from '../db/db.js';
 import type { GenerationStore } from '../generation/store.js';
@@ -158,6 +159,7 @@ async function mutateAttempt(db: Db, user: string, set: string, quizId: string, 
     }
     await q.query(`INSERT INTO study_quiz_events(user_id,attempt_id,client_request_id,request_digest,kind,question_index,answer_index,correct,version_after)
       VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9)`, [user, attemptId, input.clientRequestId, requestHash, kind, input.questionIndex ?? null, input.answerIndex ?? null, correct, attempt.version + 1]);
+    if (kind === 'submit') await collectMistakes(q,user,attemptId);
     return { attempt: await presentAttempt(q, await attemptRow(q, user, quizId, attemptId), set), replayed: false };
   }, lock(user));
 }

@@ -1,3 +1,4 @@
+import { backfillMistakes } from './services/mistakes.js';
 import { serve } from '@hono/node-server';
 import { createApp } from './api/app.js';
 import { openDb } from './db/db.js';
@@ -11,10 +12,10 @@ import { generationPolicyFromEnv } from './runtime/generation-policy.js';
 
 async function main() {
   const command = process.argv[2] ?? 'serve';
-  if (!['serve', 'check', 'migrate'].includes(command) || process.argv.length > 3) throw new Error('Invalid command');
+  if (!['serve', 'check', 'migrate', 'backfill-mistakes'].includes(command) || process.argv.length > 3) throw new Error('Invalid command');
   const config = runtimeConfig();
   // Migrations need database-owner access, not access to the model credential.
-  const provider = command === 'migrate' ? null : generationProviderFromEnv();
+  const provider = ['migrate','backfill-mistakes'].includes(command) ? null : generationProviderFromEnv();
   const generationPolicy = generationPolicyFromEnv();
   const fileRoot = resolveFileRoot(process.env.STUDYC_FILE_ROOT ?? '');
   const db = await openDb(config.databaseUrl, { ssl: config.ssl, migrations: 'none',
@@ -22,6 +23,7 @@ async function main() {
   try {
     if (command === 'migrate') await migrate(db);
     await checkMigrations(db);
+    if (command === 'backfill-mistakes') { const result = await backfillMistakes(db); console.log(JSON.stringify({event:'mistakes_backfilled',...result})); }
     if (command !== 'serve') {
       await db.close();
       console.log(JSON.stringify({ ok: true, command, service: 'studyc', release: config.releaseId }));

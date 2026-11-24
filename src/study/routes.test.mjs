@@ -49,3 +49,5 @@ test('quizzes open in their selected set without accepting unsupported subroutes
     assert.deepEqual(parseStudyRoute(`/platform/studyset/${a}/practice${suffix}`), { kind: 'not-found' });
   }
 });
+
+test('mistake notebook routes retain the real parent set and reject extra segments',()=>{assert.deepEqual(parseStudyRoute(`/platform/studyset/${a}/mistakes?quizId=${b}`),{kind:'mistakes',studySetId:a});assert.deepEqual(parseStudyRoute(`/platform/studyset/${a}/mistakes/extra`),{kind:'not-found'});});
