@@ -1,3 +1,4 @@
+import SearchPanel from './search/SearchPanel';
 import CalendarPanel from './calendar/CalendarPanel';
 import PlansPanel from './plans/PlansPanel';
 import NotesPanel from './notes/NotesPanel';
@@ -113,7 +114,7 @@ export default function StudyWorkspace() {
   }, [api, setId, setRevision]);
   useEffect(() => { setDialog(null); setMobile(false); document.querySelector('.cloud-main-scroll')?.scrollTo(0, 0); }, [path]);
   useEffect(() => {
-    const title = route.kind === 'calendar' ? '学习日历' : route.kind === 'local-data' ? '本机旧数据' : currentSet.data?.title ?? '我的学习集';
+    const title = route.kind === 'search' ? '搜索学习内容' : route.kind === 'calendar' ? '学习日历' : route.kind === 'local-data' ? '本机旧数据' : currentSet.data?.title ?? '我的学习集';
     document.title = `${title} | StudyC`;
   }, [route.kind, currentSet.data?.title]);
   useEffect(() => { if (!notice) return; const timer = setTimeout(() => setNotice(''), 5000); return () => clearTimeout(timer); }, [notice]);
@@ -158,6 +159,7 @@ export default function StudyWorkspace() {
         {sets.error ? <div className="cloud-sidebar-error"><p>学习集列表读取失败</p><button onClick={sets.loaded ? () => void sets.loadMore() : sets.reload}>重试</button></div> : null}
         {sets.nextCursor ? <button className="cloud-side-more" disabled={sets.loadingMore} onClick={() => void sets.loadMore()}>{sets.loadingMore ? '正在加载…' : '加载更多学习集'}</button> : null}
       </div>
+      <button className="side-link" onClick={()=>go('/platform/search')}><Search size={16}/><span>搜索学习内容</span></button>
       <button className="side-link" onClick={()=>go('/platform/calendar')}><Route size={16}/><span>学习日历</span></button>
       <div className="cloud-sidebar-tools"><span>学习工具</span>{[
         { suffix: 'chat/new', title: '资料问答', Icon: MessageCircle },
@@ -204,6 +206,7 @@ export default function StudyWorkspace() {
         {route.kind === 'mistakes' && currentSet.data ? <div className="cloud-page"><MistakesPanel key={`${auth.user?.id}:${route.studySetId}:${path}`} studySetId={route.studySetId} onNavigate={go}/></div> : null}
         {route.kind === 'notes' && currentSet.data ? <div className="cloud-page"><NotesPanel key={`${auth.user?.id}:${route.studySetId}:${path}`} studySetId={route.studySetId} materials={materials.items} onNavigate={go}/></div> : null}
         {route.kind === 'plans' && currentSet.data ? <div className="cloud-page"><PlansPanel key={`${auth.user?.id}:${route.studySetId}:${path}`} studySetId={route.studySetId} onNavigate={go}/></div> : null}
+        {route.kind === 'search' ? <div className="cloud-page"><SearchPanel key={`${auth.user?.id}:${path}`} onNavigate={go}/></div> : null}
         {route.kind === 'calendar' ? <div className="cloud-page"><CalendarPanel key={`${auth.user?.id}:${path}`} onNavigate={go}/></div> : null}
         {route.kind === 'local-data' ? <LocalData accountId={auth.user?.id ?? ''} /> : null}
         {route.kind === 'unavailable' && (!setId || currentSet.data) ? <div className="cloud-page cloud-unavailable"><span className="cloud-empty-mark"><BookOpen size={30} /></span><h1>{route.title}尚未开放</h1><p>现在可以创建学习集、整理和编辑文本资料。<br />这项学习工具还在准备中。</p><button className="btn btn-black" onClick={() => go(setId ? studySetPath(setId) : '/platform/studysets')}>返回我的资料<ArrowRight size={16} /></button></div> : null}

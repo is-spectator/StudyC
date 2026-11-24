@@ -9,6 +9,7 @@ export type StudyRoute =
   | { kind: 'notes'; studySetId: string }
   | { kind: 'plans'; studySetId: string }
   | { kind: 'calendar' }
+  | { kind: 'search' }
   | { kind: 'local-data' }
   | { kind: 'unavailable'; title: string; studySetId?: string }
   | { kind: 'not-found' };
@@ -26,6 +27,7 @@ export function parseStudyRoute(value: string): StudyRoute {
   if (path === '/' || path === '/platform' || path === '/platform/studysets'
     || path === '/platform/onboarding' || path.startsWith('/platform/onboarding/')
     || path === '/platform/studyset/main' || path.startsWith('/platform/studyset/main/')) return { kind: 'sets' };
+  if (path === '/platform/search') return {kind:'search'};
   if (path === '/platform/calendar') return {kind:'calendar'};
   if (path === '/platform/local-data') return { kind: 'local-data' };
   const global = ({ '/platform/calendar': '日历', '/platform/qbank': '题库', '/platform/apps': '学习工具', '/platform/settings': '账户设置' } as Record<string, string>)[path];
