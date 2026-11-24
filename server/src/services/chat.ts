@@ -1,3 +1,4 @@
+import {requireVisibleSet} from './set-visibility.js';
 import { createHash } from 'node:crypto';
 import type { Db, Transaction } from '../db/db.js';
 import { requireActiveUser } from './identity.js';
@@ -16,10 +17,7 @@ export interface ChatMessageInput { clientRequestId: string; question: string; s
 const threadView = (row: ThreadRow): ChatThread => ({ id: row.id, studySetId: row.study_set_id, title: row.title, createdAt: iso(row.created_at), updatedAt: iso(row.updated_at) });
 export class ChatService {
   constructor(private readonly db: Db, private readonly store: GenerationStore) {}
-  private async scope(q: Transaction, user: string, set: string) {
-    await requireActiveUser(q, user);
-    if (!(await q.query('SELECT id FROM study_sets WHERE id=$1 AND user_id=$2', [set, user])).length) throw absent();
-  }
+  private async scope(q: Transaction, user: string, set: string) { return requireVisibleSet(q,user,set); }
   private async thread(q: Transaction, user: string, set: string, id: string): Promise<ThreadRow> {
     await this.scope(q, user, set);
     const [row] = await q.query<ThreadRow>('SELECT * FROM study_chat_threads WHERE id=$1 AND user_id=$2 AND study_set_id=$3', [id, user, set]);

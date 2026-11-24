@@ -11,6 +11,7 @@ export type StudyRoute =
   | { kind: 'calendar' }
   | { kind: 'search' }
   | { kind: 'folders' }
+  | { kind: 'trash' }
   | { kind: 'local-data' }
   | { kind: 'unavailable'; title: string; studySetId?: string }
   | { kind: 'not-found' };
@@ -28,6 +29,7 @@ export function parseStudyRoute(value: string): StudyRoute {
   if (path === '/' || path === '/platform' || path === '/platform/studysets'
     || path === '/platform/onboarding' || path.startsWith('/platform/onboarding/')
     || path === '/platform/studyset/main' || path.startsWith('/platform/studyset/main/')) return { kind: 'sets' };
+  if (path === '/platform/trash') return {kind:'trash'};
   if (path === '/platform/folders') return {kind:'folders'};
   if (path === '/platform/search') return {kind:'search'};
   if (path === '/platform/calendar') return {kind:'calendar'};

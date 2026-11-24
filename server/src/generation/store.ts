@@ -1,3 +1,4 @@
+import {requireVisibleSet} from '../services/set-visibility.js';
 import { createHash, randomUUID } from 'node:crypto';
 import type { Db, Queryable, Transaction } from '../db/db.js';
 import { requireActiveUser } from '../services/identity.js';
@@ -89,11 +90,7 @@ export class GenerationStore {
     this.providerConfig = providerConfig ? structuredClone(providerConfig) : null;
   }
 
-  private async scope(q: Queryable, user: string, set: string) {
-    await requireActiveUser(q, user);
-    const [found] = await q.query('SELECT id FROM study_sets WHERE user_id=$1 AND id=$2', [user, set]);
-    if (!found) throw missing();
-  }
+  private async scope(q: Queryable, user: string, set: string) { await requireVisibleSet(q,user,set); }
 
   private async row(q: Queryable, user: string, set: string, id: string): Promise<JobRow> {
     const [job] = await q.query<JobRow>('SELECT * FROM study_generation_jobs WHERE user_id=$1 AND study_set_id=$2 AND id=$3', [user, set, id]);
@@ -316,6 +313,13 @@ export class GenerationStore {
       WHERE id=$1 AND current_attempt_id=$5 AND status='queued'`, [attempt.job_id, status, error, now.toISOString(), attempt.id]);
   }
 
+  async cancelSetInTransaction(q: Queryable,user: string,set: string) {
+    const now=this.now();
+    const queued=await q.query<AttemptRow>(`SELECT a.*,a.budget_day::text AS budget_day FROM study_generation_attempts a JOIN study_generation_jobs j ON j.id=a.job_id WHERE j.user_id=$1 AND j.study_set_id=$2 AND a.status='queued'`,[user,set]);
+    for(const attempt of queued) await this.finishQueued(q,attempt,'cancelled','set_trashed',now);
+    await q.query("UPDATE study_generation_jobs SET status='cancelled',result=NULL,error_code='set_trashed',updated_at=$3 WHERE user_id=$1 AND study_set_id=$2 AND status IN ('queued','running')",[user,set,now.toISOString()]);
+  }
+
   private async expire(q: Queryable, now: Date): Promise<number> {
     const abandoned = await q.query<AttemptRow>(`SELECT a.*,a.budget_day::text AS budget_day FROM study_generation_attempts a JOIN users u ON u.id=a.user_id
       WHERE a.status='queued' AND u.deleted_at IS NOT NULL`);
@@ -342,7 +346,7 @@ export class GenerationStore {
       for (;;) {
         const [candidate] = await q.query<AttemptRow>(`SELECT a.*,a.budget_day::text AS budget_day FROM study_generation_attempts a
           JOIN study_generation_jobs j ON j.id=a.job_id JOIN users u ON u.id=a.user_id
-          WHERE a.status='queued' AND j.status='queued' AND j.current_attempt_id=a.id AND u.deleted_at IS NULL
+          WHERE a.status='queued' AND j.status='queued' AND j.current_attempt_id=a.id AND u.deleted_at IS NULL AND NOT EXISTS(SELECT 1 FROM study_set_lifecycle l WHERE l.user_id=j.user_id AND l.study_set_id=j.study_set_id AND l.deleted_at IS NOT NULL)
           AND (SELECT count(*) FROM study_generation_attempts r WHERE r.user_id=a.user_id AND r.status='running')<$1
           ORDER BY a.created_at,a.id LIMIT 1`, [this.policy.userConcurrency]);
         if (!candidate) return null;

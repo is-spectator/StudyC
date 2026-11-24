@@ -147,7 +147,7 @@ export class CalendarService {
     return { timeZone: r?.time_zone ?? "UTC", version: r?.version ?? 0 };
   }
   private async event(q: Queryable, user: string, id: string) {
-    const [r] = await q.query<Row>(`${join} WHERE e.user_id=$1 AND e.id=$2`, [
+    const [r] = await q.query<Row>(`${join} WHERE e.user_id=$1 AND NOT EXISTS(SELECT 1 FROM study_set_lifecycle l WHERE l.user_id=e.user_id AND l.study_set_id=e.study_set_id AND l.deleted_at IS NOT NULL) AND e.id=$2`, [
       user,
       id,
     ]);
@@ -251,7 +251,7 @@ export class CalendarService {
       await requireActiveUser(q, user);
       const task = await this.task(q, user, source),
         [r] = await q.query<Row>(
-          `${join} WHERE e.user_id=$1 AND e.task_id=$2 AND e.cancelled_at IS NULL`,
+          `${join} WHERE e.user_id=$1 AND NOT EXISTS(SELECT 1 FROM study_set_lifecycle l WHERE l.user_id=e.user_id AND l.study_set_id=e.study_set_id AND l.deleted_at IS NOT NULL) AND e.task_id=$2 AND e.cancelled_at IS NULL`,
           [user, task.id],
         );
       return {
@@ -299,7 +299,7 @@ export class CalendarService {
           );
       }
       const rows = await q.query<Row>(
-        `${join} WHERE e.user_id=$1 AND ((e.all_day BETWEEN $2::date AND $3::date) OR ($4::timestamptz<$5::timestamptz AND e.starts_at<$5::timestamptz AND e.ends_at>$4::timestamptz)) ${range.cursor ? "AND e.id>$6" : ""} ORDER BY e.id LIMIT 21`,
+        `${join} WHERE e.user_id=$1 AND NOT EXISTS(SELECT 1 FROM study_set_lifecycle l WHERE l.user_id=e.user_id AND l.study_set_id=e.study_set_id AND l.deleted_at IS NOT NULL) AND ((e.all_day BETWEEN $2::date AND $3::date) OR ($4::timestamptz<$5::timestamptz AND e.starts_at<$5::timestamptz AND e.ends_at>$4::timestamptz)) ${range.cursor ? "AND e.id>$6" : ""} ORDER BY e.id LIMIT 21`,
         [
           user,
           range.from,
@@ -346,7 +346,7 @@ export class CalendarService {
       if (first < last && first < end && last > start) days.push(day);
     }
     const rows = await q.query<Row>(
-      `${join} WHERE e.user_id=$1 AND e.cancelled_at IS NULL AND t.cancelled_at IS NULL AND ((e.all_day=ANY($2::date[])) OR ($3::timestamptz<$4::timestamptz AND e.starts_at<$4::timestamptz AND e.ends_at>$3::timestamptz)) ${exclude ? "AND e.id<>$5" : ""} ORDER BY e.id LIMIT 101`,
+      `${join} WHERE e.user_id=$1 AND NOT EXISTS(SELECT 1 FROM study_set_lifecycle l WHERE l.user_id=e.user_id AND l.study_set_id=e.study_set_id AND l.deleted_at IS NOT NULL) AND e.cancelled_at IS NULL AND t.cancelled_at IS NULL AND ((e.all_day=ANY($2::date[])) OR ($3::timestamptz<$4::timestamptz AND e.starts_at<$4::timestamptz AND e.ends_at>$3::timestamptz)) ${exclude ? "AND e.id<>$5" : ""} ORDER BY e.id LIMIT 101`,
       [user, days, start, end, ...(exclude ? [exclude] : [])],
     );
     if (rows.length > 100)
