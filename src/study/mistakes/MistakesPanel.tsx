@@ -12,22 +12,14 @@ function selection() {
         throw Error('原作答链接缺少测验，请返回全部错题。');
     return { quizId: p.get('quizId') ?? undefined, attemptId: p.get('fromAttempt') ?? undefined, reviewId: p.get('mistakeReview') ?? undefined };
 }
-function selectedReview(id?: string) {
-    const u = new URL(location.href);
-    if (id)
-        u.searchParams.set('mistakeReview', id);
-    else
-        u.searchParams.delete('mistakeReview');
-    history.replaceState(history.state, '', u);
-}
-export default function MistakesPanel({ studySetId }: {
-    studySetId: string;
+export default function MistakesPanel({ studySetId,onNavigate }: {
+    studySetId: string; onNavigate:(path:string)=>boolean;
 }) {
     const auth = useAuth();
-    return <Workspace key={`${auth.user?.id}:${studySetId}`} studySetId={studySetId}/>;
+    return <Workspace key={`${auth.user?.id}:${studySetId}`} studySetId={studySetId} onNavigate={onNavigate}/>;
 }
-function Workspace({ studySetId }: {
-    studySetId: string;
+function Workspace({ studySetId,onNavigate }: {
+    studySetId: string; onNavigate:(path:string)=>boolean;
 }) {
     const auth = useAuth(), scope = useRef(new AbortController()), alive = useRef(true), lifecycle = useRef(0), pending = useRef(false), retry = useRef<(() => Promise<void>) | null>(null);
     const api = useMemo(() => createMistakeApi(auth.request, studySetId, () => scope.current.signal), [auth.request, studySetId]);
@@ -79,6 +71,7 @@ function Workspace({ studySetId }: {
             setLoaded(true);
         }
     }
+    function selectedReview(id?:string) {const u=new URL(location.href);if(id)u.searchParams.set('mistakeReview',id);else u.searchParams.delete('mistakeReview');onNavigate(u.pathname+u.search);}
     function show(v: Review) {
         setReview(v);
         setIndex(Math.max(0, v.questions.findIndex(q => q.selectedAnswerIndex === null)));
