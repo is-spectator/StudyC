@@ -1,8 +1,8 @@
 # StudyC 后续 PR 规划：PR-008～017
 
-日期：2026-11-24。状态：PR-008～010已实现并提交GitHub #9～11；PR-011～017已实现，每包独立PR与本地验收；全部保持待审，不自动合并或发布生产。功能编号与GitHub PR号分开使用。
+日期：2026-11-24。状态：PR-008～017均已实现并完成本地验收；经用户本次要求，GitHub #8～#18 已按依赖逐一合并到独立后端集成分支，本次汇总同步 `main`，不发布生产。功能编号与GitHub PR号分开使用。
 
-## 当前起点
+## 历史起点（本轮开发前）
 
 - PR-001～007 已合并到 `codex/studyc-independent-backend`，基线 `4feb94d`；开发不要从仍落后的 `main` 直接起步。
 - 测试账户 A/B 已跑通资料、问答引用、卡片生成/编辑/自评、测验生成、练习改答、考试续做与账户隔离。真实 Baidu 免费模型三种生成均取得成功，详见[补验记录](acceptance-pr005-007.md#2026-11-23-真实模型补验2026-11-24-整理)。
@@ -97,4 +97,4 @@ PR-011已实现并提交GitHub #12，最新修复CI通过，见[学习计划任�
 | 016 独立文本复制 | [#17](https://github.com/is-spectator/StudyC/pull/17) | [复制](pr-016-content-copy.md) |
 | 017 旧本机文本导入 | [#18](https://github.com/is-spectator/StudyC/pull/18) | [导入](pr-017-local-data-import.md) |
 
-按栈依赖审查/合并，当前本地集成分支 `codex/studyc-local-import`，包含上述全部功能。正式 `main` 未因此自动更新。本地 http://127.0.0.1:5180 ，使用内置验收账户A/B；最后基线后端477项、前端117项、部署23项及前后端构建/类型检查通过。模型配置保持原 OpenRouter/Baidu 免费模型，本轮确定性流程没有模型调用。
+上述栈 PR 已合并到 `codex/studyc-independent-backend`，本次汇总同步到 `main`。验收原始分支 `codex/studyc-local-import` 保留，详见[合并记录](pr-integration-20261124.md)。本地 http://127.0.0.1:5180 ，使用内置验收账户A/B；最后基线后端477项、前端117项、部署23项及前后端构建/类型检查通过。模型配置保持原 OpenRouter/Baidu 免费模型，本轮确定性流程没有模型调用。

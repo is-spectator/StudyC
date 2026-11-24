@@ -1,6 +1,6 @@
 # PR-011～017 本地集成交付
 
-2026-11-24，StudyC 独立仓库，分支 `codex/studyc-local-import`。生产与 main 没有自动更新。以下均为逐个独立栈 PR，需按依赖顺序审查后合并。
+2026-11-24，StudyC 独立仓库，分支 `codex/studyc-local-import`。以下独立栈 PR 已按依赖合并到 `codex/studyc-independent-backend`，本次汇总同步 `main`；原验收分支保留。见[合并记录](pr-integration-20261124.md)。生产没有更新。
 
 | 功能编号 | GitHub | 本地入口 |
 | --- | --- | --- |

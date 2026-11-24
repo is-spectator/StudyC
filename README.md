@@ -2,9 +2,9 @@
 
 前端 React + TypeScript + Vite，独立后端 Hono + PostgreSQL。以实际浏览器采集的 StudyFetch 页面、原站公开字体和插画为视觉依据，将资料整理、理解和练习整合为一个学习空间。当前正式账户使用云端学习集和纯文本资料；旧引导与内置学科示例仅保留在开发预览中，不作为云端学习数据。
 
-**2026-11-24：PR-001～007 已合并到 `codex/studyc-independent-backend`，005～007 的本地核心流程与原模型补验已通过。** 已实现[资料问答与引用](docs/pr-005-grounded-chat.md)、[多套闪卡与自评](docs/pr-006-flashcards.md)、[测验、考试和作答历史](docs/pr-007-quizzes.md)。问答流式兼容修复 [GitHub #8](https://github.com/is-spectator/StudyC/pull/8) CI 通过、本地已应用，核对时尚未合并；`main` 尚未包含全部后续功能。生产状态仍以各次发布记录为准，005～007 未发布生产。
+**2026-11-24：功能 PR-001～017 与 OpenRouter 兼容修复已全部合入 StudyC 集成分支，本次汇总同步到 `main`。** 原 GitHub #8～#18 的 CI 均通过、审查意见均已处理；业务代码与已验收的 `a57285f` 内容一致。后端477项、前端117项、部署23项及前后端构建通过。详情见 [PR 合并记录](docs/pr-integration-20261124.md)和[本地验收入口](docs/acceptance-pr011-017.md)。生产状态仍以各次发布记录为准，本次不部署生产。
 
-下一阶段见 [PR-008～013 规划](docs/next-pr-plan.md)；已实现的下一功能包为 [PR-008：闪卡间隔复习与到期队列](docs/pr-008-spaced-review.md)。PR-008 已提交 [GitHub #9](https://github.com/is-spectator/StudyC/pull/9)，PR-009/010 的本地实现与验收见下文；功能编号与 GitHub PR 号分开使用。
+[功能规划与 PR 映射](docs/next-pr-plan.md)保留每项任务书、迁移和验收边界；功能编号与 GitHub PR 号分开使用。
 
 当前归档 **34 张原站参考截图**，覆盖主要入口、列表空态、创建首步和部分弹窗。它们不代表原站所有页面与状态；本项目也不宣称全站逐页像素级复刻。
 

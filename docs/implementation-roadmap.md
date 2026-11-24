@@ -1,8 +1,8 @@
 # StudyC 实施路线与交接顺序
 
-更新：2026-11-24。状态：PR-001～007 已合并到 StudyC 独立后端集成分支 `codex/studyc-independent-backend`，当前基线为 `4feb94d`；`main` 尚未包含全部后续功能。PR-005 [资料问答](pr-005-grounded-chat.md)、PR-006 [闪卡](pr-006-flashcards.md)、PR-007 [测验与考试](pr-007-quizzes.md) 已完成测试账户 A/B 的本地核心流程验收，原 OpenRouter/Baidu 免费模型实际生成了回答、卡片和试题。完整证据边界见[本地验收记录](acceptance-pr005-007.md)。这三项功能未发布生产。
+更新：2026-11-24。状态：功能 PR-001～017 已全部合入 StudyC 独立后端集成分支 `codex/studyc-independent-backend`，本次通过汇总 PR 同步到 `main`；见[合并记录](pr-integration-20261124.md)。PR-005 [资料问答](pr-005-grounded-chat.md)、PR-006 [闪卡](pr-006-flashcards.md)、PR-007 [测验与考试](pr-007-quizzes.md) 已完成测试账户 A/B 的本地核心流程验收，原 OpenRouter/Baidu 免费模型实际生成了回答、卡片和试题。完整证据边界见[本地验收记录](acceptance-pr005-007.md)。这三项功能未发布生产。
 
-本地实测发现的 OpenRouter 流式结束帧兼容问题已修复于 [GitHub #8](https://github.com/is-spectator/StudyC/pull/8)（`b7c322c`），CI 通过、本地已应用，核对时尚未合并。**GitHub #8 是修复 PR，不是功能交付包 PR-008。** PR-008～017 已在 StudyC 独立栈分支实现并本地验收，详见[PR 编号、GitHub PR 与任务书映射](next-pr-plan.md#pr-011017-本地交付2026-11-24)。当前本地集成分支为 `codex/studyc-local-import`，PR 保持待审，不自动合并或发布生产。后端477项、前端117项、部署23项回归及前后端构建通过。未编号的 OCR、多媒体、辅导、分享与支付阶段不在本轮交付范围。
+本地实测发现的 OpenRouter 流式结束帧兼容问题已修复于 [GitHub #8](https://github.com/is-spectator/StudyC/pull/8)（`b7c322c`），CI 通过，已合并。**GitHub #8 是修复 PR，不是功能交付包 PR-008。** PR-008～017 已在 StudyC 独立栈分支实现并本地验收，详见[PR 编号、GitHub PR 与任务书映射](next-pr-plan.md#pr-011017-本地交付2026-11-24)。原本地验收分支为 `codex/studyc-local-import`；经用户本次要求，GitHub #8～#18 已逐一合并，本次同步 `main`，不发布生产。后端477项、前端117项、部署23项回归及前后端构建通过。未编号的 OCR、多媒体、辅导、分享与支付阶段不在本轮交付范围。
 
 实施边界：StudyC 的前后端、业务迁移和 PR 统一在 `is-spectator/StudyC`；Clyna 继续提供共享账户体系。后端与前端交付边界分别见 [PR-001 任务书](pr-001-study-data-api.md)和 [PR-002 任务书](pr-002-cloud-workspace.md)。
 
