@@ -42,7 +42,7 @@ it('upgrades a genuine v6 registry without rewriting history and detects owner g
     const legacySession = (await legacyService.start(owner!.id,legacySet,legacyDeck,{clientRequestId:id()})).session;
     await legacyService.review(owner!.id,legacySet,legacyDeck,legacySession.id,{clientRequestId:id(),version:1,position:0,cardId:legacyCard.id,rating:'easy'});
     const legacyDetail=await legacyService.get(owner!.id,legacySet,legacyDeck);
-    await local.exec('DROP TABLE study_spaced_review_actions; DROP TABLE study_spaced_review_sessions; DROP TABLE study_flashcard_schedules; DROP FUNCTION studyc_schedule_owner(); DELETE FROM studyc_schema_migrations WHERE version=7;');
+    await local.exec('DROP TABLE study_mistake_review_events; DROP TABLE study_mistake_reviews; DROP TABLE study_mistake_facts; DROP TABLE study_spaced_review_actions; DROP TABLE study_spaced_review_sessions; DROP TABLE study_flashcard_schedules; DROP FUNCTION studyc_schedule_owner(); DELETE FROM studyc_schema_migrations WHERE version>=7;');
     const old = await local.query('SELECT * FROM studyc_schema_migrations ORDER BY version');
     await migrate(local);
     await migrate(local);

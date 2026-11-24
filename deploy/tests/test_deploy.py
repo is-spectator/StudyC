@@ -123,12 +123,12 @@ class ReleaseChecks(unittest.TestCase):
                     self.assertIn('proxy_pass http://127.0.0.1:8789;', auth_location)
                     self.assertNotIn('127.0.0.1:8790', auth_location)
                 self.assertEqual(text.count('proxy_pass http://127.0.0.1:8789;'), len(renderer.AUTH_METHODS))
-                self.assertEqual(text.count('proxy_pass http://127.0.0.1:8790;'), 35 if enabled else 0)
+                self.assertEqual(text.count('proxy_pass http://127.0.0.1:8790;'), 41 if enabled else 0)
                 if enabled:
-                    self.assertEqual(len(review['studyApiRoutes']), 35)
+                    self.assertEqual(len(review['studyApiRoutes']), 41)
                     self.assertEqual(text.count('client_max_body_size 2m;'), 2)
                     self.assertEqual(text.count('client_max_body_size 8256k;'), 1)
-                    self.assertEqual(sum(len(methods) for methods in review['studyApiRoutes'].values()), 46)
+                    self.assertEqual(sum(len(methods) for methods in review['studyApiRoutes'].values()), 53)
                     self.assertEqual(review['studyApiBodyLimits']['flashcardLocationBytes'], 32 * 1024)
                 planplan = (output / 'clyna-planplan-alias.conf').read_bytes()
                 self.assertIn(b'proxy_pass http://127.0.0.1:8789;', planplan)
@@ -142,7 +142,7 @@ class ReleaseChecks(unittest.TestCase):
         self.assertIn('location ^~ /v1/study/ {', locations)
         self.assertIn('location ~ ^/v1/study/ { return 404; }', locations)
         patterns = re.findall(r'location ~ "([^"]+)"', locations)
-        self.assertEqual(len(patterns), 33)
+        self.assertEqual(len(patterns), 39)
         uuid = '3f623e5a-1111-4111-8111-111111111111'
         base = '/v1/study/sets/' + uuid
         valid = [base, base + '/materials', base + '/materials/' + uuid.upper(), base + '/files', base + '/files/' + uuid + '/content',
@@ -161,6 +161,9 @@ class ReleaseChecks(unittest.TestCase):
                  base + '/flashcard-decks/' + uuid + '/sessions',
                  base + '/flashcard-decks/' + uuid + '/sessions/' + uuid,
                  base + '/flashcard-decks/' + uuid + '/sessions/' + uuid + '/reviews',
+                 base + '/mistakes', base + '/mistakes/' + uuid + '/0',
+                 base + '/mistake-reviews', base + '/mistake-reviews/' + uuid,
+                 base + '/mistake-reviews/' + uuid + '/answers', base + '/mistake-reviews/' + uuid + '/submit',
                  base + '/quizzes', base + '/quizzes/' + uuid, base + '/quizzes/' + uuid + '/attempts',
                  base + '/quizzes/' + uuid + '/attempts/' + uuid,
                  base + '/quizzes/' + uuid + '/attempts/' + uuid + '/answers',
@@ -181,17 +184,18 @@ class ReleaseChecks(unittest.TestCase):
                      base + '/flashcard-decks/materialize/extra', base + '/flashcard-decks/' + uuid + '/cards/not-a-uuid',
                      base + '/flashcard-decks/' + uuid + '/sessions/not-a-uuid',
                      base + '/flashcard-decks/' + uuid + '/sessions/' + uuid + '/reviews/extra',
+                     base + '/mistakes/' + uuid + '/20',base + '/mistakes/' + uuid + '/-1',base + '/mistake-reviews/' + uuid + '/answers/extra',
                      base + '/quizzes/', base + '/quizzes/not-a-uuid', base + '/quizzes/' + uuid + '/attempts/not-a-uuid',
                      base + '/quizzes/' + uuid + '/attempts/' + uuid + '/answers/extra',
                      base + '/quizzes/' + uuid + '/attempts/' + uuid + '/submit/extra',
                      base + '/quizzes/' + uuid + '/answers']:
             self.assertFalse(any(re.fullmatch(pattern, path) for pattern in patterns), path)
-        self.assertEqual(locations.count('if ($request_method !~ ^(GET|POST)$) { return 405; }'), 8)
+        self.assertEqual(locations.count('if ($request_method !~ ^(GET|POST)$) { return 405; }'), 9)
         self.assertEqual(locations.count('if ($request_method !~ ^(GET|PATCH)$) { return 405; }'), 3)
-        self.assertEqual(locations.count('if ($request_method !~ ^(GET)$) { return 405; }'), 10)
-        self.assertEqual(locations.count('if ($request_method !~ ^(POST)$) { return 405; }'), 13)
+        self.assertEqual(locations.count('if ($request_method !~ ^(GET)$) { return 405; }'), 13)
+        self.assertEqual(locations.count('if ($request_method !~ ^(POST)$) { return 405; }'), 15)
         self.assertEqual(locations.count('if ($request_method !~ ^(PATCH)$) { return 405; }'), 1)
-        self.assertEqual(locations.count('proxy_pass http://127.0.0.1:8790;'), 35)
+        self.assertEqual(locations.count('proxy_pass http://127.0.0.1:8790;'), 41)
         self.assertIn('location = /v1/study/generation-usage {', locations)
         self.assertEqual(locations.count('client_max_body_size 8256k;'), 1)
         self.assertEqual(locations.count('client_max_body_size 32k;'), 13)
@@ -201,7 +205,7 @@ class ReleaseChecks(unittest.TestCase):
                           'proxy_set_header X-PlanPlan-Expected-User $http_x_planplan_expected_user;',
                           'proxy_cache off;', 'proxy_no_cache 1;', 'proxy_next_upstream off;',
                           'proxy_hide_header Cache-Control;']:
-            self.assertEqual(locations.count(directive), 35)
+            self.assertEqual(locations.count(directive), 41)
 
     def test_study_api_surgical_insertion_preserves_existing_config_and_guards_duplicates(self):
         original = '''server { server_name study.clyna.ai; }

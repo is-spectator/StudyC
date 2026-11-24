@@ -1,3 +1,4 @@
+import { MISTAKE_TABLES, MISTAKES_SQL } from './mistakes-schema.js';
 import { SPACED_TABLES, SPACED_SQL, SCHEDULE_OWNER_BODY } from './spaced-review-schema.js';
 import { createHash } from 'node:crypto';
 import type { Db, Queryable, Transaction } from './db.js';
@@ -211,6 +212,7 @@ export const LEARNING_MIGRATIONS = [
   { version: 5, name: 'studyc_flashcards', sql: FLASHCARDS_SCHEMA_SQL, tables: FLASHCARD_TABLES },
   { version: 6, name: 'studyc_quizzes', sql: QUIZZES_SCHEMA_SQL, tables: QUIZ_TABLES },
   { version: 7, name: 'studyc_spaced_review', sql: SPACED_SQL, tables: SPACED_TABLES },
+  { version: 8, name: 'studyc_mistake_review', sql: MISTAKES_SQL, tables: MISTAKE_TABLES },
 ];
 const additionChecksum = (migration: typeof LEARNING_MIGRATIONS[number]) => createHash('sha256').update(`${migration.name}\n${migration.sql}`).digest('hex');
 async function additionShape(q: Queryable, migration: typeof LEARNING_MIGRATIONS[number]) {

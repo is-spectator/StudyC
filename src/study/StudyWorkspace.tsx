@@ -1,3 +1,4 @@
+import MistakesPanel from './mistakes/MistakesPanel';
 import { useCallback, useEffect, useMemo, useRef, useState, type FormEvent, type MouseEvent } from 'react';
 import { Archive, ArrowLeft, ArrowRight, BookOpen, ChevronRight, ClipboardCheck, Cloud, Download, FileText, Folder, Layers, LoaderCircle, LogOut, Menu, MessageCircle, Pencil, Plus, RefreshCw, Route, Search, X } from 'lucide-react';
 import { useAuth } from '../auth/AuthProvider';
@@ -158,6 +159,7 @@ export default function StudyWorkspace() {
         { suffix: 'chat/new', title: '资料问答', Icon: MessageCircle },
         { suffix: 'flashcards', title: '闪卡', Icon: Layers },
         { suffix: 'practice', title: '测验与考试', Icon: ClipboardCheck },
+        { suffix: 'mistakes', title: '错题', Icon: BookOpen },
         { suffix: 'study-plan', title: '学习计划', Icon: Route },
       ].map(({ suffix, title, Icon }) => <button key={title} className="side-link" onClick={() => setId ? go(`${studySetPath(setId)}/${suffix}`) : setNotice('请先选择一个学习集。')}><Icon size={16} /><span>{title}</span>{suffix === 'study-plan' ? <small>未开放</small> : null}</button>)}</div>
       <a className="cloud-local-link" href="/platform/local-data" onClick={event => followLink(event, go, '/platform/local-data')}><Archive size={15} />本机旧数据</a>
@@ -194,6 +196,7 @@ export default function StudyWorkspace() {
         {route.kind === 'chat' && currentSet.data ? <ChatPanel key={`${auth.user?.id}:${route.studySetId}`} studySetId={route.studySetId} threadId={route.threadId} materials={materials.items} onNavigate={go} /> : null}
         {route.kind === 'flashcards' && currentSet.data ? <FlashcardsPanel key={`${auth.user?.id}:${route.studySetId}`} studySetId={route.studySetId} materials={materials.items} /> : null}
         {route.kind === 'quizzes' && currentSet.data ? <div className="cloud-page"><QuizzesPanel key={`${auth.user?.id}:${route.studySetId}`} studySetId={route.studySetId} materials={materials.items} /></div> : null}
+        {route.kind === 'mistakes' && currentSet.data ? <div className="cloud-page"><MistakesPanel key={`${auth.user?.id}:${route.studySetId}`} studySetId={route.studySetId}/></div> : null}
         {route.kind === 'local-data' ? <LocalData accountId={auth.user?.id ?? ''} /> : null}
         {route.kind === 'unavailable' && (!setId || currentSet.data) ? <div className="cloud-page cloud-unavailable"><span className="cloud-empty-mark"><BookOpen size={30} /></span><h1>{route.title}尚未开放</h1><p>现在可以创建学习集、整理和编辑文本资料。<br />这项学习工具还在准备中。</p><button className="btn btn-black" onClick={() => go(setId ? studySetPath(setId) : '/platform/studysets')}>返回我的资料<ArrowRight size={16} /></button></div> : null}
         {route.kind === 'not-found' ? <div className="cloud-page cloud-unavailable"><h1>没有找到这个页面</h1><p>请从学习集列表重新打开资料。</p><button className="btn btn-black" onClick={() => go('/platform/studysets')}>返回学习集列表</button></div> : null}

@@ -1,3 +1,4 @@
+import { registerMistakeRoutes } from './mistakes.js';
 import { registerSpacedRoutes } from './spaced-review.js';
 import { Hono } from 'hono';
 import { ZodError } from 'zod';
@@ -112,6 +113,10 @@ export function createApp(db: Db, options: AppOptions) {
     const spacedRead = /^\/v1\/study\/sets\/[^/]+\/flashcard-decks\/[^/]+\/(?:review-queue|review-sessions\/[^/]+)$/.test(path);
     const spacedWrite = /^\/v1\/study\/sets\/[^/]+\/flashcard-decks\/[^/]+\/review-sessions(?:\/[^/]+\/actions)?$/.test(path);
     if ((spacedRead && c.req.method !== 'GET') || (spacedWrite && c.req.method !== 'POST')) return c.json({error:{code:'method_not_allowed',message:'请求方法不支持。'}},405);
+    const mistakeRead = /^\/v1\/study\/sets\/[^/]+\/(?:mistakes(?:\/[^/]+\/[^/]+)?|mistake-reviews\/[^/]+)$/.test(path);
+    const mistakeCollection = /^\/v1\/study\/sets\/[^/]+\/mistake-reviews$/.test(path);
+    const mistakeWrite = /^\/v1\/study\/sets\/[^/]+\/mistake-reviews\/[^/]+\/(?:answers|submit)$/.test(path);
+    if ((mistakeRead && c.req.method !== 'GET') || (mistakeCollection && !['GET','POST'].includes(c.req.method)) || (mistakeWrite && c.req.method !== 'POST')) return c.json({error:{code:'method_not_allowed',message:'请求方法不支持。'}},405);
     const quizCollection = /^\/v1\/study\/sets\/[^/]+\/quizzes(?:\/[^/]+\/attempts)?$/.test(path);
     const quizRead = /^\/v1\/study\/sets\/[^/]+\/quizzes\/[^/]+(?:\/attempts\/[^/]+)?$/.test(path);
     const quizWrite = /^\/v1\/study\/sets\/[^/]+\/quizzes\/[^/]+\/attempts\/[^/]+\/(?:answers|submit)$/.test(path);
@@ -131,6 +136,7 @@ export function createApp(db: Db, options: AppOptions) {
   registerChatRoutes(app, db, options.generationStore instanceof GenerationStore ? options.generationStore : undefined, limits);
   registerFlashcardRoutes(app, db, options.generationStore instanceof GenerationStore ? options.generationStore : undefined, limits);
   registerSpacedRoutes(app, db, limits);
+  registerMistakeRoutes(app,db,limits);
   registerQuizRoutes(app, db, options.generationStore, limits);
   if (options.fileRoot) registerFileRoutes(app, db, limits, options.fileRoot);
   // No PlanPlan or account-management routes are mounted.
