@@ -51,6 +51,41 @@ describe('real upstream streaming and learning output validation', () => {
     expect(cancelled).toBe(true);
   });
 
+  it('accepts OpenRouter accounting frames that repeat an empty delta and stop after completion', async () => {
+    const finalUsage = { id: 'gen-stream-fixture', choices: [{ index: 0, delta: { content: '', role: 'assistant' }, finish_reason: 'stop', native_finish_reason: 'stop' }], usage };
+    const wire = delta(JSON.stringify(answer())) + delta('', 'stop') + `data: ${JSON.stringify(finalUsage)}\n\ndata: [DONE]\n\n`;
+    const progress: string[] = [];
+    const { service } = provider(() => new Response(wire, { headers: { 'content-type': 'text/event-stream' } }));
+    expect(await service.generate(claim(), new AbortController().signal, async value => { progress.push(value); })).toMatchObject({
+      status: 'succeeded', errorCode: null, result: answer(),
+      usage: { state: 'reported', inputTokens: 20, outputTokens: 30, totalTokens: 50, costCredits: '0.00001', providerRequestId: 'gen-stream-fixture' },
+    });
+    expect(progress).toEqual([answer().answer]);
+  });
+
+  it.each([
+    [{ delta: { content: 'extra content' }, finish_reason: 'stop' }, 'invalid_response'],
+    [{ delta: { content: ' ' }, finish_reason: 'stop' }, 'invalid_response'],
+    [{ delta: { content: '', tool_calls: [{ id: 'unexpected-tool' }] }, finish_reason: 'stop' }, 'output_refused'],
+    [{ delta: { content: '', function_call: { name: 'unexpected-tool' } }, finish_reason: 'stop' }, 'output_refused'],
+    [{ delta: { content: '', refusal: 'refused' }, finish_reason: 'stop' }, 'output_refused'],
+    [{ delta: { content: '' }, finish_reason: 'length' }, 'output_truncated'],
+    [{ delta: { content: '' }, finish_reason: 'error' }, 'output_refused'],
+    [{ delta: { content: {} }, finish_reason: 'stop' }, 'invalid_response'],
+  ])('rejects content, refusals and bad completion frames after stop %#', async (choice, errorCode) => {
+    const wire = delta(JSON.stringify(answer()), 'stop') + `data: ${JSON.stringify({ choices: [choice], usage })}\n\ndata: [DONE]\n\n`;
+    const { service } = provider(() => new Response(wire, { headers: { 'content-type': 'text/event-stream' } }));
+    expect(await service.generate(claim(), new AbortController().signal)).toMatchObject({ status: 'failed', errorCode, result: null, usage: { state: 'reported', totalTokens: 50 } });
+  });
+
+  it.each([
+    delta(JSON.stringify(answer()), 'stop'),
+    delta(JSON.stringify(answer())) + ending(),
+  ])('rejects a complete-looking answer without both stop and DONE %#', async wire => {
+    const { service } = provider(() => new Response(wire, { headers: { 'content-type': 'text/event-stream' } }));
+    expect(await service.generate(claim(), new AbortController().signal)).toMatchObject({ status: 'failed', errorCode: 'invalid_response', result: null });
+  });
+
   it.each([
     { ...answer(), citations: [{ sourceId: 'wrong', quote }] },
     { ...answer(), citations: [{ sourceId: 's1', quote: '这是资料里面没有出现过的一段捏造文字。' }] },
