@@ -64,6 +64,24 @@ describe('independent StudyC session verification', () => {
     expect(db.query).not.toHaveBeenCalled();
   });
 
+  it('guards every quiz path shape without admitting extra routes or touching the database', async () => {
+    const { app, db } = fixture();
+    const root = `/v1/study/sets/${userId}/quizzes`;
+    const paths: [string, string[]][] = [
+      [root, ['GET', 'POST']], [`${root}/${otherId}`, ['GET']],
+      [`${root}/${otherId}/attempts`, ['GET', 'POST']], [`${root}/${otherId}/attempts/${userId}`, ['GET']],
+      [`${root}/${otherId}/attempts/${userId}/answers`, ['POST']], [`${root}/${otherId}/attempts/${userId}/submit`, ['POST']],
+    ];
+    for (const [path, allowed] of paths) for (const method of ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS', 'HEAD']) {
+      if (allowed.includes(method)) continue;
+      const response = await app.request(path, { method, headers: writeCredentials() });
+      expect(response.status, `${method} ${path}`).toBe(405);
+      expect(response.headers.get('cache-control')).toBe('private, no-store');
+    }
+    expect(db.query).not.toHaveBeenCalled(); expect(db.tx).not.toHaveBeenCalled();
+    await failure(await app.request(`${root}/${otherId}/attempts/${userId}/unknown`, { headers: credentials() }), 404, 'not_found');
+  });
+
   it.each([
     ['anonymous', {}],
     ['bearer-only', { Authorization: 'Bearer fixture-token' }],
@@ -191,6 +209,28 @@ describe('standalone StudyC app boundary', () => {
     const head = await app.request('/v1/study/sets', { method: 'HEAD', headers: credentials() });
     expect(head.status).toBe(405);
     expect(head.headers.get('cache-control')).toBe('private, no-store');
+  });
+
+  it('guards every flashcard path shape and rejects unsupported methods before database access', async () => {
+    const { app, db } = fixture();
+    const root = `/v1/study/sets/${userId}/flashcard-decks`;
+    const paths: [string, string[]][] = [
+      [root, ['GET', 'POST']], [`${root}/${otherId}`, ['GET', 'PATCH']],
+      [`${root}/materialize`, ['POST']], [`${root}/${otherId}/cards`, ['POST']],
+      [`${root}/${otherId}/cards/${userId}`, ['PATCH']], [`${root}/${otherId}/sessions`, ['POST']],
+      [`${root}/${otherId}/sessions/${userId}`, ['GET']], [`${root}/${otherId}/sessions/${userId}/reviews`, ['POST']],
+    ];
+    for (const [path, allowed] of paths) {
+      for (const method of ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS', 'HEAD']) {
+        if (allowed.includes(method)) continue;
+        const response = await app.request(path, { method, headers: writeCredentials() });
+        expect(response.status, `${method} ${path}`).toBe(405);
+        expect(response.headers.get('cache-control')).toBe('private, no-store');
+      }
+    }
+    expect(db.query).not.toHaveBeenCalled();
+    expect(db.tx).not.toHaveBeenCalled();
+    await failure(await app.request(`${root}/${otherId}/sessions/${userId}/unknown`, { headers: credentials() }), 404, 'not_found');
   });
 
   it.each([

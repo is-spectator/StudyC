@@ -57,3 +57,12 @@ export async function openTestDb(options: { migrate?: boolean } = {}): Promise<D
     return db;
   } catch (error) { await db.close(); throw error; }
 }
+
+/** Genuine historical-version fixtures must remove all newer additive schemas first. */
+export async function dropAdditionsAfter(db: Db, version: number): Promise<void> {
+  const {LEARNING_MIGRATIONS}=await import('../src/db/migrations.js');
+  for(const migration of [...LEARNING_MIGRATIONS].reverse().filter(m=>m.version>version)){
+    for(const table of [...migration.tables].reverse())await db.exec(`DROP TABLE ${table}`);
+    await db.query('DELETE FROM studyc_schema_migrations WHERE version=$1',[migration.version]);
+  }
+}

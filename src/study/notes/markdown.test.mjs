@@ -1,0 +1,12 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {readFile} from 'node:fs/promises';
+import ts from 'typescript';
+import {createElement} from 'react';
+import {renderToStaticMarkup} from 'react-dom/server';
+const source=await readFile(new URL('./SafeMarkdown.tsx',import.meta.url),'utf8');
+const compiled=ts.transpileModule(source,{compilerOptions:{module:ts.ModuleKind.ESNext,jsx:ts.JsxEmit.ReactJSX,target:ts.ScriptTarget.ES2022}}).outputText.replace(/from ["']react\/jsx-runtime["']/g,`from ${JSON.stringify(import.meta.resolve('react/jsx-runtime'))}`).replace(/from ["']react["']/g,`from ${JSON.stringify(import.meta.resolve('react'))}`);
+const {default:SafeMarkdown}=await import('data:text/javascript;base64,'+Buffer.from(compiled).toString('base64'));
+const render=body=>renderToStaticMarkup(createElement(SafeMarkdown,{body}));
+test('supported headings, paragraphs, lists and block quotes use semantic elements',()=>{const html=render('# 标题\n\n段落一\n第二行\n\n- 甲\n- 乙\n\n1. 丙\n2. 丁\n\n> 引文');for(const tag of ['<h2>标题</h2>','<p>段落一\n第二行</p>','<ul>','<ol>','<blockquote>引文</blockquote>'])assert.ok(html.includes(tag),tag);});
+test('HTML, script, event handlers and Markdown link URLs stay escaped literal text',()=>{const html=render('<script>alert(1)</script>\n<img src=x onerror=alert(1)>\n\n[危险链接](javascript:alert(1))\n\n![图](https://evil.test/x)');assert.ok(html.includes('&lt;script&gt;'));assert.ok(html.includes('&lt;img'));for(const tag of ['<script','<img','<a '])assert.ok(!html.includes(tag));assert.ok(!html.includes('href='));});

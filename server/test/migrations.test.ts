@@ -1,10 +1,19 @@
 import { describe, expect, it } from 'vitest';
 import { randomUUID } from 'node:crypto';
 import { openDb } from '../src/db/db.js';
-import { checkMigrations, migrate } from '../src/db/migrations.js';
+import { checkMigrations, migrate, LEARNING_MIGRATIONS } from '../src/db/migrations.js';
 import { STUDY_SCHEMA_SQL } from '../src/db/study-schema.js';
 import { createStudySet, createTextMaterial } from '../src/services/study-data.js';
 import { openTestDb } from './database.js';
+
+async function restoreV3(db: Awaited<ReturnType<typeof openTestDb>>) {
+  for (const migration of [...LEARNING_MIGRATIONS].reverse()) {
+    for (const table of [...migration.tables].reverse()) await db.exec(`DROP TABLE IF EXISTS ${table} CASCADE`);
+  }
+  await db.exec(`DROP FUNCTION studyc_schedule_owner(); DROP FUNCTION studyc_chat_turn_immutable(); DELETE FROM studyc_schema_migrations WHERE version>=4;
+    ALTER TABLE study_generation_jobs DROP CONSTRAINT study_generation_jobs_kind_check;
+    ALTER TABLE study_generation_jobs ADD CONSTRAINT study_generation_jobs_kind_check CHECK(kind='study_outline');`);
+}
 
 describe('independent StudyC migration registry', () => {
   it('creates only StudyC objects on an existing identity schema and repeats without drift', async () => {
@@ -12,8 +21,11 @@ describe('independent StudyC migration registry', () => {
     try {
       const before = await db.query('SELECT id,deleted_at,created_at FROM users');
       await migrate(db); await migrate(db); await checkMigrations(db);
-      expect(await db.query('SELECT version,name,adopted FROM studyc_schema_migrations')).toEqual([
+      expect(await db.query('SELECT version,name,adopted FROM studyc_schema_migrations ORDER BY version')).toEqual([
         { version: 1, name: 'studyc_sets_and_text_materials', adopted: false },
+        { version: 2, name: 'studyc_source_files', adopted: false },
+        { version: 3, name: 'studyc_generation_tasks', adopted: false },
+        ...LEARNING_MIGRATIONS.map(item => ({ version: item.version, name: item.name, adopted: false })),
       ]);
       expect(await db.query('SELECT id,deleted_at,created_at FROM users')).toEqual(before);
       expect(await db.query("SELECT to_regclass('schema_migrations') AS registry")).toEqual([{ registry: null }]);
@@ -27,14 +39,18 @@ describe('independent StudyC migration registry', () => {
       await db.exec(STUDY_SCHEMA_SQL);
       await db.exec("CREATE TABLE schema_migrations(version integer PRIMARY KEY,name text,checksum text); INSERT INTO schema_migrations SELECT n,'external-'||n,repeat('a',64) FROM generate_series(1,18)n;");
       const [u] = await db.query<{ id: string }>('INSERT INTO users DEFAULT VALUES RETURNING id');
-      const set = (await createStudySet(db, u!.id, { clientRequestId: randomUUID(), title: '保留原资料' })).studySet;
-      await createTextMaterial(db, u!.id, set.id, { clientRequestId: randomUUID(), title: 'legacy笔记', body: '跨服务保留\n😀' });
+      // Genuine pre-registry fixture must use legacy SQL, not services requiring the current lifecycle schema.
+      const [set] = await db.query<{id:string}>("INSERT INTO study_sets(user_id,title,client_request_id,creation_digest) VALUES($1,'保留原资料',$2,repeat('a',64)) RETURNING id",[u!.id,randomUUID()]);
+      await db.query("INSERT INTO study_materials(user_id,study_set_id,title,body,client_request_id,creation_digest) VALUES($1,$2,'legacy笔记',$3,$4,repeat('a',64))",[u!.id,set!.id,'跨服务保留\n😀',randomUUID()]);
       const history = await db.query('SELECT * FROM schema_migrations ORDER BY version');
       const notes = await db.query('SELECT * FROM study_materials');
       await migrate(db); await migrate(db); await checkMigrations(db);
       expect(await db.query('SELECT * FROM schema_migrations ORDER BY version')).toEqual(history);
       expect(await db.query('SELECT * FROM study_materials')).toEqual(notes);
-      expect(await db.query('SELECT adopted FROM studyc_schema_migrations')).toEqual([{ adopted: true }]);
+      expect(await db.query('SELECT version, adopted FROM studyc_schema_migrations ORDER BY version')).toEqual([
+        { version: 1, adopted: true }, { version: 2, adopted: false }, { version: 3, adopted: false },
+        ...LEARNING_MIGRATIONS.map(item => ({ version: item.version, adopted: false })),
+      ]);
     } finally { await db.close(); }
   });
 
@@ -61,17 +77,23 @@ describe('independent StudyC migration registry', () => {
     try { await expect(migrate(empty)).rejects.toThrow(/identity/); } finally { await empty.close(); }
   });
 
-  it('fails closed for partial tables, altered lifecycle function and registry checksum', async () => {
+  it('fails closed for partial tables', async () => {
     const partial = await openTestDb({ migrate: false });
     try {
       await partial.exec(STUDY_SCHEMA_SQL); await partial.exec('DROP TABLE study_materials');
       await expect(migrate(partial)).rejects.toThrow(/Partial/);
     } finally { await partial.close(); }
+  });
+
+  it('fails closed for an altered lifecycle function', async () => {
     const db = await openTestDb();
     try {
       await db.exec("CREATE OR REPLACE FUNCTION planplan_active_user_write() RETURNS trigger AS $$ BEGIN RETURN NEW; END; $$ LANGUAGE plpgsql;");
       await expect(checkMigrations(db)).rejects.toThrow(/deletion trigger/);
     } finally { await db.close(); }
+  });
+
+  it('fails closed for an altered registry checksum', async () => {
     const changed = await openTestDb();
     try {
       await changed.query("UPDATE studyc_schema_migrations SET checksum=repeat('b',64)");
@@ -89,4 +111,72 @@ describe('independent StudyC migration registry', () => {
       await expect(checkMigrations(readonly)).rejects.toThrow(/schema drift/);
     } finally { await db.close(); }
   });
+
+  it('appends generation v3 without changing v1/v2 checksums, fingerprints or external history', async () => {
+    const db = await openTestDb();
+    try {
+      const original = await db.query('SELECT * FROM studyc_schema_migrations WHERE version<=2 ORDER BY version');
+      await restoreV3(db);
+      await db.exec(`DROP TABLE study_generation_attempts; DROP TABLE study_generation_jobs;
+        DROP TABLE study_generation_daily_budget; DROP FUNCTION studyc_generation_immutable();
+        DELETE FROM studyc_schema_migrations WHERE version=3;
+        CREATE TABLE schema_migrations(version integer PRIMARY KEY,name text,checksum text);
+        INSERT INTO schema_migrations VALUES(18,'external-kept',repeat('c',64));`);
+      const external = await db.query('SELECT * FROM schema_migrations');
+      await expect(checkMigrations(db)).rejects.toThrow(/history mismatch/);
+      await migrate(db); await checkMigrations(db);
+      expect(await db.query('SELECT * FROM studyc_schema_migrations WHERE version<=2 ORDER BY version')).toEqual(original);
+      expect(await db.query('SELECT * FROM schema_migrations')).toEqual(external);
+      expect(await db.query('SELECT version,adopted FROM studyc_schema_migrations WHERE version=3')).toEqual([{ version: 3, adopted: false }]);
+    } finally { await db.close(); }
+  });
+
+  it.each([
+    ['immutable trigger removed', 'DROP TRIGGER immutable_input ON study_generation_jobs'],
+    ['immutable function changed', 'CREATE OR REPLACE FUNCTION studyc_generation_immutable() RETURNS trigger AS $$ BEGIN RETURN NEW; END; $$ LANGUAGE plpgsql'],
+    ['immutable function definer', 'ALTER FUNCTION studyc_generation_immutable() SECURITY DEFINER'],
+    ['account cascade changed', 'ALTER TABLE study_generation_jobs DROP CONSTRAINT study_generation_jobs_user_id_fkey'],
+    ['budget column changed', 'ALTER TABLE study_generation_daily_budget ALTER COLUMN tokens TYPE integer'],
+    ['attempt uniqueness removed', 'ALTER TABLE study_generation_attempts DROP CONSTRAINT study_generation_attempts_job_id_number_key'],
+  ])('v3 runtime check rejects %s without repairing it', async (_label, sql) => {
+    const db = await openTestDb();
+    try {
+      await db.exec(sql);
+      await expect(checkMigrations(db)).rejects.toThrow(/drift/);
+      await expect(migrate(db)).rejects.toThrow(/drift/);
+    } finally { await db.close(); }
+  });
+
+  it('refuses partially present generation schema and does not invent a v3 record', async () => {
+    const db = await openTestDb();
+    try {
+      await restoreV3(db);
+      await db.exec('DELETE FROM studyc_schema_migrations WHERE version=3; DROP TABLE study_generation_attempts;');
+      await expect(migrate(db)).rejects.toThrow(/Partial StudyC generation/);
+      expect(await db.query('SELECT version FROM studyc_schema_migrations ORDER BY version')).toEqual([{ version: 1 }, { version: 2 }]);
+    } finally { await db.close(); }
+  });
+  it('upgrades a genuine v3 registry without rewriting its checksums or fingerprints', async () => {
+    const db = await openTestDb();
+    try {
+      await restoreV3(db);
+      const before = await db.query('SELECT * FROM studyc_schema_migrations ORDER BY version');
+      await migrate(db); await checkMigrations(db);
+      expect(await db.query('SELECT * FROM studyc_schema_migrations WHERE version<=3 ORDER BY version')).toEqual(before);
+      await db.exec("ALTER TABLE study_generation_jobs DROP CONSTRAINT study_generation_jobs_kind_check");
+      await expect(checkMigrations(db)).rejects.toThrow(/drift/);
+    } finally { await db.close(); }
+  });
+
+  it.each([
+    'DROP TRIGGER immutable_turn ON study_chat_turns',
+    'CREATE OR REPLACE FUNCTION studyc_chat_turn_immutable() RETURNS trigger AS $$ BEGIN RETURN NEW; END; $$ LANGUAGE plpgsql',
+    'ALTER FUNCTION studyc_chat_turn_immutable() SECURITY DEFINER',
+    'ALTER TABLE study_generation_progress DROP CONSTRAINT study_generation_progress_text_check',
+  ])('rejects chat migration drift: %s', async sql => {
+    const db = await openTestDb();
+    try { await db.exec(sql); await expect(checkMigrations(db)).rejects.toThrow(/drift/); }
+    finally { await db.close(); }
+  });
+
 });

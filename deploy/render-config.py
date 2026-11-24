@@ -20,6 +20,69 @@ STUDY_API_ROUTES = {
     '/v1/study/sets/{setId}': ['GET', 'PATCH'],
     '/v1/study/sets/{setId}/materials': ['GET', 'POST'],
     '/v1/study/sets/{setId}/materials/{materialId}': ['GET', 'PATCH'],
+    '/v1/study/sets/{setId}/files': ['GET', 'POST'],
+    '/v1/study/sets/{setId}/files/{fileId}/content': ['GET'],
+    '/v1/study/sets/{setId}/generations': ['GET', 'POST'],
+    '/v1/study/sets/{setId}/generations/{jobId}': ['GET'],
+    '/v1/study/sets/{setId}/generations/{jobId}/cancel': ['POST'],
+    '/v1/study/sets/{setId}/generations/{jobId}/retry': ['POST'],
+    '/v1/study/generation-usage': ['GET'],
+    '/v1/study/search': ['GET'],
+    '/v1/study/imports': ['POST'],
+    '/v1/study/imports/status': ['GET'],
+    '/v1/study/copies': ['POST'],
+    '/v1/study/sets/{setId}/copy-preview': ['GET'],
+    '/v1/study/trash': ['GET'],
+    '/v1/study/trash/{setId}': ['GET', 'PATCH'],
+    '/v1/study/folders': ['GET', 'POST'],
+    '/v1/study/folders/{folderId}': ['GET', 'PATCH'],
+    '/v1/study/folders/{folderId}/remove': ['POST'],
+    '/v1/study/folders/{folderId}/sets': ['GET'],
+    '/v1/study/sets/{setId}/folder': ['GET', 'PATCH'],
+    '/v1/study/sets/{setId}/chat/threads': ['GET', 'POST'],
+    '/v1/study/sets/{setId}/chat/threads/{threadId}': ['GET'],
+    '/v1/study/sets/{setId}/chat/threads/{threadId}/messages': ['POST'],
+    '/v1/study/sets/{setId}/chat/threads/{threadId}/messages/{turnId}/stop': ['POST'],
+    '/v1/study/sets/{setId}/chat/threads/{threadId}/messages/{turnId}/retry': ['POST'],
+    '/v1/study/sets/{setId}/chat/threads/{threadId}/messages/{turnId}/events': ['GET'],
+    '/v1/study/sets/{setId}/flashcard-decks': ['GET', 'POST'],
+    '/v1/study/sets/{setId}/flashcard-decks/{deckId}': ['GET', 'PATCH'],
+    '/v1/study/sets/{setId}/flashcard-decks/materialize': ['POST'],
+    '/v1/study/sets/{setId}/flashcard-decks/{deckId}/cards': ['POST'],
+    '/v1/study/sets/{setId}/flashcard-decks/{deckId}/cards/{cardId}': ['PATCH'],
+    '/v1/study/sets/{setId}/flashcard-decks/{deckId}/sessions': ['POST'],
+    '/v1/study/sets/{setId}/flashcard-decks/{deckId}/sessions/{sessionId}': ['GET'],
+    '/v1/study/sets/{setId}/flashcard-decks/{deckId}/sessions/{sessionId}/reviews': ['POST'],
+    '/v1/study/sets/{setId}/flashcard-decks/{deckId}/review-queue': ['GET'],
+    '/v1/study/sets/{setId}/flashcard-decks/{deckId}/review-sessions': ['POST'],
+    '/v1/study/sets/{setId}/flashcard-decks/{deckId}/review-sessions/{sessionId}': ['GET'],
+    '/v1/study/sets/{setId}/flashcard-decks/{deckId}/review-sessions/{sessionId}/actions': ['POST'],
+    '/v1/study/calendar/settings': ['GET', 'PATCH'],
+    '/v1/study/calendar/events': ['GET', 'POST'],
+    '/v1/study/calendar/events/{eventId}': ['GET', 'PATCH'],
+    '/v1/study/calendar/time-options': ['GET'],
+    '/v1/study/calendar/task-event': ['GET'],
+    '/v1/study/calendar/conflicts': ['POST'],
+    '/v1/study/sets/{setId}/plans': ['GET', 'POST'],
+    '/v1/study/sets/{setId}/plans/{planId}': ['GET', 'PATCH'],
+    '/v1/study/sets/{setId}/plans/{planId}/tasks': ['GET', 'POST'],
+    '/v1/study/sets/{setId}/plans/{planId}/tasks/{taskId}': ['PATCH'],
+    '/v1/study/sets/{setId}/plans/{planId}/tasks/{taskId}/evidence': ['GET', 'POST'],
+    '/v1/study/sets/{setId}/planning-options': ['GET'],
+    '/v1/study/sets/{setId}/notes': ['GET', 'POST'],
+    '/v1/study/sets/{setId}/notes/{noteId}': ['GET', 'PATCH'],
+    '/v1/study/sets/{setId}/mistakes': ['GET'],
+    '/v1/study/sets/{setId}/mistakes/{quizId}/{questionIndex}': ['GET'],
+    '/v1/study/sets/{setId}/mistake-reviews': ['GET', 'POST'],
+    '/v1/study/sets/{setId}/mistake-reviews/{reviewId}': ['GET'],
+    '/v1/study/sets/{setId}/mistake-reviews/{reviewId}/answers': ['POST'],
+    '/v1/study/sets/{setId}/mistake-reviews/{reviewId}/submit': ['POST'],
+    '/v1/study/sets/{setId}/quizzes': ['GET', 'POST'],
+    '/v1/study/sets/{setId}/quizzes/{quizId}': ['GET'],
+    '/v1/study/sets/{setId}/quizzes/{quizId}/attempts': ['GET', 'POST'],
+    '/v1/study/sets/{setId}/quizzes/{quizId}/attempts/{attemptId}': ['GET'],
+    '/v1/study/sets/{setId}/quizzes/{quizId}/attempts/{attemptId}/answers': ['POST'],
+    '/v1/study/sets/{setId}/quizzes/{quizId}/attempts/{attemptId}/submit': ['POST'],
 }
 UUID_PATTERN = r'[0-9A-Fa-f]{8}-[0-9A-Fa-f]{4}-[1-8][0-9A-Fa-f]{3}-[89ABab][0-9A-Fa-f]{3}-[0-9A-Fa-f]{12}'
 STUDY_API_BEGIN = '    # BEGIN StudyC authenticated data API'
@@ -61,25 +124,89 @@ def study_api_locations() -> str:
     the existing ^~ /v1 denial. Regex matching occurs inside this chosen prefix.
     The final nested regex rejects every unrecognized Study API path.
     """
-    def proxy_location(selector: str, methods: list[str], indent: int, material: bool = False) -> str:
+    def proxy_location(selector: str, methods: list[str], indent: int, body: str = '') -> str:
         space = ' ' * indent
         directives = [f'{space}location {selector} {{',
                       f'{space}    if ($request_method !~ ^({"|".join(methods)})$) {{ return 405; }}']
-        if material:
-            directives.append(f'{space}    client_max_body_size 2m;')
+        if body:
+            directives.append(f'{space}    client_max_body_size {body};')
         directives.extend(space + '    ' + line.strip() for line in STUDY_PROXY_DIRECTIVES.splitlines())
         directives.append(space + '}')
         return '\n'.join(directives)
 
     routes = [STUDY_API_BEGIN,
               proxy_location('= /v1/study/sets', ['GET', 'POST'], 4),
-              '    location ^~ /v1/study/ {']
-    for suffix, methods, material in [('', ['GET', 'PATCH'], False),
-                                      ('/materials', ['GET', 'POST'], True),
-                                      (f'/materials/{UUID_PATTERN}', ['GET', 'PATCH'], True)]:
+              proxy_location('= /v1/study/generation-usage', ['GET'], 4),
+              proxy_location('= /v1/study/search', ['GET'], 4),
+              proxy_location('= /v1/study/imports', ['POST'], 4, '2m'),
+              proxy_location('= /v1/study/imports/status', ['GET'], 4),
+              proxy_location('= /v1/study/copies', ['POST'], 4, '32k'),
+              proxy_location('= /v1/study/trash', ['GET'], 4),
+              proxy_location('= /v1/study/folders', ['GET', 'POST'], 4),
+              proxy_location('= /v1/study/calendar/settings', ['GET', 'PATCH'], 4),
+              proxy_location('= /v1/study/calendar/events', ['GET', 'POST'], 4),
+              proxy_location('= /v1/study/calendar/time-options', ['GET'], 4),
+              proxy_location('= /v1/study/calendar/task-event', ['GET'], 4),
+              proxy_location('= /v1/study/calendar/conflicts', ['POST'], 4),
+              '    location ^~ /v1/study/ {',
+              proxy_location(f'~ "^/v1/study/calendar/events/{UUID_PATTERN}$"', ['GET', 'PATCH'], 8),
+              proxy_location(f'~ "^/v1/study/trash/{UUID_PATTERN}$"', ['GET', 'PATCH'], 8),
+              proxy_location(f'~ "^/v1/study/folders/{UUID_PATTERN}$"', ['GET', 'PATCH'], 8),
+              proxy_location(f'~ "^/v1/study/folders/{UUID_PATTERN}/remove$"', ['POST'], 8),
+              proxy_location(f'~ "^/v1/study/folders/(?:{UUID_PATTERN}|unfiled)/sets$"', ['GET'], 8)]
+    # 8256 KiB is an 8 MiB PDF plus the 64 KiB multipart overhead the service allows.
+    for suffix, methods, body in [('', ['GET', 'PATCH'], ''),
+                                   ('/copy-preview', ['GET'], ''),
+                                   ('/folder', ['GET', 'PATCH'], ''),
+                                   ('/materials', ['GET', 'POST'], '2m'),
+                                   (f'/materials/{UUID_PATTERN}', ['GET', 'PATCH'], '2m'),
+                                   ('/files', ['GET', 'POST'], '8256k'),
+                                   (f'/files/{UUID_PATTERN}/content', ['GET'], ''),
+                                   ('/generations', ['GET', 'POST'], ''),
+                                   (f'/generations/{UUID_PATTERN}', ['GET'], ''),
+                                   (f'/generations/{UUID_PATTERN}/cancel', ['POST'], ''),
+                                   (f'/generations/{UUID_PATTERN}/retry', ['POST'], ''),
+                                   ('/chat/threads', ['GET', 'POST'], ''),
+                                   (f'/chat/threads/{UUID_PATTERN}', ['GET'], ''),
+                                   (f'/chat/threads/{UUID_PATTERN}/messages', ['POST'], '32k'),
+                                   (f'/chat/threads/{UUID_PATTERN}/messages/{UUID_PATTERN}/stop', ['POST'], ''),
+                                   (f'/chat/threads/{UUID_PATTERN}/messages/{UUID_PATTERN}/retry', ['POST'], ''),
+                                   (f'/chat/threads/{UUID_PATTERN}/messages/{UUID_PATTERN}/events', ['GET'], ''),
+                                   (f'/flashcard-decks/{UUID_PATTERN}/review-queue', ['GET'], '32k'),
+                                   (f'/flashcard-decks/{UUID_PATTERN}/review-sessions', ['POST'], '32k'),
+                                   (f'/flashcard-decks/{UUID_PATTERN}/review-sessions/{UUID_PATTERN}', ['GET'], '32k'),
+                                   (f'/flashcard-decks/{UUID_PATTERN}/review-sessions/{UUID_PATTERN}/actions', ['POST'], '32k'),
+                                   ('/flashcard-decks', ['GET', 'POST'], '32k'),
+                                   (f'/flashcard-decks/{UUID_PATTERN}', ['GET', 'PATCH'], '32k'),
+                                   ('/flashcard-decks/materialize', ['POST'], '32k'),
+                                   (f'/flashcard-decks/{UUID_PATTERN}/cards', ['POST'], '32k'),
+                                   (f'/flashcard-decks/{UUID_PATTERN}/cards/{UUID_PATTERN}', ['PATCH'], '32k'),
+                                   (f'/flashcard-decks/{UUID_PATTERN}/sessions', ['POST'], '32k'),
+                                   (f'/flashcard-decks/{UUID_PATTERN}/sessions/{UUID_PATTERN}', ['GET'], '32k'),
+                                   (f'/flashcard-decks/{UUID_PATTERN}/sessions/{UUID_PATTERN}/reviews', ['POST'], '32k'),
+                                   ('/plans', ['GET', 'POST'], ''),
+                                   (f'/plans/{UUID_PATTERN}', ['GET', 'PATCH'], ''),
+                                   (f'/plans/{UUID_PATTERN}/tasks', ['GET', 'POST'], ''),
+                                   (f'/plans/{UUID_PATTERN}/tasks/{UUID_PATTERN}', ['PATCH'], ''),
+                                   (f'/plans/{UUID_PATTERN}/tasks/{UUID_PATTERN}/evidence', ['GET', 'POST'], ''),
+                                   ('/planning-options', ['GET'], ''),
+                                   ('/notes', ['GET', 'POST'], '256k'),
+                                   (f'/notes/{UUID_PATTERN}', ['GET', 'PATCH'], '256k'),
+                                   ('/mistakes', ['GET'], ''),
+                                   (f'/mistakes/{UUID_PATTERN}/(?:[0-9]|1[0-9])', ['GET'], ''),
+                                   ('/mistake-reviews', ['GET', 'POST'], ''),
+                                   (f'/mistake-reviews/{UUID_PATTERN}', ['GET'], ''),
+                                   (f'/mistake-reviews/{UUID_PATTERN}/answers', ['POST'], ''),
+                                   (f'/mistake-reviews/{UUID_PATTERN}/submit', ['POST'], ''),
+                                   ('/quizzes', ['GET', 'POST'], ''),
+                                   (f'/quizzes/{UUID_PATTERN}', ['GET'], ''),
+                                   (f'/quizzes/{UUID_PATTERN}/attempts', ['GET', 'POST'], ''),
+                                   (f'/quizzes/{UUID_PATTERN}/attempts/{UUID_PATTERN}', ['GET'], ''),
+                                   (f'/quizzes/{UUID_PATTERN}/attempts/{UUID_PATTERN}/answers', ['POST'], ''),
+                                   (f'/quizzes/{UUID_PATTERN}/attempts/{UUID_PATTERN}/submit', ['POST'], '')]:
         pattern = f'^/v1/study/sets/{UUID_PATTERN}{suffix}$'
         # Quoting keeps the repetition braces part of the regex, not Nginx blocks.
-        routes.append(proxy_location(f'~ "{pattern}"', methods, 8, material))
+        routes.append(proxy_location(f'~ "{pattern}"', methods, 8, body))
     routes.extend(['        location ~ ^/v1/study/ { return 404; }', '    }', STUDY_API_END])
     return '\n'.join(routes)
 
@@ -121,7 +248,7 @@ def main() -> None:
         parser.add_argument('--' + name, required=True, type=safe_path)
     parser.add_argument('--acme-webroot', type=safe_path, help='Optional, only after confirming the real renewal webroot')
     parser.add_argument('--trusted-proxy-include', type=safe_path, help='Optional audited host-scoped Cloudflare real-IP snippet; never a global include')
-    parser.add_argument('--enable-study-api', action='store_true', help='Explicitly expose the eight authenticated StudyC data API methods')
+    parser.add_argument('--enable-study-api', action='store_true', help='Explicitly expose the authenticated StudyC data, PDF, generation, chat, flashcard and quiz routes')
     parser.add_argument('--output', required=True, type=Path)
     args = parser.parse_args()
     if args.output.exists():
@@ -149,7 +276,7 @@ def main() -> None:
                    'studyApiUpstream': '127.0.0.1:8790' if args.enable_study_api else None,
                    'studyApiEnabled': args.enable_study_api,
                    'studyApiRoutes': STUDY_API_ROUTES if args.enable_study_api else {},
-                   'studyApiBodyLimits': {'defaultBytes': 16 * 1024, 'materialLocationBytes': 2 * 1024 * 1024} if args.enable_study_api else {}})
+                   'studyApiBodyLimits': {'defaultBytes': 16 * 1024, 'materialLocationBytes': 2 * 1024 * 1024, 'flashcardLocationBytes': 32 * 1024, 'noteLocationBytes': 256 * 1024} if args.enable_study_api else {}})
     (args.output / 'review.json').write_text(json.dumps(review, indent=2) + '\n')
     (args.output / 'review.json').chmod(0o600)
     print(json.dumps({'reviewDirectory': str(args.output), 'status': review['status'], 'files': list(outputs)}))

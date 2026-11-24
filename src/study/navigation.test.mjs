@@ -1,0 +1,2 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {registerStudyLeaveGuard,confirmStudyLeave} from './navigation.ts';
+test('multiple task editors cannot hide another editor unsaved-work guard',()=>{let dirty=true;const first=registerStudyLeaveGuard(()=>!dirty),second=registerStudyLeaveGuard(()=>true);try{assert.equal(confirmStudyLeave(),false);second();assert.equal(confirmStudyLeave(),false);dirty=false;assert.equal(confirmStudyLeave(),true);}finally{first();second();}assert.equal(confirmStudyLeave(),true);});
