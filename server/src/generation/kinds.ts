@@ -1,6 +1,6 @@
 import { GenerationError, type GenerationConfig, type GenerationKind, type GenerationSnapshot } from './types.js';
 export const PROMPTS: Record<GenerationKind, GenerationSnapshot['promptVersion']> = {
-  study_outline: 'study-outline-v1', chat_answer: 'chat-answer-v1', flashcards: 'flashcards-v1', quiz: 'quiz-v1',
+  study_outline: 'study-outline-v1', chat_answer: 'chat-answer-v1', flashcards: 'flashcards-v1', quiz: 'quiz-v1', study_note: 'study-note-v1',
 };
 export const snapshotKind = (snapshot: GenerationSnapshot): GenerationKind | undefined =>
   (Object.keys(PROMPTS) as GenerationKind[]).find(kind => PROMPTS[kind] === snapshot.promptVersion);
@@ -10,6 +10,7 @@ export function normalizeConfig(kind: GenerationKind, value: GenerationConfig): 
   const int = (v: unknown, min: number, max: number): v is number => Number.isInteger(v) && Number(v) >= min && Number(v) <= max;
   const keys = (...expected: string[]) => Object.keys(value).sort().join(',') === ['language', ...expected].sort().join(',');
   if (kind === 'study_outline' && 'pointCount' in value && keys('pointCount') && int(value.pointCount, 1, 8)) return { language: value.language, pointCount: value.pointCount };
+  if (kind === 'study_note' && 'sectionCount' in value && keys('sectionCount') && int(value.sectionCount,1,8)) return {language:value.language,sectionCount:value.sectionCount};
   if (kind === 'flashcards' && 'cardCount' in value && keys('cardCount') && int(value.cardCount, 1, 20)) return { language: value.language, cardCount: value.cardCount };
   if (kind === 'quiz' && 'singleChoiceCount' in value && keys('singleChoiceCount', 'trueFalseCount')
     && int(value.singleChoiceCount, 0, 10) && int(value.trueFalseCount, 0, 10) && value.singleChoiceCount + value.trueFalseCount >= 1) {

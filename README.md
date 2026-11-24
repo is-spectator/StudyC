@@ -4,7 +4,7 @@
 
 **2026-11-24：PR-001～007 已合并到 `codex/studyc-independent-backend`，005～007 的本地核心流程与原模型补验已通过。** 已实现[资料问答与引用](docs/pr-005-grounded-chat.md)、[多套闪卡与自评](docs/pr-006-flashcards.md)、[测验、考试和作答历史](docs/pr-007-quizzes.md)。问答流式兼容修复 [GitHub #8](https://github.com/is-spectator/StudyC/pull/8) CI 通过、本地已应用，核对时尚未合并；`main` 尚未包含全部后续功能。生产状态仍以各次发布记录为准，005～007 未发布生产。
 
-下一阶段见 [PR-008～013 规划](docs/next-pr-plan.md)；已实现的下一功能包为 [PR-008：闪卡间隔复习与到期队列](docs/pr-008-spaced-review.md)。PR-008 已提交 [GitHub #9](https://github.com/is-spectator/StudyC/pull/9)，后续仍是待实现任务；功能编号与 GitHub PR 号分开使用。
+下一阶段见 [PR-008～013 规划](docs/next-pr-plan.md)；已实现的下一功能包为 [PR-008：闪卡间隔复习与到期队列](docs/pr-008-spaced-review.md)。PR-008 已提交 [GitHub #9](https://github.com/is-spectator/StudyC/pull/9)，PR-009/010 的本地实现与验收见下文；功能编号与 GitHub PR 号分开使用。
 
 当前归档 **34 张原站参考截图**，覆盖主要入口、列表空态、创建首步和部分弹窗。它们不代表原站所有页面与状态；本项目也不宣称全站逐页像素级复刻。
 
@@ -15,6 +15,8 @@
 首次双域发布已确认两个新域名的 HTTP 跳转到各自 HTTPS，证书有效期至 2027-02-17，既有自动续期任务包含新证书且模拟续期通过。首次发布沿用了这些配置；当前后端状态以 [2026-11-21 独立服务发布记录](deploy/release-20261121-independent-backend.md) 为准。
 
 PR-009 已接入学习集「错题」和已提交成绩页「查看本次错题」，支持原始错答/来源、同测验独立重练和刷新续做。实现边界、v8迁移、回填命令及本地验收见 [PR-009](docs/pr-009-mistake-review.md)。本次仍只部署本地。
+
+PR-010 已接入「笔记」：选定资料生成带引用的候选，明确保存后可编辑；保留原稿/来源快照，处理409冲突和保存响应丢失。原免费模型已完成两种资料的真实生成。本地入口及v9迁移见 [PR-010](docs/pr-010-generated-notes.md)。
 
 ## PR-005～007 本地验收
 

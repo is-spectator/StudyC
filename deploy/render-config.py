@@ -45,6 +45,8 @@ STUDY_API_ROUTES = {
     '/v1/study/sets/{setId}/flashcard-decks/{deckId}/review-sessions': ['POST'],
     '/v1/study/sets/{setId}/flashcard-decks/{deckId}/review-sessions/{sessionId}': ['GET'],
     '/v1/study/sets/{setId}/flashcard-decks/{deckId}/review-sessions/{sessionId}/actions': ['POST'],
+    '/v1/study/sets/{setId}/notes': ['GET', 'POST'],
+    '/v1/study/sets/{setId}/notes/{noteId}': ['GET', 'PATCH'],
     '/v1/study/sets/{setId}/mistakes': ['GET'],
     '/v1/study/sets/{setId}/mistakes/{quizId}/{questionIndex}': ['GET'],
     '/v1/study/sets/{setId}/mistake-reviews': ['GET', 'POST'],
@@ -140,6 +142,8 @@ def study_api_locations() -> str:
                                    (f'/flashcard-decks/{UUID_PATTERN}/sessions', ['POST'], '32k'),
                                    (f'/flashcard-decks/{UUID_PATTERN}/sessions/{UUID_PATTERN}', ['GET'], '32k'),
                                    (f'/flashcard-decks/{UUID_PATTERN}/sessions/{UUID_PATTERN}/reviews', ['POST'], '32k'),
+                                   ('/notes', ['GET', 'POST'], '256k'),
+                                   (f'/notes/{UUID_PATTERN}', ['GET', 'PATCH'], '256k'),
                                    ('/mistakes', ['GET'], ''),
                                    (f'/mistakes/{UUID_PATTERN}/(?:[0-9]|1[0-9])', ['GET'], ''),
                                    ('/mistake-reviews', ['GET', 'POST'], ''),
@@ -224,7 +228,7 @@ def main() -> None:
                    'studyApiUpstream': '127.0.0.1:8790' if args.enable_study_api else None,
                    'studyApiEnabled': args.enable_study_api,
                    'studyApiRoutes': STUDY_API_ROUTES if args.enable_study_api else {},
-                   'studyApiBodyLimits': {'defaultBytes': 16 * 1024, 'materialLocationBytes': 2 * 1024 * 1024, 'flashcardLocationBytes': 32 * 1024} if args.enable_study_api else {}})
+                   'studyApiBodyLimits': {'defaultBytes': 16 * 1024, 'materialLocationBytes': 2 * 1024 * 1024, 'flashcardLocationBytes': 32 * 1024, 'noteLocationBytes': 256 * 1024} if args.enable_study_api else {}})
     (args.output / 'review.json').write_text(json.dumps(review, indent=2) + '\n')
     (args.output / 'review.json').chmod(0o600)
     print(json.dumps({'reviewDirectory': str(args.output), 'status': review['status'], 'files': list(outputs)}))

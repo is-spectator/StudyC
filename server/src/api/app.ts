@@ -1,3 +1,4 @@
+import { registerNoteRoutes } from './notes.js';
 import { registerMistakeRoutes } from './mistakes.js';
 import { registerSpacedRoutes } from './spaced-review.js';
 import { Hono } from 'hono';
@@ -117,6 +118,8 @@ export function createApp(db: Db, options: AppOptions) {
     const mistakeCollection = /^\/v1\/study\/sets\/[^/]+\/mistake-reviews$/.test(path);
     const mistakeWrite = /^\/v1\/study\/sets\/[^/]+\/mistake-reviews\/[^/]+\/(?:answers|submit)$/.test(path);
     if ((mistakeRead && c.req.method !== 'GET') || (mistakeCollection && !['GET','POST'].includes(c.req.method)) || (mistakeWrite && c.req.method !== 'POST')) return c.json({error:{code:'method_not_allowed',message:'请求方法不支持。'}},405);
+    const noteCollection=/^\/v1\/study\/sets\/[^/]+\/notes$/.test(path),noteDetail=/^\/v1\/study\/sets\/[^/]+\/notes\/[^/]+$/.test(path);
+    if((noteCollection&&!['GET','POST'].includes(c.req.method))||(noteDetail&&!['GET','PATCH'].includes(c.req.method)))return c.json({error:{code:'method_not_allowed',message:'请求方法不支持。'}},405);
     const quizCollection = /^\/v1\/study\/sets\/[^/]+\/quizzes(?:\/[^/]+\/attempts)?$/.test(path);
     const quizRead = /^\/v1\/study\/sets\/[^/]+\/quizzes\/[^/]+(?:\/attempts\/[^/]+)?$/.test(path);
     const quizWrite = /^\/v1\/study\/sets\/[^/]+\/quizzes\/[^/]+\/attempts\/[^/]+\/(?:answers|submit)$/.test(path);
@@ -137,6 +140,7 @@ export function createApp(db: Db, options: AppOptions) {
   registerFlashcardRoutes(app, db, options.generationStore instanceof GenerationStore ? options.generationStore : undefined, limits);
   registerSpacedRoutes(app, db, limits);
   registerMistakeRoutes(app,db,limits);
+  registerNoteRoutes(app,db,limits);
   registerQuizRoutes(app, db, options.generationStore, limits);
   if (options.fileRoot) registerFileRoutes(app, db, limits, options.fileRoot);
   // No PlanPlan or account-management routes are mounted.

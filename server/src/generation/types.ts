@@ -1,10 +1,11 @@
-export type GenerationKind = 'study_outline' | 'chat_answer' | 'flashcards' | 'quiz';
+export type GenerationKind = 'study_outline' | 'chat_answer' | 'flashcards' | 'quiz' | 'study_note';
 export type Language = 'zh-CN' | 'en';
 export interface OutlineConfig { language: Language; pointCount: number }
 export interface ChatConfig { language: Language; question: string; history: { question: string; answer: string }[] }
 export interface FlashcardConfig { language: Language; cardCount: number }
 export interface QuizConfig { language: Language; singleChoiceCount: number; trueFalseCount: number }
-export type GenerationConfig = OutlineConfig | ChatConfig | FlashcardConfig | QuizConfig;
+export interface NoteConfig { language: Language; sectionCount: number }
+export type GenerationConfig = OutlineConfig | ChatConfig | FlashcardConfig | QuizConfig | NoteConfig;
 export type GenerationStatus = 'queued' | 'running' | 'succeeded' | 'failed' | 'cancelled' | 'interrupted';
 export interface GenerationInput {
   clientRequestId: string;
@@ -25,7 +26,7 @@ export interface SourceSnapshot {
 }
 export interface GenerationSnapshot {
   schemaVersion: 1;
-  promptVersion: 'study-outline-v1' | 'chat-answer-v1' | 'flashcards-v1' | 'quiz-v1';
+  promptVersion: 'study-outline-v1' | 'chat-answer-v1' | 'flashcards-v1' | 'quiz-v1' | 'study-note-v1';
   sources: SourceSnapshot[];
   config: GenerationInput['config'];
 }
@@ -71,7 +72,8 @@ export interface ChatResult { schemaVersion: 1; answer: string; citations: Gener
 export interface FlashcardResult { schemaVersion: 1; title: string; cards: { front: string; back: string; citations: GenerationCitation[] }[] }
 export interface QuizQuestion { type: 'single_choice' | 'true_false'; prompt: string; options: string[]; answerIndex: number; explanation: string; citations: GenerationCitation[] }
 export interface QuizResult { schemaVersion: 1; title: string; questions: QuizQuestion[] }
-export type GenerationResult = OutlineResult | ChatResult | FlashcardResult | QuizResult;
+export interface NoteResult { schemaVersion: 1; title: string; sections: { heading: string; body: string; citations: GenerationCitation[] }[] }
+export type GenerationResult = OutlineResult | ChatResult | FlashcardResult | QuizResult | NoteResult;
 export interface GenerationUsage {
   state: 'reported' | 'unknown' | 'not_sent';
   inputTokens: number | null;

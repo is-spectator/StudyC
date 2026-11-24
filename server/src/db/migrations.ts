@@ -1,3 +1,4 @@
+import { NOTE_TABLES, NOTES_SQL } from './notes-schema.js';
 import { MISTAKE_TABLES, MISTAKES_SQL } from './mistakes-schema.js';
 import { SPACED_TABLES, SPACED_SQL, SCHEDULE_OWNER_BODY } from './spaced-review-schema.js';
 import { createHash } from 'node:crypto';
@@ -163,7 +164,7 @@ async function verifyFileSchema(q: Transaction): Promise<string> {
   return hash(actual);
 }
 
-async function generationShape(q: Queryable, legacy = false) {
+async function generationShape(q: Queryable, legacy = false, learningV4 = false) {
   const [fn] = await q.query<{ body: string; security_definer: boolean; language: string; result: string }>(`SELECT p.prosrc AS body,
     p.prosecdef AS security_definer,l.lanname AS language,p.prorettype::regtype::text AS result
     FROM pg_proc p JOIN pg_language l ON l.oid=p.prolang WHERE p.oid=to_regprocedure('studyc_generation_immutable()')`);
@@ -174,6 +175,10 @@ async function generationShape(q: Queryable, legacy = false) {
   // v4 separately fingerprints the full current definition, so this projection cannot hide drift.
   if (legacy) for (const item of jobs.constraints) {
     if (item.contype === 'c' && /\bkind\b/.test(item.definition)) item.definition = "CHECK (kind = 'study_outline'::text)";
+  }
+  // v9 owns the expanded constraint fingerprint; retain the exact v4 projection.
+  if (learningV4 && await exists(q,'study_notes')) for(const item of jobs.constraints) {
+    if(item.contype==='c' && /\bkind\b/.test(item.definition)) item.definition="CHECK (kind = ANY (ARRAY['study_outline'::text, 'chat_answer'::text, 'flashcards'::text, 'quiz'::text]))";
   }
   return { jobs, attempts: await tableShape(q, 'study_generation_attempts'),
     budget: await tableShape(q, 'study_generation_daily_budget'), immutable: { ...fn, body: whitespace(fn.body) } };
@@ -213,6 +218,7 @@ export const LEARNING_MIGRATIONS = [
   { version: 6, name: 'studyc_quizzes', sql: QUIZZES_SCHEMA_SQL, tables: QUIZ_TABLES },
   { version: 7, name: 'studyc_spaced_review', sql: SPACED_SQL, tables: SPACED_TABLES },
   { version: 8, name: 'studyc_mistake_review', sql: MISTAKES_SQL, tables: MISTAKE_TABLES },
+  { version: 9, name: 'studyc_generated_notes', sql: NOTES_SQL, tables: NOTE_TABLES },
 ];
 const additionChecksum = (migration: typeof LEARNING_MIGRATIONS[number]) => createHash('sha256').update(`${migration.name}\n${migration.sql}`).digest('hex');
 async function additionShape(q: Queryable, migration: typeof LEARNING_MIGRATIONS[number]) {
@@ -223,13 +229,14 @@ async function additionShape(q: Queryable, migration: typeof LEARNING_MIGRATIONS
     if (!fn || fn.security_definer || fn.language !== 'plpgsql' || fn.result !== 'trigger' || whitespace(fn.body)!==whitespace(SCHEDULE_OWNER_BODY)) throw new Error('StudyC schedule owner function drift');
     return {tables,ownerGuard:{...fn,body:whitespace(fn.body)}};
   }
+  if (migration.version === 9) return {tables,generations:await generationShape(q)};
   if (migration.version !== 4) return { tables };
   const [fn] = await q.query<{ body: string; security_definer: boolean; language: string; result: string }>(`SELECT p.prosrc AS body,
     p.prosecdef AS security_definer,l.lanname AS language,p.prorettype::regtype::text AS result
     FROM pg_proc p JOIN pg_language l ON l.oid=p.prolang WHERE p.oid=to_regprocedure('studyc_chat_turn_immutable()')`);
   if (!fn || fn.security_definer || fn.language !== 'plpgsql' || fn.result !== 'trigger'
     || whitespace(fn.body) !== whitespace(CHAT_IMMUTABLE_BODY)) throw new Error('StudyC chat immutable function drift');
-  return { tables, generations: await generationShape(q), immutable: { ...fn, body: whitespace(fn.body) } };
+  return { tables, generations: await generationShape(q,false,true), immutable: { ...fn, body: whitespace(fn.body) } };
 }
 async function migrateAdditions(q: Transaction, history: MigrationRow[]) {
   if (history.length > LEARNING_MIGRATIONS.at(-1)!.version) throw new Error('StudyC migration history mismatch');

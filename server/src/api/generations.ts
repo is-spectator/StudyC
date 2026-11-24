@@ -10,10 +10,11 @@ export type GenerationHttpStore = Pick<GenerationStore, 'create' | 'list' | 'get
 const uuid = z.uuid().transform(value => value.toLowerCase());
 const input = z.object({
   clientRequestId: uuid,
-  kind: z.enum(['study_outline','flashcards','quiz']),
+  kind: z.enum(['study_outline','flashcards','quiz','study_note']),
   sources: z.array(z.object({ materialId: uuid, version: z.number().int().min(1).max(2147483647) }).strict())
     .min(1).max(MAX_SOURCES).refine(sources => new Set(sources.map(source => source.materialId)).size === sources.length),
   config: z.union([
+    z.object({language:z.enum(['zh-CN','en']),sectionCount:z.number().int().min(1).max(8)}).strict(),
     z.object({ language: z.enum(['zh-CN', 'en']), pointCount: z.number().int().min(1).max(8) }).strict(),
     z.object({ language: z.enum(['zh-CN', 'en']), cardCount: z.number().int().min(1).max(20) }).strict(),
     z.object({ language: z.enum(['zh-CN', 'en']), singleChoiceCount: z.number().int().min(0).max(10), trueFalseCount: z.number().int().min(0).max(10) }).strict(),
@@ -49,6 +50,7 @@ export function registerGenerationRoutes(app: Hono<StudyEnv>, store: GenerationH
     const id = ids(c);
     await limits.consume('write', id.userId, 120);
     const body = input.parse(await readJson(c, 16 * 1024));
+    if(body.kind==='study_note'&&process.env.STUDYC_NOTES_ENABLED==='false')throw new GenerationError('service_unavailable','笔记生成暂时关闭。');
     const result = await available().create(id.userId, id.setId, body);
     return c.json({ job: publicJob(result.job) }, result.replayed ? 200 : 202);
   });
@@ -72,7 +74,9 @@ export function registerGenerationRoutes(app: Hono<StudyEnv>, store: GenerationH
     const id = ids(c), job = jobId(c);
     await limits.consume('write', id.userId, 120);
     const body = retryInput.parse(await readJson(c, 16 * 1024));
-    if ((await available().get(id.userId, id.setId, job)).kind === 'chat_answer') throw new GenerationError('job_conflict', '请从原对话重试回答。');
+    const current=await available().get(id.userId,id.setId,job);
+    if(current.kind==='study_note'&&process.env.STUDYC_NOTES_ENABLED==='false')throw new GenerationError('service_unavailable','笔记生成暂时关闭。');
+    if (current.kind === 'chat_answer') throw new GenerationError('job_conflict', '请从原对话重试回答。');
     const result = await available().retry(id.userId, id.setId, job, body);
     return c.json({ job: publicJob(result.job) }, result.replayed ? 200 : 202);
   });
