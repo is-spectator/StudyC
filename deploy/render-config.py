@@ -28,6 +28,8 @@ STUDY_API_ROUTES = {
     '/v1/study/sets/{setId}/generations/{jobId}/retry': ['POST'],
     '/v1/study/generation-usage': ['GET'],
     '/v1/study/search': ['GET'],
+    '/v1/study/copies': ['POST'],
+    '/v1/study/sets/{setId}/copy-preview': ['GET'],
     '/v1/study/trash': ['GET'],
     '/v1/study/trash/{setId}': ['GET', 'PATCH'],
     '/v1/study/folders': ['GET', 'POST'],
@@ -134,6 +136,7 @@ def study_api_locations() -> str:
               proxy_location('= /v1/study/sets', ['GET', 'POST'], 4),
               proxy_location('= /v1/study/generation-usage', ['GET'], 4),
               proxy_location('= /v1/study/search', ['GET'], 4),
+              proxy_location('= /v1/study/copies', ['POST'], 4, '32k'),
               proxy_location('= /v1/study/trash', ['GET'], 4),
               proxy_location('= /v1/study/folders', ['GET', 'POST'], 4),
               proxy_location('= /v1/study/calendar/settings', ['GET', 'PATCH'], 4),
@@ -149,6 +152,7 @@ def study_api_locations() -> str:
               proxy_location(f'~ "^/v1/study/folders/(?:{UUID_PATTERN}|unfiled)/sets$"', ['GET'], 8)]
     # 8256 KiB is an 8 MiB PDF plus the 64 KiB multipart overhead the service allows.
     for suffix, methods, body in [('', ['GET', 'PATCH'], ''),
+                                   ('/copy-preview', ['GET'], ''),
                                    ('/folder', ['GET', 'PATCH'], ''),
                                    ('/materials', ['GET', 'POST'], '2m'),
                                    (f'/materials/{UUID_PATTERN}', ['GET', 'PATCH'], '2m'),
