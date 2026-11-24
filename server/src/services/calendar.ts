@@ -269,9 +269,20 @@ export class CalendarService {
     const range = calendarRange.parse(raw);
     return this.db.tx(async (q) => {
       await requireActiveUser(q, user);
-      const settings = await this.settings(q, user),
-        start = dayBoundary(range.from, settings.timeZone),
-        end = dayBoundary(dayAdd(range.to, 1), settings.timeZone);
+      const settings = await this.settings(q, user);
+      const dates: string[] = [];
+      for (let day = range.from; day <= range.to; day = dayAdd(day, 1))
+        dates.push(day);
+      const boundaries = [...dates, dayAdd(range.to, 1)].map((day) =>
+        dayBoundary(day, settings.timeZone),
+      );
+      const start = boundaries[0]!,
+        end = boundaries.at(-1)!;
+      const days = dates.map((date, i) => ({
+        date,
+        startsAt: boundaries[i]!,
+        endsAt: boundaries[i + 1]!,
+      }));
       if (range.cursor) {
         const r = await this.event(q, user, range.cursor);
         const day = r.timing.kind === "all_day" ? r.timing.date : null;
@@ -300,6 +311,8 @@ export class CalendarService {
       );
       return {
         timeZone: settings.timeZone,
+        settingsVersion: settings.version,
+        days,
         items: rows.slice(0, 20).map(present),
         nextCursor: rows.length > 20 ? rows[19]!.id : null,
       };

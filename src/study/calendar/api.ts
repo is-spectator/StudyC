@@ -24,6 +24,14 @@ export type Event = {
   taskCancelledAt: string | null;
   version: number;
 };
+export type DayRange = { date: string; startsAt: string; endsAt: string };
+export function eventInDay(event: Event, day: DayRange) {
+  return event.time.kind === "all_day"
+    ? event.time.date === day.date
+    : Date.parse(day.startsAt) < Date.parse(day.endsAt) &&
+        Date.parse(event.time.startsAt) < Date.parse(day.endsAt) &&
+        Date.parse(event.time.endsAt) > Date.parse(day.startsAt);
+}
 export type Option = { value: string; instant: string; offset: string };
 export type Conflict = { id: string; title: string; version: number };
 export type Candidate = {
@@ -131,7 +139,27 @@ export function createCalendarApi(
         (v.nextCursor !== null && !id(v.nextCursor))
       )
         fail();
+      if (
+        !Array.isArray(v.days) ||
+        !Number.isInteger(v.settingsVersion) ||
+        v.settingsVersion < 0
+      )
+        fail();
+      const count = (Date.parse(to) - Date.parse(from)) / 86400000 + 1;
+      if (v.days.length !== count) fail();
+      for (const [i, d] of v.days.entries())
+        if (
+          !d ||
+          d.date !== addDays(from, i) ||
+          !instant(d.startsAt) ||
+          !instant(d.endsAt) ||
+          Date.parse(d.endsAt) < Date.parse(d.startsAt) ||
+          (i > 0 && v.days[i - 1].endsAt !== d.startsAt)
+        )
+          fail();
       return {
+        days: v.days as DayRange[],
+        settingsVersion: v.settingsVersion as number,
         items: v.items.map(parseEvent) as Event[],
         nextCursor: v.nextCursor as string | null,
         timeZone: v.timeZone as string,

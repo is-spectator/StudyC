@@ -110,3 +110,36 @@ test("repeated-hour labels show both offsets rather than a zero-length clock int
   assert.ok(label.includes("-4"));
   assert.ok(label.includes("-5"));
 });
+
+test("weekly distribution excludes a skipped day but retains floating all-day records", async () => {
+  const { eventInDay } = await import("./api.ts");
+  const day = {
+      date: "2011-12-30",
+      startsAt: "2011-12-30T10:00:00.000Z",
+      endsAt: "2011-12-30T10:00:00.000Z",
+    },
+    timed = {
+      ...event,
+      time: {
+        kind: "timed",
+        startsAt: "2011-12-30T09:00:00.000Z",
+        endsAt: "2011-12-30T11:00:00.000Z",
+      },
+    };
+  assert.equal(eventInDay(timed, day), false);
+  assert.equal(
+    eventInDay(
+      { ...event, time: { kind: "all_day", date: "2011-12-30" } },
+      day,
+    ),
+    true,
+  );
+  assert.equal(
+    eventInDay(timed, {
+      date: "2011-12-29",
+      startsAt: "2011-12-29T10:00:00.000Z",
+      endsAt: day.startsAt,
+    }),
+    true,
+  );
+});

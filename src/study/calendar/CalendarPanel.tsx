@@ -7,6 +7,8 @@ import OrganizationStatus from "../organization/OrganizationStatus";
 import {
   createCalendarApi,
   formatCalendarTime,
+  eventInDay,
+  type DayRange,
   dateInZone,
   addDays,
   viewRange,
@@ -44,6 +46,7 @@ export default function CalendarPanel({
     api = useMemo(() => createCalendarApi(op.call), [op.call]);
   const [settings, setSettings] = useState<Settings | null>(null),
     [events, setEvents] = useState<Event[]>([]),
+    [dayRanges, setDayRanges] = useState<DayRange[]>([]),
     [cursor, setCursor] = useState<string | null>(null),
     [anchor, setAnchor] = useState(""),
     [view, setView] = useState<"day" | "week">("week"),
@@ -101,7 +104,12 @@ export default function CalendarPanel({
       throw new Error("日历日期无效。");
     const range = viewRange(date, mode),
       page = await api.list(range.from, range.to);
-    setSettings(s);
+    setSettings({
+      ...s,
+      timeZone: page.timeZone,
+      version: page.settingsVersion,
+    });
+    setDayRanges(page.days);
     setEvents(page.items);
     setCursor(page.nextCursor);
     setAnchor(date);
@@ -281,15 +289,10 @@ export default function CalendarPanel({
           <div className={`calendar-days ${view === "day" ? "is-day" : ""}`}>
             {Array.from({ length: view === "day" ? 1 : 7 }, (_, i) => {
               const day = addDays(range.from, i),
-                items = events.filter((e) =>
-                  e.time.kind === "all_day"
-                    ? e.time.date === day
-                    : dateInZone(e.time.startsAt, settings.timeZone) <= day &&
-                      dateInZone(
-                        new Date(Date.parse(e.time.endsAt) - 1),
-                        settings.timeZone,
-                      ) >= day,
-                );
+                boundary = dayRanges.find((d) => d.date === day),
+                items = boundary
+                  ? events.filter((e) => eventInDay(e, boundary))
+                  : [];
               return (
                 <Day
                   key={day}
@@ -309,6 +312,11 @@ export default function CalendarPanel({
               onClick={() =>
                 void op.run(async () => {
                   const page = await api.list(range.from, range.to, cursor);
+                  if (
+                    page.timeZone !== settings.timeZone ||
+                    page.settingsVersion !== settings.version
+                  )
+                    throw new Error("显示时区已变化，请重新读取日历。");
                   setEvents((old) => [
                     ...old,
                     ...page.items.filter(

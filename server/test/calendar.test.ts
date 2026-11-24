@@ -150,6 +150,9 @@ describe("calendar ownership, explicit conflict acknowledgement, task linkage an
     };
     expect((await s.preview(user, input)).conflicts).toEqual([]);
     await create(input);
+    const week = await s.list(user, { from: "2011-12-26", to: "2012-01-01" }),
+      skipped = week.days.find((d) => d.date === "2011-12-30")!;
+    expect(skipped.startsAt).toBe(skipped.endsAt);
     expect(
       (await s.list(user, { from: "2011-12-30", to: "2011-12-30" })).items.map(
         (e) => e.id,
