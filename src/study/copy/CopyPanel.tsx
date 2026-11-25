@@ -117,18 +117,17 @@ export default function CopyPanel({
     <section className="organization-panel">
       <header className="cloud-page-heading">
         <div>
-          <span className="cloud-eyebrow">A FRESH COPY</span>
           <h1>复制学习内容</h1>
-          <p>
-            选择当前纯文本资料，复制到新学习集或已有学习集。副本拥有新
-            ID，保留来源映射。
-          </p>
-          <p>
-            原 PDF
-            文件、笔记、闪卡、测验、成绩、学习记录、计划和日程不在本次复制范围。
-          </p>
+          <p>选择文本资料，创建可独立编辑的副本。原资料保持不变。</p>
         </div>
       </header>
+      <details className="org-disclosure org-help">
+        <summary>了解复制范围</summary>
+        <p>
+          仅复制所选资料的当前文本。原 PDF
+          文件、笔记、闪卡、测验、成绩、学习记录、计划和日程不会一同复制。
+        </p>
+      </details>
       <OrganizationStatus
         {...op}
         onRetry={op.retry ? () => void op.run(op.retry!, true) : undefined}
@@ -260,7 +259,7 @@ export default function CopyPanel({
           </fieldset>
           {stale ? (
             <div role="alert">
-              <p>来源版本已变化，尚未创建副本。重新读取后请重新核对选择。</p>
+              <p>来源内容已更新，尚未创建副本。请重新预览后核对选择。</p>
               <button
                 type="button"
                 className="btn"

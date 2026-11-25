@@ -1,3 +1,4 @@
+import { LibraryService, libraryQuery } from '../services/library.js';
 import type { Context, Hono } from 'hono';
 import { z } from 'zod';
 import type { Db } from '../db/db.js';
@@ -90,8 +91,16 @@ export function registerStudyRoutes(app: Hono<Env>, db: Db, limits: SharedRateLi
     const result = await createStudySet(db, uid(c), input);
     return c.json({ studySet: result.studySet }, result.replayed ? 200 : 201);
   });
-  app.get('/v1/study/sets', async c => c.json(await listStudySets(db, uid(c), listOptions(c))));
-  app.get('/v1/study/sets/:setId', async c => c.json({ studySet: await getStudySet(db, uid(c), setId(c)) }));
+  const library=new LibraryService(db);
+  const libraryInput=(c:Context<Env>)=>{if(Object.values(c.req.queries()).some(v=>v.length!==1))throw new StudyInputError('查询参数不能重复。');return libraryQuery.parse(c.req.query());};
+  app.get('/v1/study/sets', async c => {
+    if(c.req.query('view')==='library'){const {view,...input}=libraryInput(c);return c.json(await library.list(uid(c),input));}
+    return c.json(await listStudySets(db, uid(c), listOptions(c)));
+  });
+  app.get('/v1/study/sets/:setId', async c => {
+    if(c.req.query('view')!==undefined){libraryInput(c);z.object({view:z.literal('library')}).strict().parse(c.req.query());return c.json({studySet:await library.get(uid(c),setId(c))});}
+    return c.json({ studySet: await getStudySet(db, uid(c), setId(c)) });
+  });
   app.patch('/v1/study/sets/:setId', async c => {
     await limits.consume('write', uid(c), 120);
     const id = setId(c);

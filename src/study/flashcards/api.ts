@@ -1,11 +1,11 @@
-import { AuthApiError, throwIfAborted, type RequestOptions } from '../../auth/api';
+import { AuthApiError, throwIfAborted, type RequestOptions } from '../../auth/api.ts';
 export type Citation={sourceId:string;materialId:string;version:number;quote:string;start:number;end:number;page:number|null};
 export type Source={sourceId:string;materialId:string;version:number;title:string;body:string;pageProvenance:string};
 export type Card={id:string;front:string;back:string;version:number;position:number;citations:Citation[]};
 export type Deck={id:string;studySetId:string;title:string;version:number;generationJobId:string|null;sourceSnapshots:Source[];cardCount?:number;reviewSummary?:{newCount:number;dueCount:number}};
 export type Session={id:string;deckId:string;status:'in_progress'|'completed';version:number;nextIndex:number;cards:Card[];updatedAt:string};
 export type Detail={deck:Deck;cards:Card[];lastSession:Session|null;metrics:{kind:'self_rated';totalReviews:number;ratings:Record<string,number>;lastReviewedAt:string|null;lastRating:string|null}};
-export type Job={id:string;kind:string;status:string;errorCode:string|null;result:{title:string;cards?:{front:string;back:string;citations:Citation[]}[]}|null};
+export type Job={id:string;kind:string;status:string;savedDeckId?:string|null;errorCode:string|null;result:{title:string;cards?:{front:string;back:string;citations:Citation[]}[]}|null};
 export type Request=<T>(path:string,options?:RequestOptions)=>Promise<T>;
 const uuid=/^[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}$/i;
 const bad=()=>new AuthApiError('invalid_response','闪卡服务返回了无法读取的资料，请重试。',502);
@@ -18,7 +18,7 @@ export function createFlashcardsApi(request:Request,setId:string){
  const deck=(v:unknown):Deck=>{if(!object(v)||!uuid.test(v.id)||v.studySetId!==setId||typeof v.title!=='string'||!Number.isInteger(v.version)||v.version<1||!Array.isArray(v.sourceSnapshots))throw bad();return v as Deck;};
  const session=(v:unknown):Session=>{if(!object(v)||!uuid.test(v.id)||!uuid.test(v.deckId)||!['in_progress','completed'].includes(v.status)||!Number.isInteger(v.version)||!Array.isArray(v.cards)||!v.cards.every(validCard)||!Number.isInteger(v.nextIndex)||v.nextIndex<0||v.nextIndex>v.cards.length)throw bad();return v as Session;};
  const field=(v:unknown,key:string)=>{if(!object(v)||!(key in v))throw bad();return v[key];};
- const job=(v:unknown):Job=>{if(!object(v)||!uuid.test(v.id)||v.studySetId!==setId||v.kind!=='flashcards'||!['queued','running','succeeded','failed','cancelled','interrupted'].includes(v.status))throw bad();return v as Job;};
+ const job=(v:unknown):Job=>{if(!object(v)||!uuid.test(v.id)||v.studySetId!==setId||v.kind!=='flashcards'||!['queued','running','succeeded','failed','cancelled','interrupted'].includes(v.status)||('savedDeckId' in v&&v.savedDeckId!==null&&(!uuid.test(v.savedDeckId)||v.status!=='succeeded')))throw bad();return v as Job;};
  const target=(id:string)=>{if(!uuid.test(id))throw bad();return `${root}/${id}`;};
  return {
   async list(cursor?:string,signal?:AbortSignal){const v=await send(root+(cursor?`?cursor=${encodeURIComponent(cursor)}`:''),{signal});if(!object(v)||!Array.isArray(v.items)||(v.nextCursor!==null&&!uuid.test(v.nextCursor)))throw bad();return {items:v.items.map(deck),nextCursor:v.nextCursor as string|null};},
@@ -29,7 +29,7 @@ export function createFlashcardsApi(request:Request,setId:string){
   async start(id:string,body:{clientRequestId:string},signal?:AbortSignal){return session(field(await send(target(id)+'/sessions',{method:'POST',body,signal}),'session'));},
   async getSession(id:string,sessionId:string,signal?:AbortSignal){if(!uuid.test(sessionId))throw bad();const result=session(field(await send(target(id)+'/sessions/'+sessionId,{signal}),'session'));if(result.deckId!==id)throw bad();return result;},
   async review(id:string,sessionId:string,body:Record<string,unknown>,signal?:AbortSignal){return session(field(await send(target(id)+'/sessions/'+sessionId+'/reviews',{method:'POST',body,signal}),'session'));},
-  async jobs(signal?:AbortSignal):Promise<Job[]>{const v=await send(generations+'?limit=100',{signal});if(!object(v)||!Array.isArray(v.items))throw bad();return v.items.filter((j:unknown)=>object(j)&&j.kind==='flashcards').map(job);},
+  async jobs(signal?:AbortSignal):Promise<Job[]>{const v=await send(root+'?view=generations',{signal});if(!object(v)||!Array.isArray(v.items))throw bad();return v.items.map((j:unknown)=>{const parsed=job(j);if(!object(j)||!('savedDeckId' in j))throw bad();return parsed;});},
   async generate(body:Record<string,unknown>,signal?:AbortSignal){return job(field(await send(generations,{method:'POST',body,signal}),'job'));},
   async cancel(id:string,signal?:AbortSignal){return job(field(await send(generations+'/'+id+'/cancel',{method:'POST',body:{},signal}),'job'));},
   async materialize(body:{clientRequestId:string;jobId:string},signal?:AbortSignal){return deck(field(await send(root+'/materialize',{method:'POST',body,signal}),'deck'));},

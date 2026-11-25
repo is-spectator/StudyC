@@ -114,15 +114,16 @@ export default function TrashPanel({
     <section className="organization-panel">
       <header className="cloud-page-heading">
         <div>
-          <span className="cloud-eyebrow">YOUR LEARNING, PRESERVED</span>
           <h1>{current ? "管理学习集" : "回收站"}</h1>
-          <p>
-            移入回收站的学习集会从列表、搜索与关联日程中隐藏。恢复保留原
-            ID、资料、归类和学习记录。
-          </p>
-          <p>此版本不提供永久删除或自动清理。</p>
+          <p>暂时收起不再学习的内容，需要时可以完整恢复。</p>
         </div>
       </header>
+      <details className="org-disclosure org-help">
+        <summary>了解回收站与恢复</summary>
+        <p>
+          移入回收站后，学习集会从列表、搜索与关联日程中隐藏。恢复后，资料、归类和学习记录都会保留。回收站目前不会永久删除或自动清理内容。
+        </p>
+      </details>
       {!enabled ? <p role="status">回收站当前只允许查看。</p> : null}
       <OrganizationStatus
         {...op}

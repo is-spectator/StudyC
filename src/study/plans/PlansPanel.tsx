@@ -75,9 +75,8 @@ export default function PlansPanel({ studySetId, onNavigate }: Props) {
     <section className="organization-panel">
       <header className="cloud-page-heading">
         <div>
-          <span className="cloud-eyebrow">LEARNING PLANS</span>
           <h1>{plan?.title ?? "学习目标与计划"}</h1>
-          <p>将目标拆成任务，安排日期，留下实际学习依据。</p>
+          <p>安排学习目标，逐步完成每天的任务。</p>
         </div>
         {plan ? (
           <button
@@ -117,10 +116,10 @@ export default function PlansPanel({ studySetId, onNavigate }: Props) {
       ) : null}
       {plan ? (
         <>
-          <div className="org-box">
+          <div className="org-box org-plan-goal">
             <h2>学习目标</h2>
             <p className="org-prose">{plan.goal || "还没有填写目标说明。"}</p>
-            <p>目标日期：{plan.dueDate ?? "未设定"} · 日期不随时区换日</p>
+            <p className="org-small">目标日期：{plan.dueDate ?? "未安排"}</p>
             <button
               className="btn"
               disabled={!enabled || op.busy}
@@ -139,9 +138,7 @@ export default function PlansPanel({ studySetId, onNavigate }: Props) {
               添加任务
             </button>
           </div>
-          <p>
-            手动标记可撤销；系统记录独立保留。打开活动页面不会自动完成任务。
-          </p>
+          <p className="org-small">打开任务开始学习，或手动记录完成情况。</p>
           {addTask ? (
             <TaskCreator
               api={api}
@@ -614,7 +611,8 @@ function TaskCard({
     [version, setVersion] = useState(task.version),
     [choices, setChoices] = useState<Evidence[] | null>(null);
   useDraftGuard(
-    editing && (title !== task.title || dueDate !== (task.dueDate ?? "")),
+    (editing && (title !== task.title || dueDate !== (task.dueDate ?? ""))) ||
+      !!op.retry,
   );
   useEffect(() => {
     setVersion(task.version);
@@ -658,51 +656,49 @@ function TaskCard({
     <article
       className={`org-box org-task ${task.cancelledAt ? "is-cancelled" : ""}`}
     >
-      <h3>{task.title}</h3>
-      <p>
-        日期：{task.dueDate ?? "未设定"}
-        {task.cancelledAt ? " · 已取消" : ""}
-      </p>
-      {task.activity ? (
-        <p>
-          关联{labels[task.activity.kind]}：
+      <div className="org-task-summary">
+        <div className="org-task-copy">
+          <h3>{task.title}</h3>
+          <div className="org-task-meta">
+            <span
+              className={`org-task-state ${task.cancelledAt ? "is-muted" : task.manualCompletedAt || task.evidence.length ? "is-complete" : ""}`}
+            >
+              {task.cancelledAt
+                ? "已取消"
+                : task.manualCompletedAt
+                  ? "手动完成"
+                  : task.evidence.length
+                    ? "学习已完成"
+                    : "待完成"}
+            </span>
+            <span>{task.dueDate ?? "未安排日期"}</span>
+            <span>
+              {task.activity ? labels[task.activity.kind] : "手动任务"}
+            </span>
+          </div>
+        </div>
+        {!task.cancelledAt && task.activity ? (
           <button
-            className="org-text-link"
+            className="btn btn-black"
+            disabled={editing || op.busy || !!op.retry}
             onClick={() =>
               onNavigate(activityPath(task.studySetId, task.activity!))
             }
           >
-            {task.activity.title}
+            {task.manualCompletedAt || task.evidence.length
+              ? "再次学习"
+              : "开始学习"}
           </button>
-        </p>
-      ) : (
-        <p>手动任务</p>
-      )}
-      <p>
-        手动标记：
-        {task.manualCompletedAt
-          ? "已完成（" +
-            new Date(task.manualCompletedAt).toLocaleString("zh-CN") +
-            "）"
-          : "未完成"}
-      </p>
-      <p>
-        系统依据：
-        {task.evidence.length
-          ? `${task.evidence.length} 条实际完成记录`
-          : "尚未关联"}
-      </p>
-      {task.evidence.map((e) => (
-        <p key={e.sessionKind + e.sessionId} className="org-small">
-          {e.sessionKind === "quiz_attempt"
-            ? "已提交测验"
-            : e.sessionKind === "spaced_review"
-              ? "已完成间隔复习"
-              : "已完成闪卡学习"}{" "}
-          · {new Date(e.completedAt).toLocaleString("zh-CN")}
-        </p>
-      ))}
-      <button className="btn" disabled={!!task.cancelledAt||op.busy} onClick={()=>onNavigate('/platform/calendar?'+new URLSearchParams({studySetId:task.studySetId,planId:task.planId,taskId:task.id}))}>安排到日历</button>
+        ) : !task.cancelledAt ? (
+          <button
+            className="btn"
+            disabled={editing || !enabled || op.busy || !!latest || !!op.retry}
+            onClick={() => mutate({ manualCompleted: !task.manualCompletedAt })}
+          >
+            {task.manualCompletedAt ? "撤销手动完成" : "手动标记完成"}
+          </button>
+        ) : null}
+      </div>
       <OrganizationStatus
         {...op}
         onRetry={() => void op.run(op.retry ?? refresh, !!op.retry)}
@@ -773,7 +769,7 @@ function TaskCard({
                   confirm("放弃尚未保存的任务修改？")
                 ) {
                   setTitle(task.title);
-                  setDate(task.dueDate ?? '');
+                  setDate(task.dueDate ?? "");
                   setEditing(false);
                 }
               }}
@@ -782,55 +778,118 @@ function TaskCard({
             </button>
           </div>
         </form>
-      ) : (
-        <div className="org-actions">
-          <button
-            className="btn"
-            disabled={!enabled || op.busy || !!latest || !!op.retry}
-            onClick={() => setEditing(true)}
-          >
-            改名或改期
-          </button>
-          <button
-            className="btn"
-            disabled={
-              !enabled ||
-              op.busy ||
-              !!latest ||
-              !!op.retry ||
-              !!task.cancelledAt
-            }
-            onClick={() => mutate({ manualCompleted: !task.manualCompletedAt })}
-          >
-            {task.manualCompletedAt ? "撤销手动完成" : "手动标记完成"}
-          </button>
-          <button
-            className="btn"
-            disabled={!enabled || op.busy || !!latest || !!op.retry}
-            onClick={() => mutate({ cancelled: !task.cancelledAt })}
-          >
-            {task.cancelledAt ? "恢复任务" : "取消任务"}
-          </button>
-          {task.activity && ["deck", "quiz"].includes(task.activity.kind) ? (
+      ) : null}
+      <details className="org-disclosure org-task-details">
+        <summary>完成记录与更多操作</summary>
+        {task.activity ? (
+          <p>
+            关联{labels[task.activity.kind]}：
             <button
-              className="btn"
-              disabled={!enabled || op.busy || !!task.cancelledAt}
+              className="org-text-link"
               onClick={() =>
-                void op.run(async () =>
-                  setChoices(await api.evidence(task.planId, task.id)),
-                )
+                onNavigate(activityPath(task.studySetId, task.activity!))
               }
             >
-              关联已完成记录
+              {task.activity.title}
             </button>
-          ) : null}
-        </div>
-      )}
+          </p>
+        ) : (
+          <p>手动任务</p>
+        )}
+        <p>
+          手动完成情况：
+          {task.manualCompletedAt
+            ? "已完成（" +
+              new Date(task.manualCompletedAt).toLocaleString("zh-CN") +
+              "）"
+            : "未完成"}
+        </p>
+        <p>
+          关联的学习记录：
+          {task.evidence.length
+            ? `${task.evidence.length} 条实际完成记录`
+            : "暂无已关联的完成记录"}
+        </p>
+        {task.evidence.map((e) => (
+          <p key={e.sessionKind + e.sessionId} className="org-small">
+            {e.sessionKind === "quiz_attempt"
+              ? "已提交测验"
+              : e.sessionKind === "spaced_review"
+                ? "已完成间隔复习"
+                : "已完成闪卡学习"}{" "}
+            · {new Date(e.completedAt).toLocaleString("zh-CN")}
+          </p>
+        ))}
+        <button
+          className="btn"
+          disabled={!!task.cancelledAt || op.busy}
+          onClick={() =>
+            onNavigate(
+              "/platform/calendar?" +
+                new URLSearchParams({
+                  studySetId: task.studySetId,
+                  planId: task.planId,
+                  taskId: task.id,
+                }),
+            )
+          }
+        >
+          安排到日历
+        </button>
+        {!editing ? (
+          <div className="org-actions">
+            <button
+              className="btn"
+              disabled={!enabled || op.busy || !!latest || !!op.retry}
+              onClick={() => setEditing(true)}
+            >
+              改名或改期
+            </button>
+            {task.activity ? (
+              <button
+                className="btn"
+                disabled={
+                  !enabled ||
+                  op.busy ||
+                  !!latest ||
+                  !!op.retry ||
+                  !!task.cancelledAt
+                }
+                onClick={() =>
+                  mutate({ manualCompleted: !task.manualCompletedAt })
+                }
+              >
+                {task.manualCompletedAt ? "撤销手动完成" : "手动标记完成"}
+              </button>
+            ) : null}
+            <button
+              className="btn"
+              disabled={!enabled || op.busy || !!latest || !!op.retry}
+              onClick={() => mutate({ cancelled: !task.cancelledAt })}
+            >
+              {task.cancelledAt ? "恢复任务" : "取消任务"}
+            </button>
+            {task.activity && ["deck", "quiz"].includes(task.activity.kind) ? (
+              <button
+                className="btn"
+                disabled={!enabled || op.busy || !!task.cancelledAt}
+                onClick={() =>
+                  void op.run(async () =>
+                    setChoices(await api.evidence(task.planId, task.id)),
+                  )
+                }
+              >
+                关联已完成记录
+              </button>
+            ) : null}
+          </div>
+        ) : null}
+      </details>
       {choices ? (
         <div className="org-evidence">
           <h4>选择实际完成记录</h4>
           <p>
-            仅列出任务创建后开始且已完成的学习；间隔复习至少评价过一张卡。只读材料需要手动标记。
+            选择这项任务开始后完成的闪卡复习或已提交测验。阅读资料后可手动标记完成。
           </p>
           {!choices.length ? (
             <p>
