@@ -14,7 +14,7 @@ import {
 import { useAuth } from "../../auth/AuthProvider";
 import type { StudySet, MaterialSummary, SourceFile, StudyApi } from "../api";
 import { studySetPath, materialPath } from "../routes";
-import PdfUpload from "../PdfUpload";
+import PdfUpload, { type PdfFileListState } from "../PdfUpload";
 import { createLibraryApi, type LibrarySet } from "./api";
 import SetActions, { setTone } from "./SetActions";
 type Materials = {
@@ -43,7 +43,8 @@ export default function SetOverview({
     library = useMemo(() => createLibraryApi(auth.request), [auth.request]),
     [detail, setDetail] = useState<LibrarySet | null>(null),
     [detailError, setDetailError] = useState(""),
-    [files, setFiles] = useState<SourceFile[]>([]),
+    [fileList, setFileList] = useState<PdfFileListState>({ studySetId: set.id, files: [], loading: true, loaded: false, error: "" }),
+    [filesRevision, setFilesRevision] = useState(0),
     [adding, setAdding] = useState(false),
     [error, setError] = useState(""),
     [revision, setRevision] = useState(0);
@@ -64,7 +65,9 @@ export default function SetOverview({
       });
     return () => c.abort();
   }, [library, set.id, revision]);
-  const root = studySetPath(set.id),
+  const currentFiles = fileList.studySetId === set.id ? fileList : { studySetId: set.id, files: [], loading: true, loaded: false, error: "" },
+    files = currentFiles.files,
+    root = studySetPath(set.id),
     summary = detail?.summary,
     download = async (file: SourceFile) => {
       setError("");
@@ -224,7 +227,8 @@ export default function SetOverview({
           api={api}
           studySetId={set.id}
           hideRecords
-          onFilesChange={setFiles}
+          filesRevision={filesRevision}
+          onFileListChange={setFileList}
           onExtracted={() => {
             materials.reload();
             setRevision((v) => v + 1);
@@ -240,6 +244,15 @@ export default function SetOverview({
           </button>
         </header>
         {materials.loading ? <p role="status">正在读取资料…</p> : null}
+        {currentFiles.loading ? <p role="status">正在读取上传记录…</p> : null}
+        {currentFiles.error ? (
+          <div className="cloud-error" role="alert">
+            <p>上传记录读取失败：{currentFiles.error}</p>
+            <button className="btn" onClick={() => setFilesRevision(value => value + 1)}>
+              重新读取上传记录
+            </button>
+          </div>
+        ) : null}
         {materials.error ? (
           <div className="cloud-error" role="alert">
             <p>{materials.error}</p>
@@ -255,6 +268,7 @@ export default function SetOverview({
         ) : null}
         {!materials.loading &&
         !materials.error &&
+        currentFiles.loaded &&
         !materials.items.length &&
         !files.length ? (
           <div className="overview-material-empty">
@@ -286,7 +300,7 @@ export default function SetOverview({
                   <small>
                     {source
                       ? `PDF · ${source.pageCount} 页 · 文字已提取`
-                      : "文本笔记"}{" "}
+                      : currentFiles.loaded ? "文本笔记" : "资料来源待确认"}{" "}
                     · {new Date(m.updatedAt).toLocaleDateString("zh-CN")} 更新
                   </small>
                 </a>
